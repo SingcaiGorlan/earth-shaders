@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earth Science Visualization - Launch</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0c0e1b 0%, #1a1d3a 50%, #0c0e1b 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+
+        /* Animated stars background */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Main container */
+        .launch-container {
+            background: rgba(20, 25, 50, 0.95);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(100, 150, 255, 0.3);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5),
+                        0 0 40px rgba(100, 150, 255, 0.2);
+            position: relative;
+            z-index: 10;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(100, 150, 255, 0.5) rgba(30, 35, 60, 0.6);
+        }
+
+        /* Custom scrollbar */
+        .launch-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .launch-container::-webkit-scrollbar-track {
+            background: rgba(30, 35, 60, 0.6);
+            border-radius: 4px;
+        }
+
+        .launch-container::-webkit-scrollbar-thumb {
+            background: rgba(100, 150, 255, 0.5);
+            border-radius: 4px;
+        }
+
+        .launch-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(100, 150, 255, 0.7);
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #ffffff;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(100, 150, 255, 0.5);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: #8892b0;
+            font-size: 1.1em;
+        }
+
+        /* Feature sections */
+        .feature-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(30, 35, 60, 0.6);
+            border-radius: 12px;
+            border: 1px solid rgba(100, 150, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .feature-section:hover {
+            border-color: rgba(100, 150, 255, 0.5);
+            box-shadow: 0 0 20px rgba(100, 150, 255, 0.1);
+        }
+
+        .section-title {
+            color: #64ffda;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-icon {
+            font-size: 1.5em;
+        }
+
+        /* Checkbox grid */
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 12px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px 15px;
+            background: rgba(40, 45, 70, 0.8);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+            user-select: none;
+        }
+
+        .checkbox-item:hover {
+            background: rgba(50, 55, 80, 0.9);
+            border-color: rgba(100, 150, 255, 0.3);
+            transform: translateX(5px);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            cursor: pointer;
+            accent-color: #64ffda;
+        }
+
+        .checkbox-item input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            cursor: pointer;
+            accent-color: #64ffda;
+        }
+
+        .checkbox-item label {
+            color: #ccd6f6;
+            cursor: pointer;
+            font-size: 0.95em;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .checkbox-item label > div:first-child {
+            font-weight: 500;
+        }
+
+        .checkbox-item .description {
+            color: #8892b0;
+            font-size: 0.8em;
+            margin-top: 4px;
+        }
+
+        /* Performance indicator */
+        .performance-indicator {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(30, 35, 60, 0.6);
+            border-radius: 10px;
+            border-left: 4px solid #64ffda;
+        }
+
+        .perf-title {
+            color: #64ffda;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .perf-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(40, 45, 70, 0.8);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .perf-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #64ffda 0%, #667eea 100%);
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .perf-text {
+            color: #8892b0;
+            font-size: 0.85em;
+            margin-top: 5px;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-secondary {
+            background: rgba(40, 45, 70, 0.8);
+            color: #64ffda;
+            border: 2px solid #64ffda;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(100, 255, 218, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Preset buttons */
+        .preset-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .preset-btn {
+            padding: 8px 16px;
+            background: rgba(40, 45, 70, 0.8);
+            border: 1px solid rgba(100, 150, 255, 0.3);
+            border-radius: 6px;
+            color: #ccd6f6;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9em;
+        }
+
+        .preset-btn:hover {
+            background: rgba(100, 150, 255, 0.2);
+            border-color: rgba(100, 150, 255, 0.6);
+        }
+
+        /* Loading screen */
+        .loading-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0c0e1b;
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(100, 150, 255, 0.2);
+            border-top-color: #64ffda;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #64ffda;
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .launch-container {
+                padding: 25px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .checkbox-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated stars -->
+    <div class="stars" id="stars"></div>
+
+    <!-- Main launch interface -->
+    <div class="launch-container">
+        <div class="header">
+            <h1>🌍 Earth Science Visualization</h1>
+            <p>选择要启用的功能模块 | Select Features to Enable</p>
+        </div>
+
+        <!-- Mode Selection Section -->
+        <div class="feature-section">
+            <div class="section-title">
+                <span class="section-icon">🎯</span>
+                <span>应用模式 | Application Mode</span>
+            </div>
+            <div class="checkbox-grid">
+                <div class="checkbox-item">
+                    <input type="radio" id="modeEducation" name="appMode" value="education" checked>
+                    <label for="modeEducation">
+                        <div>教学演示模式 | Education Demo</div>
+                        <div class="description">适合教学和演示，展示地球科学概念</div>
+                    </label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="radio" id="modeKSP" name="appMode" value="ksp">
+                    <label for="modeKSP">
+                        <div>KSP游戏模式 | KSP Game Mode</div>
+                        <div class="description">航天器控制和轨道力学模拟</div>
+                    </label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="radio" id="modeResearch" name="appMode" value="research">
+                    <label for="modeResearch">
+                        <div>科研模式 | Research Mode</div>
+                        <div class="description">详细数据分析和科学可视化</div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preset configurations -->
+        <div class="preset-group">
+            <button class="preset-btn" onclick="loadPreset('minimal')">⚡ 最小配置</button>
+            <button class="preset-btn" onclick="loadPreset('balanced')">⚖️ 平衡模式</button>
+            <button class="preset-btn" onclick="loadPreset('full')">🚀 完整体验</button>
+            <button class="preset-btn" onclick="loadPreset('performance')">🎮 性能优先</button>
+        </div>
+
+        <!-- Visual Effects Section -->
+        <div class="feature-section">
+            <div class="section-title">
+                <span class="section-icon">✨</span>
+                <span>视觉效果 | Visual Effects</span>
+            </div>
+            <div class="checkbox-grid">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="enableEarth" checked>
+                    <label for="enableEarth">
+                        <div>地球渲染 | Earth Rendering</div>
+                        <div class="description">基础地球模型和纹理</div>
+                    </label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="enableClouds" checked>
+                    <label for="enableClouds">
+                        <div>云层系统 | Cloud Layer</div>
+                        <div class="description">动态云层和大气效果</div>
+                    </label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="enableAtmosphere" checked>
+                    <label for="enableAtmosphere">
+                        <div>大气层 | Atmosphere</div>
+                        <div class="description">多层大气光晕效果</div>
+                    </label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="enableOceanWaves">
+                    <label for="enableOceanWaves">
+                        <div>海洋波浪 | Ocean Waves</div>
+                        <div class="description">动态海面波动效果</div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Space Weather Section -->
+        <div class="feature-section">
+            <div class="section-title">
+                <span class="section-icon">🌞</span>
+                <span>太空天气 | Space Weather</span>
+            </div>
+            <div class="checkbox-grid">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="enableSun" checked>
+                    <label for="enableSun">
+                        <div>太阳系统 | Sun System</div>
+                        <div class="description">真实太阳和光照效果</div>
+                    </label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="enableSolarWind">
+                    <label for="enableSolarWind">
+                        <div>太阳风 | Solar Wind</div>
+                        <div class="description">太阳粒子流效果</div>
+                    </label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="enableMagnetosphere">
+                    <label for="enableMagnetosphere">
+                        <div>地球磁层 | Magnetosphere</div>
+                        <div class="description">磁场保护罩可视化</div>
+                    </label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="enableAurora">
+                    <label for="enableAurora">
+                        <div>极光效果 | Aurora</div>
+                        <div class="description">南北极光环</div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Physics Simulation Section -->
+        <div class="feature-section">
+            <div class="section-title">
+                <span class="section-icon">🔬</span>
+                <span>物理模拟 | Physics Simulation</span>
+            </div>
+            <div class="checkbox-grid">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="enableGravityField">
+                    <label for="enableGravityField">
+                        <div>引力场 | Gravitational Field</div>
+                        <div class="description">等势面和场线可视化</div>
+                    </label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="enableLagrangePoints">
+                    <label for="enableLagrangePoints">
+                        <div>拉格朗日点 | Lagrange Points</div>
+                        <div class="description">地月系统平衡点</div>
+                    </label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="enableCyclones">
+                    <label for="enableCyclones">
+                        <div>热带气旋 | Tropical Cyclones</div>
+                        <div class="description">台风/飓风模拟</div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mode Selection Section -->
+        <div class="feature-section">
+            <div class="section-title">
+                <span class="section-icon">🎯</span>
+                <span>应用模式 | Application Mode</span>
+            </div>
+            <div class="checkbox-grid">
+                <div class="checkbox-item">
+                    <input type="radio" id="modeEducation" name="appMode" value="education" checked>
+                    <label for="modeEducation">
+                        <div>教学演示模式 | Education Demo</div>
+                        <div class="description">适合教学和演示，展示地球科学概念</div>
+                    </label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="radio" id="modeKSP" name="appMode" value="ksp">
+                    <label for="modeKSP">
+                        <div>KSP游戏模式 | KSP Game Mode</div>
+                        <div class="description">航天器控制和轨道力学模拟</div>
+                    </label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="radio" id="modeResearch" name="appMode" value="research">
+                    <label for="modeResearch">
+                        <div>科研模式 | Research Mode</div>
+                        <div class="description">详细数据分析和科学可视化</div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Preset configurations -->
+        <div class="preset-group">
+            <button class="preset-btn" onclick="loadPreset('minimal')">⚡ 最小配置</button>
+            <button class="preset-btn" onclick="loadPreset('balanced')">⚖️ 平衡模式</button>
+            <button class="preset-btn" onclick="loadPreset('full')">🚀 完整体验</button>
+            <button class="preset-btn" onclick="loadPreset('performance')">🎮 性能优先</button>
+            <button class="preset-btn" onclick="loadPreset('education')">📚 教学模式</button>
+            <button class="preset-btn" onclick="loadPreset('ksp')">🚀 KSP模式</button>
+            <button class="preset-btn" onclick="loadPreset('research')">🔬 科研模式</button>
+        </div>
+
+        <!-- Interactive Features Section -->
+        <div class="feature-section">
+            <div class="section-title">
+                <span class="section-icon">🚀</span>
+                <span>交互功能 | Interactive Features</span>
+            </div>
+            <div class="checkbox-grid">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="enableSatellites" checked>
+                    <label for="enableSatellites">
+                        <div>卫星轨道 | Satellite Orbits</div>
+                        <div class="description">真实卫星追踪系统</div>
+                    </label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="enableKSPMode">
+                    <label for="enableKSPMode">
+                        <div>KSP游戏模式 | KSP Game Mode</div>
+                        <div class="description">航天器控制和轨道力学</div>
+                    </label>
+                </div>
+                <div class="checkbox-item">
+                    <input type="checkbox" id="enableTimeControl" checked>
+                    <label for="enableTimeControl">
+                        <div>时间控制 | Time Control</div>
+                        <div class="description">时间加速和回溯</div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Indicator -->
+        <div class="performance-indicator">
+            <div class="perf-title">📊 预估性能影响 | Estimated Performance Impact</div>
+            <div class="perf-bar">
+                <div class="perf-fill" id="perfFill" style="width: 30%"></div>
+            </div>
+            <div class="perf-text" id="perfText">当前配置：中等负载 | Current: Medium Load</div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="button-group">
+            <button class="btn btn-secondary" onclick="selectAll(false)">取消全选</button>
+            <button class="btn btn-secondary" onclick="selectAll(true)">全选</button>
+            <button class="btn btn-primary" onclick="launch()">🚀 启动系统</button>
+        </div>
+    </div>
+
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">正在初始化系统...</div>
+    </div>
+
+    <script>
+        // Generate animated stars
+        function generateStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Calculate performance impact
+        function calculatePerformance() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            let enabledCount = 0;
+            let heavyFeatures = 0;
+
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    enabledCount++;
+                    // Heavy features that impact performance more
+                    if (['enableOceanWaves', 'enableSolarWind', 'enableMagnetosphere', 
+                         'enableAurora', 'enableGravityField', 'enableCyclones', 
+                         'enableKSPMode'].includes(cb.id)) {
+                        heavyFeatures++;
+                    }
+                }
+            });
+
+            const baseLoad = 20;
+            const lightLoad = enabledCount * 3;
+            const heavyLoad = heavyFeatures * 8;
+            const totalLoad = Math.min(100, baseLoad + lightLoad + heavyLoad);
+
+            const perfFill = document.getElementById('perfFill');
+            const perfText = document.getElementById('perfText');
+
+            perfFill.style.width = totalLoad + '%';
+
+            if (totalLoad < 30) {
+                perfFill.style.background = 'linear-gradient(90deg, #64ffda 0%, #00ff88 100%)';
+                perfText.textContent = '当前配置：低负载 - 流畅运行 | Current: Low Load - Smooth';
+            } else if (totalLoad < 60) {
+                perfFill.style.background = 'linear-gradient(90deg, #64ffda 0%, #667eea 100%)';
+                perfText.textContent = '当前配置：中等负载 - 良好性能 | Current: Medium Load - Good';
+            } else if (totalLoad < 80) {
+                perfFill.style.background = 'linear-gradient(90deg, #ffd700 0%, #ff8c00 100%)';
+                perfText.textContent = '当前配置：高负载 - 可能需要高性能设备 | Current: High Load';
+            } else {
+                perfFill.style.background = 'linear-gradient(90deg, #ff6b6b 0%, #ee5a6f 100%)';
+                perfText.textContent = '当前配置：极高负载 - 建议减少功能 | Current: Very High Load';
+            }
+        }
+
+        // Preset configurations
+        function loadPreset(preset) {
+            const presets = {
+                minimal: {
+                    appMode: 'education',
+                    enableEarth: true,
+                    enableClouds: false,
+                    enableAtmosphere: false,
+                    enableOceanWaves: false,
+                    enableSun: true,
+                    enableSolarWind: false,
+                    enableMagnetosphere: false,
+                    enableAurora: false,
+                    enableGravityField: false,
+                    enableLagrangePoints: false,
+                    enableCyclones: false,
+                    enableSatellites: true,
+                    enableKSPMode: false,
+                    enableTimeControl: true
+                },
+                balanced: {
+                    appMode: 'education',
+                    enableEarth: true,
+                    enableClouds: true,
+                    enableAtmosphere: true,
+                    enableOceanWaves: false,
+                    enableSun: true,
+                    enableSolarWind: false,
+                    enableMagnetosphere: false,
+                    enableAurora: false,
+                    enableGravityField: false,
+                    enableLagrangePoints: false,
+                    enableCyclones: false,
+                    enableSatellites: true,
+                    enableKSPMode: false,
+                    enableTimeControl: true
+                },
+                full: {
+                    appMode: 'education',
+                    enableEarth: true,
+                    enableClouds: true,
+                    enableAtmosphere: true,
+                    enableOceanWaves: true,
+                    enableSun: true,
+                    enableSolarWind: true,
+                    enableMagnetosphere: true,
+                    enableAurora: true,
+                    enableGravityField: true,
+                    enableLagrangePoints: true,
+                    enableCyclones: true,
+                    enableSatellites: true,
+                    enableKSPMode: true,
+                    enableTimeControl: true
+                },
+                performance: {
+                    appMode: 'education',
+                    enableEarth: true,
+                    enableClouds: true,
+                    enableAtmosphere: true,
+                    enableOceanWaves: false,
+                    enableSun: true,
+                    enableSolarWind: false,
+                    enableMagnetosphere: false,
+                    enableAurora: false,
+                    enableGravityField: false,
+                    enableLagrangePoints: false,
+                    enableCyclones: false,
+                    enableSatellites: true,
+                    enableKSPMode: false,
+                    enableTimeControl: true
+                },
+                education: {
+                    appMode: 'education',
+                    enableEarth: true,
+                    enableClouds: true,
+                    enableAtmosphere: true,
+                    enableOceanWaves: true,
+                    enableSun: true,
+                    enableSolarWind: false,
+                    enableMagnetosphere: false,
+                    enableAurora: true,
+                    enableGravityField: false,
+                    enableLagrangePoints: false,
+                    enableCyclones: true,
+                    enableSatellites: true,
+                    enableKSPMode: false,
+                    enableTimeControl: true
+                },
+                ksp: {
+                    appMode: 'ksp',
+                    enableEarth: true,
+                    enableClouds: true,
+                    enableAtmosphere: true,
+                    enableOceanWaves: false,
+                    enableSun: true,
+                    enableSolarWind: false,
+                    enableMagnetosphere: false,
+                    enableAurora: false,
+                    enableGravityField: false,
+                    enableLagrangePoints: false,
+                    enableCyclones: false,
+                    enableSatellites: true,
+                    enableKSPMode: true,
+                    enableTimeControl: true
+                },
+                research: {
+                    appMode: 'research',
+                    enableEarth: true,
+                    enableClouds: true,
+                    enableAtmosphere: true,
+                    enableOceanWaves: false,
+                    enableSun: true,
+                    enableSolarWind: true,
+                    enableMagnetosphere: true,
+                    enableAurora: true,
+                    enableGravityField: true,
+                    enableLagrangePoints: true,
+                    enableCyclones: false,
+                    enableSatellites: true,
+                    enableKSPMode: false,
+                    enableTimeControl: true
+                }
+            };
+
+            const selected = presets[preset];
+            if (selected) {
+                Object.keys(selected).forEach(id => {
+                    if (id === 'appMode') {
+                        // Handle radio buttons for mode selection
+                        const radioButton = document.querySelector(`input[name="appMode"][value="${selected[id]}"]`);
+                        if (radioButton) {
+                            radioButton.checked = true;
+                        }
+                    } else {
+                        const checkbox = document.getElementById(id);
+                        if (checkbox) {
+                            checkbox.checked = selected[id];
+                        }
+                    }
+                });
+                calculatePerformance();
+            }
+        }
+
+        // Select all or deselect all
+        function selectAll(select) {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(cb => cb.checked = select);
+            calculatePerformance();
+        }
+
+        // Launch the application
+        function launch() {
+            // Get selected mode
+            const selectedMode = document.querySelector('input[name="appMode"]:checked').value;
+            
+            const config = {
+                appMode: selectedMode,
+                earth: document.getElementById('enableEarth').checked,
+                clouds: document.getElementById('enableClouds').checked,
+                atmosphere: document.getElementById('enableAtmosphere').checked,
+                oceanWaves: document.getElementById('enableOceanWaves').checked,
+                sun: document.getElementById('enableSun').checked,
+                solarWind: document.getElementById('enableSolarWind').checked,
+                magnetosphere: document.getElementById('enableMagnetosphere').checked,
+                aurora: document.getElementById('enableAurora').checked,
+                gravityField: document.getElementById('enableGravityField').checked,
+                lagrangePoints: document.getElementById('enableLagrangePoints').checked,
+                cyclones: document.getElementById('enableCyclones').checked,
+                satellites: document.getElementById('enableSatellites').checked,
+                kspMode: document.getElementById('enableKSPMode').checked,
+                timeControl: document.getElementById('enableTimeControl').checked
+            };
+
+            // Save configuration to localStorage
+            localStorage.setItem('earthVizConfig', JSON.stringify(config));
+
+            // Show loading screen
+            document.getElementById('loadingScreen').style.display = 'flex';
+
+            // Redirect to main application after a short delay
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        }
+
+        // Initialize
+        generateStars();
+        
+        // Add click handlers to checkbox-item containers
+        document.querySelectorAll('.checkbox-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                // Don't trigger if clicking directly on input or label
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') {
+                    return;
+                }
+                
+                // Find the input element and toggle it
+                const input = this.querySelector('input[type="checkbox"], input[type="radio"]');
+                if (input) {
+                    if (input.type === 'checkbox') {
+                        input.checked = !input.checked;
+                    } else if (input.type === 'radio') {
+                        input.checked = true;
+                    }
+                    // Trigger change event
+                    input.dispatchEvent(new Event('change'));
+                }
+            });
+        });
+        
+        // Add event listeners to all checkboxes
+        document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+            cb.addEventListener('change', calculatePerformance);
+        });
+
+        // Add event listeners to all radio buttons
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', calculatePerformance);
+        });
+
+        // Initial performance calculation
+        calculatePerformance();
+
+        // Load saved configuration if exists
+        const savedConfig = localStorage.getItem('earthVizConfig');
+        if (savedConfig) {
+            try {
+                const config = JSON.parse(savedConfig);
+                Object.keys(config).forEach(key => {
+                    const checkbox = document.getElementById(key === 'earth' ? 'enableEarth' : 
+                                                           key === 'clouds' ? 'enableClouds' :
+                                                           key === 'atmosphere' ? 'enableAtmosphere' :
+                                                           key === 'oceanWaves' ? 'enableOceanWaves' :
+                                                           key === 'sun' ? 'enableSun' :
+                                                           key === 'solarWind' ? 'enableSolarWind' :
+                                                           key === 'magnetosphere' ? 'enableMagnetosphere' :
+                                                           key === 'aurora' ? 'enableAurora' :
+                                                           key === 'gravityField' ? 'enableGravityField' :
+                                                           key === 'lagrangePoints' ? 'enableLagrangePoints' :
+                                                           key === 'cyclones' ? 'enableCyclones' :
+                                                           key === 'satellites' ? 'enableSatellites' :
+                                                           key === 'kspMode' ? 'enableKSPMode' :
+                                                           key === 'timeControl' ? 'enableTimeControl' : '');
+                    if (checkbox) {
+                        checkbox.checked = config[key];
+                    }
+                });
+                calculatePerformance();
+            } catch (e) {
+                console.error('Failed to load saved config:', e);
+            }
+        }
+    </script>
+</body>
+</html>

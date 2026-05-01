@@ -4,6 +4,97 @@ import GUI from 'lil-gui'
 import earthVertexShader from './shaders/earth/vertex.glsl'
 import earthFragmentShader from './shaders/earth/fragment.glsl'
 import { SatelliteOrbitManager } from './satelliteOrbit.js'
+import { KSPGameSystem } from './kspGame.js'
+
+/**
+ * Load user configuration from launch page
+ */
+const userConfig = JSON.parse(localStorage.getItem('earthVizConfig') || '{}')
+console.log('Loaded user configuration:', userConfig)
+
+// Helper function to check if feature is enabled
+function isFeatureEnabled(featureName, defaultValue = true) {
+    if (Object.keys(userConfig).length === 0) return defaultValue
+    return userConfig[featureName] !== false
+}
+
+// Get application mode
+function getAppMode() {
+    return userConfig.appMode || 'education' // Default to education mode
+}
+
+/**
+ * Apply user configuration to show/hide features
+ */
+function applyUserConfig() {
+    console.log('Applying user configuration...')
+    
+    const appMode = getAppMode()
+    console.log(`Application mode: ${appMode}`)
+    
+    // Hide/show solar wind
+    if (typeof solarWind !== 'undefined') {
+        solarWind.visible = isFeatureEnabled('solarWind', appMode === 'research')
+    }
+    
+    // Hide/show magnetosphere
+    if (typeof magnetosphere !== 'undefined') {
+        magnetosphere.visible = isFeatureEnabled('magnetosphere', appMode === 'research')
+    }
+    
+    // Hide/show aurora
+    if (typeof auroraNorth !== 'undefined') {
+        auroraNorth.visible = isFeatureEnabled('aurora', appMode === 'education' || appMode === 'research')
+        auroraSouth.visible = isFeatureEnabled('aurora', appMode === 'education' || appMode === 'research')
+    }
+    
+    // Hide/show gravity field
+    if (typeof gravityWellsGroup !== 'undefined') {
+        gravityWellsGroup.visible = isFeatureEnabled('gravityField', appMode === 'research')
+    }
+    
+    // Hide/show field lines
+    if (typeof fieldLinesGroup !== 'undefined') {
+        fieldLinesGroup.visible = isFeatureEnabled('gravityField', appMode === 'research')
+    }
+    
+    // Hide/show gravity indicators
+    if (typeof gravityIndicators !== 'undefined') {
+        gravityIndicators.forEach(indicator => {
+            indicator.visible = isFeatureEnabled('gravityField', appMode === 'research')
+        })
+    }
+    
+    // Hide/show Lagrange points
+    if (typeof lagrangeGroup !== 'undefined') {
+        lagrangeGroup.visible = isFeatureEnabled('lagrangePoints', appMode === 'research')
+    }
+    
+    // Hide/show cyclones
+    if (typeof cycloneGroup !== 'undefined') {
+        cycloneGroup.visible = isFeatureEnabled('cyclones', appMode === 'education')
+    }
+    
+    // Hide/show clouds
+    if (typeof clouds !== 'undefined') {
+        clouds.visible = isFeatureEnabled('clouds', true)
+    }
+    
+    // Hide/show atmosphere
+    if (typeof innerAtmosphere !== 'undefined') {
+        innerAtmosphere.visible = isFeatureEnabled('atmosphere', true)
+        outerAtmosphere.visible = isFeatureEnabled('atmosphere', true)
+    }
+    
+    // Disable ocean waves if not enabled
+    if (typeof earthMaterial !== 'undefined' && !isFeatureEnabled('oceanWaves', appMode === 'education')) {
+        if (earthMaterial.uniforms.waveHeight) {
+            earthMaterial.uniforms.waveHeight.value = 0
+        }
+    }
+    
+    console.log('Configuration applied successfully!')
+}
 
 /**
  * 创建卫星列表 UI
@@ -2248,12 +2339,50 @@ const clock = new THREE.Clock()
 let lastFrameTime = Date.now()
 let lastListUpdateTime = 0
 
+// Initialize KSP Game System
+let kspGame = null
+const appMode = getAppMode()
+if (appMode === 'ksp') {
+    kspGame = new KSPGameSystem(scene, earth, camera, controls)
+}
+
+// KSP GUI controls
+const kspFolder = gui.addFolder('🚀 KSP Game Mode')
+const kspConfig = {
+    enableKSPMode: appMode === 'ksp',
+    resetSpacecraft: () => kspGame && kspGame.resetSpacecraft(),
+    cameraMode: 'FREE_ROAM'
+}
+
+if (kspGame) {
+    kspFolder.add(kspConfig, 'enableKSPMode').name('Enable KSP Controls')
+    kspFolder.add(kspConfig, 'resetSpacecraft').name('Reset Spacecraft')
+    kspFolder.add(kspConfig, 'cameraMode', ['FREE_ROAM', 'FOLLOW', 'ORBIT']).name('Camera Mode').onChange((value) => {
+        const modeMap = {
+            'FREE_ROAM': 'FREE_ROAM',
+            'FOLLOW': 'FOLLOW_SPACECRAFT',
+            'ORBIT': 'ORBIT_VIEW'
+        }
+        kspGame.gameState.mode = modeMap[value]
+    })
+} else {
+    kspFolder.add(kspConfig, 'enableKSPMode').name('KSP Mode (Disabled in Launch)').disable()
+}
+
+// Apply user configuration from launch page
+applyUserConfig()
+
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
     const currentTime = Date.now()
     const deltaTime = (currentTime - lastFrameTime) / 1000  // 秒
     lastFrameTime = currentTime
+
+    // Update KSP game system if enabled
+    if (kspConfig.enableKSPMode) {
+        kspGame.update(deltaTime, elapsedTime)
+    }
 
     earth.rotation.y = elapsedTime * 0.1
 

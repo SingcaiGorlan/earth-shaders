@@ -5,6 +5,7 @@ import earthVertexShader from './shaders/earth/vertex.glsl'
 import earthFragmentShader from './shaders/earth/fragment.glsl'
 import { SatelliteOrbitManager } from './satelliteOrbit.js'
 import { KSPGameSystem } from './kspGame.js'
+import { SolarSystemModel } from './solarSystem.js'
 
 /**
  * Load user configuration from launch page
@@ -2346,6 +2347,47 @@ if (appMode === 'ksp') {
     kspGame = new KSPGameSystem(scene, earth, camera, controls)
 }
 
+// Initialize Solar System Extension (adds other planets to existing Earth scene)
+let solarSystem = null
+const solarSystemConfig = {
+    enableSolarSystem: false,  // 默认禁用
+    showOrbits: false,         // 默认隐藏轨道
+    showAsteroidBelt: false,   // 默认隐藏小行星带
+    timeScale: 1,
+    focusPlanet: 'None'
+}
+
+function initSolarSystem() {
+    if (!solarSystem && solarSystemConfig.enableSolarSystem) {
+        // Pass existing Earth and Sun to solar system model
+        solarSystem = new SolarSystemModel(scene, earth, sun)
+        // Manually initialize
+        solarSystem.initSolarSystem()
+        console.log('✅ Solar System Extension initialized with real proportions!')
+        console.log('🌍 Earth remains at center (0,0,0)')
+        console.log('☀️ Sun at (150,0,0) - using existing sun')
+        console.log('🪐 Other planets orbit around existing sun')
+        // Hide orbits by default
+        if (solarSystem) {
+            solarSystem.toggleOrbits(false)
+            solarSystem.toggleAsteroidBelt(false)
+        }
+    }
+}
+
+function toggleSolarSystem(enabled) {
+    console.log(`Toggle Solar System: ${enabled}`)
+    
+    if (enabled && !solarSystem) {
+        initSolarSystem()
+    }
+    
+    if (solarSystem && solarSystem.group) {
+        solarSystem.group.visible = enabled
+        console.log(`Solar System group visibility: ${enabled}`)
+    }
+}
+
 // KSP GUI controls
 const kspFolder = gui.addFolder('🚀 KSP Game Mode')
 const kspConfig = {
@@ -2357,6 +2399,9 @@ const kspConfig = {
 if (kspGame) {
     kspFolder.add(kspConfig, 'enableKSPMode').name('Enable KSP Controls')
     kspFolder.add(kspConfig, 'resetSpacecraft').name('Reset Spacecraft')
+    kspFolder.add({
+        openConfigPanel: () => kspGame.toggleConfigPanel()
+    }, 'openConfigPanel').name('🔧 航天器配置面板')
     kspFolder.add(kspConfig, 'cameraMode', ['FREE_ROAM', 'FOLLOW', 'ORBIT']).name('Camera Mode').onChange((value) => {
         const modeMap = {
             'FREE_ROAM': 'FREE_ROAM',
@@ -2365,9 +2410,80 @@ if (kspGame) {
         }
         kspGame.gameState.mode = modeMap[value]
     })
+    
+    // New controls for extended features
+    kspFolder.add({
+        startLaunch: () => kspGame.startLaunchSequence()
+    }, 'startLaunch').name('🚀 开始发射序列')
+    
+    kspFolder.add({
+        toggleAttitudePanel: () => {
+            if (!kspGame.attitudePanel) {
+                kspGame.createAttitudePanel()
+            }
+            const isVisible = kspGame.attitudePanel.style.display !== 'none'
+            kspGame.attitudePanel.style.display = isVisible ? 'none' : 'block'
+        }
+    }, 'toggleAttitudePanel').name('📊 姿态数据面板')
+    
+    kspFolder.add({
+        toggle3DIndicator: () => {
+            if (!kspGame.attitudeIndicator3D) {
+                kspGame.create3DAttitudeIndicator()
+            }
+            kspGame.attitudeIndicator3D.visible = !kspGame.attitudeIndicator3D.visible
+        }
+    }, 'toggle3DIndicator').name('🎨 3D姿态指示器')
+    
+    kspFolder.add({
+        calculateOrbit: () => {
+            kspGame.calculateOrbit()
+            kspGame.drawPredictedOrbit()
+        }
+    }, 'calculateOrbit').name('🛰️ 计算轨道')
+    
+    kspFolder.add({
+        toggleManeuverPanel: () => kspGame.toggleManeuverPanel()
+    }, 'toggleManeuverPanel').name('🎯 机动节点面板')
+    
+    kspFolder.add({
+        toggleMapView: () => kspGame.toggleMapView()
+    }, 'toggleMapView').name('🗺️ 轨道地图视图')
+    
+    kspFolder.add({
+        toggle2DPanel: () => kspGame.toggle2DPanel()
+    }, 'toggle2DPanel').name('🎮 2D控制面板')
+    
+    kspFolder.add({
+        switchToGround: () => {
+            kspGame.gameState.mode = 'GROUND'
+            kspGame.initGroundScene()
+        }
+    }, 'switchToGround').name('🌍 切换到地面模式')
 } else {
     kspFolder.add(kspConfig, 'enableKSPMode').name('KSP Mode (Disabled in Launch)').disable()
 }
+
+// Solar System GUI controls
+const solarSystemFolder = gui.addFolder('🌌 太阳系模型')
+
+solarSystemFolder.add(solarSystemConfig, 'enableSolarSystem').name('启用太阳系').onChange(toggleSolarSystem)
+solarSystemFolder.add(solarSystemConfig, 'showOrbits').name('显示轨道').onChange((value) => {
+    if (solarSystem) solarSystem.toggleOrbits(value)
+})
+solarSystemFolder.add(solarSystemConfig, 'showAsteroidBelt').name('显示小行星带').onChange((value) => {
+    if (solarSystem) solarSystem.toggleAsteroidBelt(value)
+})
+solarSystemFolder.add(solarSystemConfig, 'timeScale', 0.1, 10, 0.1).name('时间流速').onChange((value) => {
+    if (solarSystem) solarSystem.setTimeScale(value)
+})
+
+const planetNames = ['None', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']
+solarSystemFolder.add(solarSystemConfig, 'focusPlanet', planetNames).name('聚焦行星').onChange((value) => {
+    if (solarSystem && value !== 'None') {
+        solarSystem.focusOnPlanet(value, camera, controls)
+    }
+})
 
 // Apply user configuration from launch page
 applyUserConfig()
@@ -2382,6 +2498,13 @@ const tick = () =>
     // Update KSP game system if enabled
     if (kspConfig.enableKSPMode) {
         kspGame.update(deltaTime, elapsedTime)
+        
+        // Disable OrbitControls during launch sequence
+        if (kspGame.gameState.mode === 'LAUNCH' || kspGame.gameState.mode === 'GROUND') {
+            controls.enabled = false
+        } else {
+            controls.enabled = true
+        }
     }
 
     earth.rotation.y = elapsedTime * 0.1
@@ -2513,6 +2636,11 @@ const tick = () =>
     } else {
         innerAtmosphere.scale.set(1.0, 1.0, 1.0)
         outerAtmosphere.scale.set(1.0, 1.0, 1.0)
+    }
+
+    // Update Solar System
+    if (solarSystem) {
+        solarSystem.update(deltaTime * (solarSystemConfig.timeScale || 1))
     }
 
     // 更新模拟时间（应用时间缩放）

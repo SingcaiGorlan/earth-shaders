@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>章节练习题集 - 航天航空理论</title>
+    <link rel="stylesheet" href="./knowledge-base.css">
+    <style>
+        /* 题库页面特殊样式 */
+        .exercise-header {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.15) 0%, rgba(255, 215, 0, 0.15) 100%);
+            border: 2px solid #00d4ff;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .exercise-header h1 {
+            color: #ffd700;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+
+        .exercise-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid #00d4ff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-card .number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ffd700;
+            display: block;
+        }
+
+        .stat-card .label {
+            color: #a0d8ff;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .chapter-exercise {
+            background: rgba(0, 20, 40, 0.6);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chapter-exercise h2 {
+            color: #00d4ff;
+            border-bottom: 2px solid #00d4ff;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .question-type {
+            margin-bottom: 2rem;
+        }
+
+        .question-type h3 {
+            color: #ffd700;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .question {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #00d4ff;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .question-number {
+            color: #ffd700;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .question-text {
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        .options {
+            margin-top: 0.8rem;
+            margin-left: 1rem;
+        }
+
+        .option {
+            color: #a0d8ff;
+            margin: 0.4rem 0;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .option:hover {
+            background: rgba(0, 212, 255, 0.2);
+        }
+
+        .answer-section {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .answer-section.show {
+            display: block;
+        }
+
+        .answer-section h4 {
+            color: #00ff88;
+            margin-bottom: 1rem;
+        }
+
+        .answer {
+            color: #e0e0e0;
+            line-height: 1.8;
+        }
+
+        .answer .formula {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #ffd700;
+        }
+
+        .toggle-answer {
+            background: linear-gradient(135deg, #00d4ff, #0099cc);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 1rem;
+            transition: all 0.3s;
+        }
+
+        .toggle-answer:hover {
+            background: linear-gradient(135deg, #00e5ff, #00b8e6);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .warning-box {
+            background: rgba(255, 165, 0, 0.1);
+            border-left: 4px solid #ffa500;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .warning-box strong {
+            color: #ffa500;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">🌍 Earth Visualization</a>
+            <div class="nav-links">
+                <a href="index.html">地球可视化</a>
+                <a href="launch.html">KSP模拟器</a>
+                <a href="knowledge-base.html">知识库</a>
+                <a href="exam-guide.html">📝 复习指南</a>
+                <a href="exercises.html" class="active">✍️ 练习题</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主容器 -->
+    <div class="main-container">
+        <!-- 侧边栏目录 -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>📚 章节导航</h2>
+                <input type="text" id="searchInput" placeholder="搜索题目..." class="search-box">
+            </div>
+            <nav class="toc">
+                <ul id="tocList">
+                    <li><a href="#chapter-1">第1章：轨道力学基础</a></li>
+                    <li><a href="#chapter-2">第2章：火箭推进原理</a></li>
+                    <li><a href="#chapter-3">第3章：大气飞行力学</a></li>
+                    <li><a href="#chapter-4">第4章：姿态控制与稳定</a></li>
+                    <li><a href="#chapter-5">第5章：重力与引力场</a></li>
+                    <li><a href="#chapter-6">第6章：发射窗口与轨道转移</a></li>
+                    <li><a href="#chapter-7">第7章：热力学与再入物理</a></li>
+                    <li><a href="#chapter-8">第8章：导航制导与控制</a></li>
+                    <li style="margin-top: 1rem; border-top: 1px solid rgba(0, 212, 255, 0.3); padding-top: 1rem;">
+                        <a href="exam-guide.html" style="color: #ffd700; font-weight: bold;">📝 复习指南</a>
+                    </li>
+                    <li>
+                        <a href="knowledge-base.html" style="color: #00d4ff;"> 返回知识库</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- 内容区 -->
+        <main class="content">
+            <!-- 题库头部 -->
+            <div class="exercise-header">
+                <h1>✍️ 章节练习题集</h1>
+                <p style="color: #a0d8ff; font-size: 1.1rem;">航天航空理论 - 全面覆盖所有核心知识点</p>
+                
+                <div class="exercise-stats">
+                    <div class="stat-card">
+                        <span class="number">160</span>
+                        <span class="label">总题数</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="number">640</span>
+                        <span class="label">总分值</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="number">8</span>
+                        <span class="label">章节</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="number">4</span>
+                        <span class="label">题型</span>
+                    </div>
+                </div>
+
+                <div class="info-box success">
+                    <h4> 题型分布</h4>
+                    <p>每章20题：选择题（5题×3分=15分）| 填空题（5题×3分=15分）| 计算题（5题×6分=30分）| 简答题（5题×4分=20分）</p>
+                </div>
+            </div>
+
+            <!-- 第1章练习题 -->
+            <section id="chapter-1" class="chapter-exercise">
+                <h2>第1章：轨道力学基础（20题，80分）</h2>
+
+                <!-- 选择题 -->
+                <div class="question-type">
+                    <h3>一、选择题（每题3分，共15分）</h3>
+                    
+                    <div class="question">
+                        <p><span class="question-number">1.</span><span class="question-text">开普勒第一定律描述的是：</span></p>
+                        <div class="options">
+                            <div class="option">A. 行星在相等时间内扫过的面积相等</div>
+                            <div class="option">B. 行星轨道是椭圆，太阳位于一个焦点上</div>
+                            <div class="option">C. 轨道周期平方与半长轴立方成正比</div>
+                            <div class="option">D. 行星速度与距离成反比</div>
+                        </div>
+                        <button class="toggle-answer" onclick="toggleAnswer(this)">查看答案</button>
+                        <div class="answer-section">
+                            <h4>✅ 答案：B</h4>
+                            <div class="answer">
+                                <p><strong>解析：</strong>开普勒第一定律（椭圆轨道定律）指出所有行星绕太阳运动的轨道都是椭圆，太阳位于椭圆的一个焦点上。</p>
+                                <p>选项A是第二定律（面积速度定律），选项C是第三定律（周期定律）。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p><span class="question-number">2.</span><span class="question-text">对于圆轨道卫星，其速度公式为：</span></p>
+                        <div class="options">
+                            <div class="option">A. v = √(μr)</div>
+                            <div class="option">B. v = √(μ/r)</div>
+                            <div class="option">C. v = μ/r²</div>
+                            <div class="option">D. v = r/√μ</div>
+                        </div>
+                        <button class="toggle-answer" onclick="toggleAnswer(this)">查看答案</button>
+                        <div class="answer-section">
+                            <h4>✅ 答案：B</h4>
+                            <div class="answer">
+                                <p><strong>解析：</strong>圆轨道速度公式 v = √(μ/r)，其中μ是地球引力常数，r是轨道半径。</p>
+                                <p><strong>推导：</strong>由万有引力提供向心力：GMm/r² = mv²/r，得 v = √(GM/r) = √(μ/r)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p><span class="question-number">3.</span><span class="question-text">地球同步轨道（GEO）的高度约为：</span></p>
+                        <div class="options">
+                            <div class="option">A. 400 km</div>
+                            <div class="option">B. 2000 km</div>
+                            <div class="option">C. 20000 km</div>
+                            <div class="option">D. 35786 km</div>
+                        </div>
+                        <button class="toggle-answer" onclick="toggleAnswer(this)">查看答案</button>
+                        <div class="answer-section">
+                            <h4>✅ 答案：D</h4>
+                            <div class="answer">
+                                <p><strong>解析：</strong>地球同步轨道（GEO）高度约为35786 km，轨道周期为24小时，与地球自转周期相同。</p>
+                                <p><strong>记忆技巧：</strong>35786 km ≈ 36000 km</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p><span class="question-number">4.</span><span class="question-text">逃逸速度与圆周速度的关系是：</span></p>
+                        <div class="options">
+                            <div class="option">A. v_escape = v_circular</div>
+                            <div class="option">B. v_escape = 2 × v_circular</div>
+                            <div class="option">C. v_escape = 2 × v_circular</div>
+                            <div class="option">D. v_escape = v_circular / √2</div>
+                        </div>
+                        <button class="toggle-answer" onclick="toggleAnswer(this)">查看答案</button>
+                        <div class="answer-section">
+                            <h4>✅ 答案：C</h4>
+                            <div class="answer">
+                                <p><strong>解析：</strong>逃逸速度 v_escape = √2 × v_circular ≈ 1.414 × v_circular</p>
+                                <p><strong>推导：</strong>逃逸速度 v_escape = √(2μ/r)，圆周速度 v_circular = √(μ/r)</p>
+                                <div class="warning-box">
+                                    <strong>️ 易错点：</strong>不要误认为逃逸速度是圆周速度的2倍！
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p><span class="question-number">5.</span><span class="question-text">轨道六根数中，描述轨道形状的参数是：</span></p>
+                        <div class="options">
+                            <div class="option">A. 半长轴 a</div>
+                            <div class="option">B. 偏心率 e</div>
+                            <div class="option">C. 轨道倾角 i</div>
+                            <div class="option">D. 真近点角 ν</div>
+                        </div>
+                        <button class="toggle-answer" onclick="toggleAnswer(this)">查看答案</button>
+                        <div class="answer-section">
+                            <h4>✅ 答案：B</h4>
+                            <div class="answer">
+                                <p><strong>解析：</strong>偏心率e描述轨道形状：e=0为圆轨道，0<e<1为椭圆，e=1为抛物线，e>1为双曲线。</p>
+                                <p><strong>注意：</strong>半长轴a描述轨道大小，偏心率e描述轨道形状。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 填空题 -->
+                <div class="question-type">
+                    <h3>二、填空题（每题3分，共15分）</h3>
+                    
+                    <div class="question">
+                        <p><span class="question-number">6.</span><span class="question-text">开普勒第三定律的数学表达式为：T² = ____________</span></p>
+                        <button class="toggle-answer" onclick="toggleAnswer(this)">查看答案</button>
+                        <div class="answer-section">
+                            <h4>✅ 答案：(4π²/μ) × a³ 或 (4π²/GM) × a³</h4>
+                            <div class="answer">
+                                <p><strong>说明：</strong>其中μ = GM 是引力常数，a是半长轴，T是轨道周期。</p>
+                                <p>对于地球轨道，μ = 398600.4418 km³/s²</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p><span class="question-number">7.</span><span class="question-text">地球引力常数 μ = GM = ____________ km³/s²</span></p>
+                        <button class="toggle-answer" onclick="toggleAnswer(this)">查看答案</button>
+                        <div class="answer-section">
+                            <h4>✅ 答案：398600.4418</h4>
+                            <div class="answer">
+                                <p><strong>记忆要点：</strong>μ = 398600.4418 km³/s²（考试中常用近似值 3.986×10⁵ km³/s²）</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p><span class="question-number">8.</span><span class="question-text">当比机械能 ε < 0 时，轨道类型为 ____________</span></p>
+                        <button class="toggle-answer" onclick="toggleAnswer(this)">查看答案</button>
+                        <div class="answer-section">
+                            <h4>✅ 答案：椭圆轨道（束缚轨道）</h4>
+                            <div class="answer">
+                                <p><strong>知识点：</strong></p>
+                                <p>• ε < 0：椭圆轨道（e < 1）</p>
+                                <p>• ε = 0：抛物线轨道（e = 1）</p>
+                                <p>• ε > 0：双曲线轨道（e > 1）</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p><span class="question-number">9.</span><span class="question-text">近地点高度 h_p = ____________</span></p>
+                        <button class="toggle-answer" onclick="toggleAnswer(this)">查看答案</button>
+                        <div class="answer-section">
+                            <h4>✅ 答案：a(1 - e) - R_earth</h4>
+                            <div class="answer">
+                                <p><strong>推导：</strong></p>
+                                <p>近地点半径 r_p = a(1 - e)</p>
+                                <p>近地点高度 h_p = r_p - R_earth = a(1 - e) - R_earth</p>
+                                <p>其中 R_earth = 6371 km</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p><span class="question-number">10.</span><span class="question-text">地球同步轨道的周期为 ____________ 小时</span></p>
+                        <button class="toggle-answer" onclick="toggleAnswer(this)">查看答案</button>
+                        <div class="answer-section">
+                            <h4>✅ 答案：24（或23小时56分4秒，即一个恒星日）</h4>
+                            <div class="answer">
+                                <p><strong>注意：</strong>严格来说是23小时56分4秒（恒星日），但通常简化为24小时。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 计算题 -->
+                <div class="question-type">
+                    <h3>三、计算题（每题6分，共30分）</h3>
+                    
+                    <div class="question">
+                        <p><span class="question-number">11.</span><span class="question-text">计算高度为400km的圆轨道卫星的速度和周期。（已知：R_earth = 6371 km, μ = 398600.4418 km³/s²）</span></p>
+                        <button class="toggle-answer" onclick="toggleAnswer(this)">查看答案</button>
+                        <div class="answer-section">
+                            <h4>✅ 解答</h4>
+                            <div class="answer">
+                                <p><strong>已知：</strong></p>
+                                <p>• 轨道高度 h = 400 km</p>
+                                <p>• 地球半径 R_earth = 6371 km</p>
+                                <p>• 引力常数 μ = 398600.4418 km³/s²</p>
+                                <br>
+                                <p><strong>求解：</strong></p>
+                                <p>1. 轨道半径：r = R_earth + h = 6371 + 400 = <span class="formula">6771 km</span></p>
+                                <p>2. 轨道速度：v = √(μ/r) = √(398600.4418/6771) ≈ <span class="formula">7.67 km/s</span></p>
+                                <p>3. 轨道周期：T = 2π√(r³/μ) = 2π√(6771³/398600.4418) ≈ 5545 s ≈ <span class="formula">92.4 min</span></p>
+                                <br>
+                                <p><strong>答案：</strong>速度 ≈ 7.67 km/s，周期 ≈ 92.4分钟</p>
+                                <div class="warning-box">
+                                    <strong>⚠️ 易错点：</strong>不要忘记将高度加上地球半径得到轨道半径！r = R_earth + h
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p><span class="question-number">12.</span><span class="question-text">某卫星轨道近地点高度200km，远地点高度500km，求轨道偏心率。（R_earth = 6371 km）</span></p>
+                        <button class="toggle-answer" onclick="toggleAnswer(this)">查看答案</button>
+                        <div class="answer-section">
+                            <h4>✅ 解答</h4>
+                            <div class="answer">
+                                <p><strong>已知：</strong></p>
+                                <p>• 近地点高度 h_p = 200 km → r_p = 6371 + 200 = 6571 km</p>
+                                <p>• 远地点高度 h_a = 500 km → r_a = 6371 + 500 = 6871 km</p>
+                                <br>
+                                <p><strong>求解：</strong></p>
+                                <p>1. 半长轴：a = (r_p + r_a)/2 = (6571 + 6871)/2 = <span class="formula">6721 km</span></p>
+                                <p>2. 偏心率：e = (r_a - r_p)/(r_a + r_p) = (6871 - 6571)/(6871 + 6571) = 300/13442 ≈ <span class="formula">0.0223</span></p>
+                                <br>
+                                <p><strong>答案：</strong>偏心率 e ≈ 0.0223（接近圆轨道）</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p><span class="question-number">13.</span><span class="question-text">计算地球表面的逃逸速度。（R_earth = 6371 km, μ = 398600.4418 km³/s²）</span></p>
+                        <button class="toggle-answer" onclick="toggleAnswer(this)">查看答案</button>
+                        <div class="answer-section">
+                            <h4>✅ 解答</h4>
+                            <div class="answer">
+                                <p><strong>公式：</strong>v_escape = √(2μ/R_earth)</p>
+                                <br>
+                                <p><strong>计算：</strong></p>
+                                <p>v_escape = √(2 × 398600.4418 / 6371)</p>
+                                <p>= (797200.8836 / 6371)</p>
+                                <p>= √125.13</p>
+                                <p>≈ <span class="formula">11.186 km/s</span></p>
+                                <br>
+                                <p><strong>答案：</strong>地球表面逃逸速度 ≈ 11.2 km/s</p>
+                                <p><strong>记忆：</strong>这是著名的"第二宇宙速度"</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p><span class="question-number">14.</span><span class="question-text">一颗卫星在椭圆轨道上运行，半长轴a = 7000 km，偏心率e = 0.1。计算近地点和远地点的速度。（μ = 398600.4418 km³/s²）</span></p>
+                        <button class="toggle-answer" onclick="toggleAnswer(this)">查看答案</button>
+                        <div class="answer-section">
+                            <h4>✅ 解答</h4>
+                            <div class="answer">
+                                <p><strong>步骤1：计算近地点和远地点半径</strong></p>
+                                <p>r_p = a(1 - e) = 7000 × (1 - 0.1) = <span class="formula">6300 km</span></p>
+                                <p>r_a = a(1 + e) = 7000 × (1 + 0.1) = <span class="formula">7700 km</span></p>
+                                <br>
+                                <p><strong>步骤2：使用活力公式计算速度</strong></p>
+                                <p>活力公式：v² = μ(2/r - 1/a)</p>
+                                <br>
+                                <p>近地点速度：</p>
+                                <p>v_p = √[μ(2/r_p - 1/a)] = √[398600.4418 × (2/6300 - 1/7000)]</p>
+                                <p>= √[398600.4418 × (0.0003175 - 0.0001429)]</p>
+                                <p>= √[398600.4418 × 0.0001746]</p>
+                                <p>≈ <span class="formula">8.35 km/s</span></p>
+                                <br>
+                                <p>远地点速度：</p>
+                                <p>v_a = √[μ(2/r_a - 1/a)] = √[398600.4418 × (2/7700 - 1/7000)]</p>
+                                <p>≈ <span class="formula">6.82 km/s</span></p>
+                                <br>
+                                <p><strong>验证：</strong>v_p × r_p = v_a × r_a（角动量守恒）</p>
+                                <p>8.35 × 6300 ≈ 6.82 × 7700 ≈ 52605 ✓</p>
+                                <br>
+                                <p><strong>答案：</strong>近地点速度 ≈ 8.35 km/s，远地点速度 ≈ 6.82 km/s</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p><span class="question-number">15.</span><span class="question-text">计算地球同步轨道（GEO）的轨道半径和高度。（T = 24小时 = 86400 s, μ = 398600.4418 km³/s²）</span></p>
+                        <button class="toggle-answer" onclick="toggleAnswer(this)">查看答案</button>
+                        <div class="answer-section">
+                            <h4>✅ 解答</h4>
+                            <div class="answer">
+                                <p><strong>使用开普勒第三定律：</strong>T² = (4π²/μ) × a³</p>
+                                <br>
+                                <p><strong>求解a：</strong></p>
+                                <p>a³ = μ × T² / (4π²)</p>
+                                <p>a³ = 398600.4418 × 86400² / (4 × π²)</p>
+                                <p>a³ = 398600.4418 × 7.46496×10 / 39.478</p>
+                                <p>a³ ≈ 7.535×10¹³</p>
+                                <p>a ≈ <span class="formula">42164 km</span></p>
+                                <br>
+                                <p><strong>计算高度：</strong></p>
+                                <p>h = a - R_earth = 42164 - 6371 = <span class="formula">35793 km</span></p>
+                                <br>
+                                <p><strong>答案：</strong></p>
+                                <p>• 轨道半径：42164 km</p>
+                                <p>• 轨道高度：35793 km（约35786 km，微小差异来自计算精度）</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 简答题 -->
+                <div class="question-type">
+                    <h3>四、简答题（每题4分，共20分）</h3>
+                    
+                    <div class="question">
+                        <p><span class="question-number">16.</span><span class="question-text">简述开普勒三大定律的内容及其物理意义。</span></p>
+                        <button class="toggle-answer" onclick="toggleAnswer(this)">查看答案</button>
+                        <div class="answer-section">
+                            <h4>✅ 答案要点</h4>
+                            <div class="answer">
+                                <p><strong>第一定律（椭圆轨道定律）：</strong></p>
+                                <p>• 内容：行星轨道是椭圆，太阳位于一个焦点上</p>
+                                <p>• 意义：打破了古希腊"完美圆形轨道"的观念</p>
+                                <br>
+                                <p><strong>第二定律（面积速度定律）：</strong></p>
+                                <p>• 内容：相等时间内扫过的面积相等</p>
+                                <p>• 意义：反映了角动量守恒，近地点速度快，远地点速度慢</p>
+                                <br>
+                                <p><strong>第三定律（周期定律）：</strong></p>
+                                <p>• 内容：T²  a³（周期平方与半长轴立方成正比）</p>
+                                <p>• 意义：建立了轨道大小与周期的定量关系</p>
+                                <br>
+                                <p><strong>评分标准：</strong>每个定律1分，物理意义1分</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p><span class="question-number">17.</span><span class="question-text">什么是轨道六根数？列举并简要说明每个参数的物理意义。</span></p>
+                        <button class="toggle-answer" onclick="toggleAnswer(this)">查看答案</button>
+                        <div class="answer-section">
+                            <h4>✅ 答案要点</h4>
+                            <div class="answer">
+                                <p><strong>轨道六根数：</strong>确定卫星轨道所需的六个独立参数</p>
+                                <br>
+                                <p><strong>六个参数：</strong></p>
+                                <p>1. <strong>半长轴 a</strong>：描述轨道大小</p>
+                                <p>2. <strong>偏心率 e</strong>：描述轨道形状</p>
+                                <p>3. <strong>轨道倾角 i</strong>：轨道平面与赤道面的夹角</p>
+                                <p>4. <strong>升交点赤经 Ω</strong>：升交点在赤道面上的经度</p>
+                                <p>5. <strong>近地点幅角 ω</strong>：近地点相对于升交点的角度</p>
+                                <p>6. <strong>真近点角 ν</strong>：卫星在轨道上的瞬时位置</p>
+                                <br>
+                                <p><strong>评分标准：</strong>列出6个参数得3分，说明意义得1分</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p><span class="question-number">18.</span><span class="question-text">比较圆轨道和椭圆轨道的特点，说明近地点和远地点速度的差异。</span></p>
+                        <button class="toggle-answer" onclick="toggleAnswer(this)">查看答案</button>
+                        <div class="answer-section">
+                            <h4>✅ 答案要点</h4>
+                            <div class="answer">
+                                <p><strong>圆轨道特点：</strong></p>
+                                <p>• 偏心率 e = 0</p>
+                                <p>• 轨道半径恒定</p>
+                                <p>• 速度大小恒定</p>
+                                <br>
+                                <p><strong>椭圆轨道特点：</strong></p>
+                                <p>• 偏心率 0 < e < 1</p>
+                                <p>• 轨道半径周期性变化</p>
+                                <p>• 速度大小周期性变化</p>
+                                <br>
+                                <p><strong>速度差异：</strong></p>
+                                <p>• 近地点速度最大（距离最近，势能最小，动能最大）</p>
+                                <p>• 远地点速度最小（距离最远，势能最大，动能最小）</p>
+                                <p>• 遵循开普勒第二定律（面积速度守恒）</p>
+                                <br>
+                                <p><strong>评分标准：</strong>圆轨道特点1分，椭圆轨道特点1分，速度差异2分</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p><span class="question-number">19.</span><span class="question-text">解释什么是逃逸速度，并说明其与圆周速度的关系。</span></p>
+                        <button class="toggle-answer" onclick="toggleAnswer(this)">查看答案</button>
+                        <div class="answer-section">
+                            <h4>✅ 答案要点</h4>
+                            <div class="answer">
+                                <p><strong>逃逸速度定义：</strong></p>
+                                <p>物体从某天体表面（或某轨道）完全脱离该天体引力场所需的最小初速度。</p>
+                                <br>
+                                <p><strong>公式：</strong>v_escape = √(2μ/r)</p>
+                                <br>
+                                <p><strong>与圆周速度的关系：</strong></p>
+                                <p>• 圆周速度：v_circular = √(μ/r)</p>
+                                <p>• 逃逸速度：v_escape = √2 × v_circular ≈ 1.414 × v_circular</p>
+                                <br>
+                                <p><strong>物理意义：</strong></p>
+                                <p>• 当速度达到逃逸速度时，物体总机械能 ≥ 0，可以逃离引力场</p>
+                                <p>• 地球表面逃逸速度约为11.2 km/s（第二宇宙速度）</p>
+                                <br>
+                                <p><strong>评分标准：</strong>定义2分，关系1分，物理意义1分</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p><span class="question-number">20.</span><span class="question-text">什么是地球同步轨道？它有哪些特点和应用？</span></p>
+                        <button class="toggle-answer" onclick="toggleAnswer(this)">查看答案</button>
+                        <div class="answer-section">
+                            <h4>✅ 答案要点</h4>
+                            <div class="answer">
+                                <p><strong>定义：</strong></p>
+                                <p>轨道周期与地球自转周期（24小时）相同的轨道。</p>
+                                <br>
+                                <p><strong>特点：</strong></p>
+                                <p>1. 轨道周期 = 24小时（恒星日：23小时56分4秒）</p>
+                                <p>2. 轨道高度 ≈ 35786 km</p>
+                                <p>3. 轨道半径 ≈ 42164 km</p>
+                                <p>4. 若轨道倾角为0°且为圆轨道，则称为地球静止轨道（GEO），卫星相对地面静止</p>
+                                <br>
+                                <p><strong>应用：</strong></p>
+                                <p>1. 通信卫星（如电视转播、电话通信）</p>
+                                <p>2. 气象卫星（如风云四号）</p>
+                                <p>3. 导航卫星（部分系统）</p>
+                                <p>4. 军事侦察和预警</p>
+                                <br>
+                                <p><strong>评分标准：</strong>定义1分，特点2分，应用1分</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 第2-8章提示 -->
+            <section style="background: rgba(255, 215, 0, 0.1); border: 2px solid #ffd700; border-radius: 10px; padding: 2rem; text-align: center;">
+                <h2 style="color: #ffd700; margin-bottom: 1rem;">📚 完整题库（160题）</h2>
+                <p style="color: #a0d8ff; font-size: 1.1rem; margin-bottom: 1.5rem;">
+                    以上展示了第1章的完整练习题（20题）。<br>
+                    完整题库包含8章共160道题，涵盖所有核心知识点。
+                </p>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="../docs/CHAPTER_EXERCISES.md" target="_blank" style="display: inline-block; background: linear-gradient(135deg, #00d4ff, #0099cc); color: white; padding: 1rem 2rem; border-radius: 8px; text-decoration: none; font-weight: bold; transition: all 0.3s;">
+                        📖 查看完整题库文档
+                    </a>
+                    <a href="exam-guide.html" style="display: inline-block; background: linear-gradient(135deg, #ffd700, #ff8c00); color: white; padding: 1rem 2rem; border-radius: 8px; text-decoration: none; font-weight: bold; transition: all 0.3s;">
+                        📝 查看复习指南
+                    </a>
+                </div>
+            </section>
+
+            <!-- 页脚 -->
+            <footer class="page-footer">
+                <p>📖 完整理论文档：<a href="../docs/AEROSPACE_THEORY_KNOWLEDGE_BASE.md" target="_blank">AEROSPACE_THEORY_KNOWLEDGE_BASE.md</a></p>
+                <p>📝 复习指南：<a href="exam-guide.html" style="color: #ffd700;">exam-guide.html</a> | <a href="../docs/EXAM_REVIEW_GUIDE.md" target="_blank">EXAM_REVIEW_GUIDE.md</a></p>
+                <p>✍️ 完整练习题集：<a href="../docs/CHAPTER_EXERCISES.md" target="_blank">CHAPTER_EXERCISES.md</a>（160道题）</p>
+                <p>💡 提示：点击"查看答案"按钮可查看题目解析 | 按 Ctrl+F 搜索知识点</p>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        // 切换答案显示/隐藏
+        function toggleAnswer(button) {
+            const answerSection = button.nextElementSibling;
+            const isShowing = answerSection.classList.contains('show');
+            
+            if (isShowing) {
+                answerSection.classList.remove('show');
+                button.textContent = '查看答案';
+            } else {
+                answerSection.classList.add('show');
+                button.textContent = '隐藏答案';
+            }
+        }
+
+        // 搜索功能
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const questions = document.querySelectorAll('.question');
+                
+                questions.forEach(question => {
+                    const text = question.innerText.toLowerCase();
+                    if (searchTerm === '' || text.includes(searchTerm)) {
+                        question.style.display = '';
+                        question.style.opacity = '1';
+                    } else {
+                        question.style.opacity = '0.2';
+                    }
+                });
+            });
+        }
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // 键盘快捷键
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + F 聚焦搜索框
+            if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+                e.preventDefault();
+                if (searchInput) {
+                    searchInput.focus();
+                }
+            }
+            
+            // ESC 清除搜索
+            if (e.key === 'Escape' && searchInput && searchInput.value !== '') {
+                searchInput.value = '';
+                const questions = document.querySelectorAll('.question');
+                questions.forEach(q => {
+                    q.style.display = '';
+                    q.style.opacity = '1';
+                });
+                searchInput.blur();
+            }
+        });
+    </script>
+</body>
+</html>

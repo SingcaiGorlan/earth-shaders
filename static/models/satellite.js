@@ -1,10 +1,10 @@
 /**
  * 卫星3D模型生成器
- * 这个脚本生成一个简单的卫星模型（立方体 + 太阳能板）
+ * 这个脚本生成一个简单的卫星模型(立方体 + 太阳能板)
  * 
- * 使用方法：
+ * 使用方法:
  * 1. 在 Blender 中创建模型
- * 2. 或者使用 Three.js 程序化生成（如下所示）
+ * 2. 或者使用 Three.js 程序化生成(如下所示)
  * 
  * 这里提供一个简单的程序化卫星模型示例
  */
@@ -18,7 +18,7 @@ import * as THREE from 'three'
 export function createSimpleSatelliteModel() {
     const satelliteGroup = new THREE.Group()
 
-    // 卫星主体（立方体）
+    // 卫星主体(立方体)
     const bodyGeometry = new THREE.BoxGeometry(0.06, 0.06, 0.06)
     const bodyMaterial = new THREE.MeshStandardMaterial({
         color: '#cccccc',
@@ -74,7 +74,7 @@ export function createSimpleSatelliteModel() {
 }
 
 /**
- * 创建 ISS 模型（简化版）
+ * 创建 ISS 模型(简化版)
  * @returns {THREE.Group} ISS 模型组
  */
 export function createISSModel() {
@@ -92,7 +92,7 @@ export function createISSModel() {
     module.castShadow = true
     issGroup.add(module)
 
-    // 太阳能板阵列（大型）
+    // 太阳能板阵列(大型)
     const solarPanelGeometry = new THREE.BoxGeometry(0.25, 0.01, 0.12)
     const solarPanelMaterial = new THREE.MeshStandardMaterial({
         color: '#1565c0',

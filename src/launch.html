@@ -132,10 +132,10 @@
             font-size: 1.5em;
         }
 
-        /* Checkbox grid */
+        /* Checkbox grid - 单栏布局 */
         .checkbox-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: 1fr;
             gap: 12px;
         }
 
@@ -359,15 +359,18 @@
         <div class="header">
             <h1>🌍 Earth Science Visualization</h1>
             <p>选择要启用的功能模块 | Select Features to Enable</p>
-            <div style="margin-top: 15px;">
+            <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
                 <a href="knowledge-base.html" style="color: #64ffda; text-decoration: none; padding: 8px 16px; background: rgba(100, 255, 218, 0.1); border: 1px solid #64ffda; border-radius: 6px; display: inline-block; transition: all 0.3s ease;">
                     📚 航天航空知识库
+                </a>
+                <a href="aerospace-history.html" target="_blank" style="color: #ffd700; text-decoration: none; padding: 8px 16px; background: rgba(255, 215, 0, 0.1); border: 1px solid #ffd700; border-radius: 6px; display: inline-block; transition: all 0.3s ease;">
+                    🚀 航天历史
                 </a>
             </div>
         </div>
 
         <!-- Mode Selection Section -->
-        <div class="feature-section">
+        <div class="feature-section" id="modeSection">
             <div class="section-title">
                 <span class="section-icon">🎯</span>
                 <span>应用模式 | Application Mode</span>
@@ -377,16 +380,10 @@
                     <input type="radio" id="modeEducation" name="appMode" value="education" checked>
                     <label for="modeEducation">
                         <div>教学演示模式 | Education Demo</div>
-                        <div class="description">适合教学和演示，展示地球科学概念</div>
+                        <div class="description">适合教学和演示,展示地球科学概念</div>
                     </label>
                 </div>
-                <div class="checkbox-item">
-                    <input type="radio" id="modeKSP" name="appMode" value="ksp">
-                    <label for="modeKSP">
-                        <div>KSP游戏模式 | KSP Game Mode</div>
-                        <div class="description">航天器控制和轨道力学模拟</div>
-                    </label>
-                </div>
+
                 <div class="checkbox-item">
                     <input type="radio" id="modeResearch" name="appMode" value="research">
                     <label for="modeResearch">
@@ -399,7 +396,7 @@
 
         <!-- Preset configurations -->
         <div class="preset-group">
-            <button class="preset-btn" onclick="loadPreset('minimal')">⚡ 最小配置</button>
+            <button class="preset-btn" onclick="loadPreset('minimal')">🔧 最小配置</button>
             <button class="preset-btn" onclick="loadPreset('balanced')">⚖️ 平衡模式</button>
             <button class="preset-btn" onclick="loadPreset('full')">🚀 完整体验</button>
             <button class="preset-btn" onclick="loadPreset('performance')">🎮 性能优先</button>
@@ -465,6 +462,13 @@
                     </label>
                 </div>
                 <div class="checkbox-item">
+                    <input type="checkbox" id="enablePlanetaryOrbits">
+                    <label for="enablePlanetaryOrbits">
+                        <div>行星轨道 | Planetary Orbits</div>
+                        <div class="description">显示太阳系行星运行轨道</div>
+                    </label>
+                </div>
+                <div class="checkbox-item">
                     <input type="checkbox" id="enableMagnetosphere">
                     <label for="enableMagnetosphere">
                         <div>地球磁层 | Magnetosphere</div>
@@ -475,7 +479,7 @@
                     <input type="checkbox" id="enableAurora">
                     <label for="enableAurora">
                         <div>极光效果 | Aurora</div>
-                        <div class="description">南北极光环</div>
+                        <div class="description">南北极光效果</div>
                     </label>
                 </div>
             </div>
@@ -484,7 +488,7 @@
         <!-- Physics Simulation Section -->
         <div class="feature-section">
             <div class="section-title">
-                <span class="section-icon">🔬</span>
+                <span class="section-icon"></span>
                 <span>物理模拟 | Physics Simulation</span>
             </div>
             <div class="checkbox-grid">
@@ -512,48 +516,6 @@
             </div>
         </div>
 
-        <!-- Mode Selection Section -->
-        <div class="feature-section">
-            <div class="section-title">
-                <span class="section-icon">🎯</span>
-                <span>应用模式 | Application Mode</span>
-            </div>
-            <div class="checkbox-grid">
-                <div class="checkbox-item">
-                    <input type="radio" id="modeEducation" name="appMode" value="education" checked>
-                    <label for="modeEducation">
-                        <div>教学演示模式 | Education Demo</div>
-                        <div class="description">适合教学和演示，展示地球科学概念</div>
-                    </label>
-                </div>
-                <div class="checkbox-item">
-                    <input type="radio" id="modeKSP" name="appMode" value="ksp">
-                    <label for="modeKSP">
-                        <div>KSP游戏模式 | KSP Game Mode</div>
-                        <div class="description">航天器控制和轨道力学模拟</div>
-                    </label>
-                </div>
-                <div class="checkbox-item">
-                    <input type="radio" id="modeResearch" name="appMode" value="research">
-                    <label for="modeResearch">
-                        <div>科研模式 | Research Mode</div>
-                        <div class="description">详细数据分析和科学可视化</div>
-                    </label>
-                </div>
-            </div>
-        </div>
-
-        <!-- Preset configurations -->
-        <div class="preset-group">
-            <button class="preset-btn" onclick="loadPreset('minimal')">⚡ 最小配置</button>
-            <button class="preset-btn" onclick="loadPreset('balanced')">⚖️ 平衡模式</button>
-            <button class="preset-btn" onclick="loadPreset('full')">🚀 完整体验</button>
-            <button class="preset-btn" onclick="loadPreset('performance')">🎮 性能优先</button>
-            <button class="preset-btn" onclick="loadPreset('education')">📚 教学模式</button>
-            <button class="preset-btn" onclick="loadPreset('ksp')">🚀 KSP模式</button>
-            <button class="preset-btn" onclick="loadPreset('research')">🔬 科研模式</button>
-        </div>
-
         <!-- Interactive Features Section -->
         <div class="feature-section">
             <div class="section-title">
@@ -565,14 +527,14 @@
                     <input type="checkbox" id="enableSatellites" checked>
                     <label for="enableSatellites">
                         <div>卫星轨道 | Satellite Orbits</div>
-                        <div class="description">真实卫星追踪系统</div>
+                        <div class="description">真实卫星追踪系统(含轨道线)</div>
                     </label>
                 </div>
                 <div class="checkbox-item">
-                    <input type="checkbox" id="enableKSPMode">
-                    <label for="enableKSPMode">
-                        <div>KSP游戏模式 | KSP Game Mode</div>
-                        <div class="description">航天器控制和轨道力学</div>
+                    <input type="checkbox" id="enableOrbitLines" checked>
+                    <label for="enableOrbitLines">
+                        <div>轨道线显示 | Orbit Lines</div>
+                        <div class="description">显示卫星运行轨道轨迹</div>
                     </label>
                 </div>
                 <div class="checkbox-item">
@@ -591,7 +553,7 @@
             <div class="perf-bar">
                 <div class="perf-fill" id="perfFill" style="width: 30%"></div>
             </div>
-            <div class="perf-text" id="perfText">当前配置：中等负载 | Current: Medium Load</div>
+            <div class="perf-text" id="perfText">当前配置:中等负载 | Current: Medium Load</div>
         </div>
 
         <!-- Action Buttons -->
@@ -635,8 +597,7 @@
                     enabledCount++;
                     // Heavy features that impact performance more
                     if (['enableOceanWaves', 'enableSolarWind', 'enableMagnetosphere', 
-                         'enableAurora', 'enableGravityField', 'enableCyclones', 
-                         'enableKSPMode'].includes(cb.id)) {
+                         'enableAurora', 'enableGravityField', 'enableCyclones'].includes(cb.id)) {
                         heavyFeatures++;
                     }
                 }
@@ -654,16 +615,16 @@
 
             if (totalLoad < 30) {
                 perfFill.style.background = 'linear-gradient(90deg, #64ffda 0%, #00ff88 100%)';
-                perfText.textContent = '当前配置：低负载 - 流畅运行 | Current: Low Load - Smooth';
+                perfText.textContent = '当前配置:低负载 - 流畅运行 | Current: Low Load - Smooth';
             } else if (totalLoad < 60) {
                 perfFill.style.background = 'linear-gradient(90deg, #64ffda 0%, #667eea 100%)';
-                perfText.textContent = '当前配置：中等负载 - 良好性能 | Current: Medium Load - Good';
+                perfText.textContent = '当前配置:中等负载 - 良好性能 | Current: Medium Load - Good';
             } else if (totalLoad < 80) {
                 perfFill.style.background = 'linear-gradient(90deg, #ffd700 0%, #ff8c00 100%)';
-                perfText.textContent = '当前配置：高负载 - 可能需要高性能设备 | Current: High Load';
+                perfText.textContent = '当前配置:高负载 - 可能需要高性能设备 | Current: High Load';
             } else {
                 perfFill.style.background = 'linear-gradient(90deg, #ff6b6b 0%, #ee5a6f 100%)';
-                perfText.textContent = '当前配置：极高负载 - 建议减少功能 | Current: Very High Load';
+                perfText.textContent = '当前配置:极高负载 - 建议减少功能 | Current: Very High Load';
             }
         }
 
@@ -678,13 +639,14 @@
                     enableOceanWaves: false,
                     enableSun: true,
                     enableSolarWind: false,
+                    enablePlanetaryOrbits: false,
                     enableMagnetosphere: false,
                     enableAurora: false,
                     enableGravityField: false,
                     enableLagrangePoints: false,
                     enableCyclones: false,
                     enableSatellites: true,
-                    enableKSPMode: false,
+                    enableOrbitLines: true,
                     enableTimeControl: true
                 },
                 balanced: {
@@ -695,13 +657,14 @@
                     enableOceanWaves: false,
                     enableSun: true,
                     enableSolarWind: false,
+                    enablePlanetaryOrbits: false,
                     enableMagnetosphere: false,
                     enableAurora: false,
                     enableGravityField: false,
                     enableLagrangePoints: false,
                     enableCyclones: false,
                     enableSatellites: true,
-                    enableKSPMode: false,
+                    enableOrbitLines: true,
                     enableTimeControl: true
                 },
                 full: {
@@ -712,13 +675,14 @@
                     enableOceanWaves: true,
                     enableSun: true,
                     enableSolarWind: true,
+                    enablePlanetaryOrbits: true,
                     enableMagnetosphere: true,
                     enableAurora: true,
                     enableGravityField: true,
                     enableLagrangePoints: true,
                     enableCyclones: true,
                     enableSatellites: true,
-                    enableKSPMode: true,
+                    enableOrbitLines: true,
                     enableTimeControl: true
                 },
                 performance: {
@@ -729,64 +693,14 @@
                     enableOceanWaves: false,
                     enableSun: true,
                     enableSolarWind: false,
+                    enablePlanetaryOrbits: false,
                     enableMagnetosphere: false,
                     enableAurora: false,
                     enableGravityField: false,
                     enableLagrangePoints: false,
                     enableCyclones: false,
                     enableSatellites: true,
-                    enableKSPMode: false,
-                    enableTimeControl: true
-                },
-                education: {
-                    appMode: 'education',
-                    enableEarth: true,
-                    enableClouds: true,
-                    enableAtmosphere: true,
-                    enableOceanWaves: true,
-                    enableSun: true,
-                    enableSolarWind: false,
-                    enableMagnetosphere: false,
-                    enableAurora: true,
-                    enableGravityField: false,
-                    enableLagrangePoints: false,
-                    enableCyclones: true,
-                    enableSatellites: true,
-                    enableKSPMode: false,
-                    enableTimeControl: true
-                },
-                ksp: {
-                    appMode: 'ksp',
-                    enableEarth: true,
-                    enableClouds: true,
-                    enableAtmosphere: true,
-                    enableOceanWaves: false,
-                    enableSun: true,
-                    enableSolarWind: false,
-                    enableMagnetosphere: false,
-                    enableAurora: false,
-                    enableGravityField: false,
-                    enableLagrangePoints: false,
-                    enableCyclones: false,
-                    enableSatellites: true,
-                    enableKSPMode: true,
-                    enableTimeControl: true
-                },
-                research: {
-                    appMode: 'research',
-                    enableEarth: true,
-                    enableClouds: true,
-                    enableAtmosphere: true,
-                    enableOceanWaves: false,
-                    enableSun: true,
-                    enableSolarWind: true,
-                    enableMagnetosphere: true,
-                    enableAurora: true,
-                    enableGravityField: true,
-                    enableLagrangePoints: true,
-                    enableCyclones: false,
-                    enableSatellites: true,
-                    enableKSPMode: false,
+                    enableOrbitLines: true,
                     enableTimeControl: true
                 }
             };
@@ -831,13 +745,14 @@
                 oceanWaves: document.getElementById('enableOceanWaves').checked,
                 sun: document.getElementById('enableSun').checked,
                 solarWind: document.getElementById('enableSolarWind').checked,
+                planetaryOrbits: document.getElementById('enablePlanetaryOrbits').checked,
                 magnetosphere: document.getElementById('enableMagnetosphere').checked,
                 aurora: document.getElementById('enableAurora').checked,
                 gravityField: document.getElementById('enableGravityField').checked,
                 lagrangePoints: document.getElementById('enableLagrangePoints').checked,
                 cyclones: document.getElementById('enableCyclones').checked,
                 satellites: document.getElementById('enableSatellites').checked,
-                kspMode: document.getElementById('enableKSPMode').checked,
+                orbitLines: document.getElementById('enableOrbitLines').checked,
                 timeControl: document.getElementById('enableTimeControl').checked
             };
 
@@ -903,13 +818,14 @@
                                                            key === 'oceanWaves' ? 'enableOceanWaves' :
                                                            key === 'sun' ? 'enableSun' :
                                                            key === 'solarWind' ? 'enableSolarWind' :
+                                                           key === 'planetaryOrbits' ? 'enablePlanetaryOrbits' :
                                                            key === 'magnetosphere' ? 'enableMagnetosphere' :
                                                            key === 'aurora' ? 'enableAurora' :
                                                            key === 'gravityField' ? 'enableGravityField' :
                                                            key === 'lagrangePoints' ? 'enableLagrangePoints' :
                                                            key === 'cyclones' ? 'enableCyclones' :
                                                            key === 'satellites' ? 'enableSatellites' :
-                                                           key === 'kspMode' ? 'enableKSPMode' :
+                                                           key === 'orbitLines' ? 'enableOrbitLines' :
                                                            key === 'timeControl' ? 'enableTimeControl' : '');
                     if (checkbox) {
                         checkbox.checked = config[key];

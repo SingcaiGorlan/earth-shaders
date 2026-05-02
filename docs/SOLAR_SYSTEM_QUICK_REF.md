@@ -54,7 +54,7 @@ controls.target.set(0, 0, 0)
 // 调整时间流速
 solarSystemConfig.timeScale = 5.0  // 5倍速
 
-// 暂停（设为0）
+// 暂停(设为0)
 solarSystemConfig.timeScale = 0
 
 // 正常速度
@@ -75,13 +75,13 @@ solarSystem.toggleAsteroidBelt(false)
 ## 🔢 关键参数
 
 ### 太阳
-- **半径：** 3.0单位
-- **光晕内层：** 3.5单位，30%透明
-- **光晕外层：** 4.5单位，15%透明
-- **日冕粒子：** 200个
-- **光照强度：** 2.0
+- **半径:** 3.0单位
+- **光晕内层:** 3.5单位,30%透明
+- **光晕外层:** 4.5单位,15%透明
+- **日冕粒子:** 200个
+- **光照强度:** 2.0
 
-### 行星尺寸（相对）
+### 行星尺寸(相对)
 ```
 最大: 木星 3.5
       土星 3.0
@@ -110,11 +110,11 @@ solarSystem.toggleAsteroidBelt(false)
 ```
 
 ### 小行星带
-- **数量：** 2,000颗
-- **位置：** 28-32单位（火星木星之间）
-- **高度：** ±0.75单位
-- **粒子大小：** 0.05-0.2单位
-- **旋转速度：** 0.0005/帧
+- **数量:** 2,000颗
+- **位置:** 28-32单位(火星木星之间)
+- **高度:** ±0.75单位
+- **粒子大小:** 0.05-0.2单位
+- **旋转速度:** 0.0005/帧
 
 ---
 
@@ -139,18 +139,18 @@ solarSystem.toggleAsteroidBelt(false)
 ## ⚙️ 技术细节
 
 ### 材质类型
-- **类地行星：** MeshStandardMaterial（粗糙表面）
-- **气态巨行星：** MeshPhongMaterial（光泽表面）
-- **太阳光晕：** MeshBasicMaterial + BackSide
-- **轨道线：** LineBasicMaterial
-- **小行星：** PointsMaterial
+- **类地行星:** MeshStandardMaterial(粗糙表面)
+- **气态巨行星:** MeshPhongMaterial(光泽表面)
+- **太阳光晕:** MeshBasicMaterial + BackSide
+- **轨道线:** LineBasicMaterial
+- **小行星:** PointsMaterial
 
 ### 几何体细分
-- **太阳：** 64×64
-- **行星：** 32×32
-- **月球：** 16×16
-- **轨道：** 128段
-- **光环：** 64段
+- **太阳:** 64×64
+- **行星:** 32×32
+- **月球:** 16×16
+- **轨道:** 128段
+- **光环:** 64段
 
 ### 动画更新频率
 ```javascript
@@ -168,7 +168,7 @@ solarSystem.toggleAsteroidBelt(false)
 
 ### 场景1: 教育演示
 ```javascript
-// 慢速展示，便于讲解
+// 慢速展示,便于讲解
 solarSystemConfig.timeScale = 0.5
 solarSystemConfig.showOrbits = true
 solarSystemConfig.showAsteroidBelt = true
@@ -180,7 +180,7 @@ const planets = ['Mercury', 'Venus', 'Earth', 'Mars',
 
 ### 场景2: 艺术渲染
 ```javascript
-// 隐藏辅助元素，突出美感
+// 隐藏辅助元素,突出美感
 solarSystemConfig.showOrbits = false
 solarSystemConfig.showAsteroidBelt = false
 solarSystemConfig.timeScale = 0.2
@@ -195,7 +195,7 @@ camera.position.set(30, 20, 40)
 solarSystemConfig.timeScale = 10.0
 solarSystemConfig.showOrbits = true
 
-// 关注特定区域（如小行星带）
+// 关注特定区域(如小行星带)
 camera.position.set(0, 15, 35)
 controls.target.set(30, 0, 0)
 ```
@@ -212,10 +212,10 @@ T² ∝ a³
 地球: (20/1.0)² = 400     vs    20³ = 8000
 木星: (35/0.084)² ≈ 173K  vs    35³ = 42,875
 
-注意：模型速度经过调整以便观察，不完全符合真实比例
+注意:模型速度经过调整以便观察,不完全符合真实比例
 ```
 
-### 洛希极限（光环形成）
+### 洛希极限(光环形成)
 ```
 土星光环位于洛希极限内
 r_Roche ≈ 2.44 × R_planet × (ρ_planet/ρ_ring)^(1/3)
@@ -266,16 +266,16 @@ solarSystem.planets[0].group.visible = true
 
 ### 优化建议
 ✅ 不使用时禁用太阳系  
-✅ 减少小行星数量（修改asteroidCount）  
-✅ 降低几何体细分（32→16）  
-✅ 关闭阴影（如果不需要）  
+✅ 减少小行星数量(修改asteroidCount)  
+✅ 降低几何体细分(32→16)  
+✅ 关闭阴影(如果不需要)  
 ✅ 使用较低的时间流速  
 
 ### 资源占用
-- **三角形数：** ~50,000
-- **绘制调用：** ~30次
-- **内存占用：** ~10MB
-- **FPS影响：** 通常 <5%
+- **三角形数:** ~50,000
+- **绘制调用:** ~30次
+- **内存占用:** ~10MB
+- **FPS影响:** 通常 <5%
 
 ---
 
@@ -342,4 +342,4 @@ solarSystemConfig.focusPlanet = 'None';
 
 ---
 
-**快速参考，随时查阅！🚀**
+**快速参考,随时查阅！🚀**

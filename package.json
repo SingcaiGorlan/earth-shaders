@@ -1,20 +1,22 @@
 {
-  "name": "threejs-journey-exercise",
+  "name": "aerospace-knowledge-system",
+  "productName": "航天航空知识可视化系统",
   "private": true,
-  "version": "0.0.0",
+  "version": "2.3.0",
+  "description": "基于 Three.js 的航天航空知识可视化学习平台",
+  "author": "Gorlan",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build"
   },
-  "devDependencies": {
-    "vite": "^6.2.2",
-    "vite-plugin-glsl": "1.3.3",
-    "vite-plugin-restart": "^0.4.2"
-  },
   "dependencies": {
     "lil-gui": "^0.20.0",
     "satellite.js": "^4.1.4",
     "three": "^0.174.0"
+  },
+  "devDependencies": {
+    "vite": "^6.2.2",
+    "vite-plugin-glsl": "1.3.3"
   }
 }

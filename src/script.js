@@ -4,8 +4,11 @@ import GUI from 'lil-gui'
 import earthVertexShader from './shaders/earth/vertex.glsl'
 import earthFragmentShader from './shaders/earth/fragment.glsl'
 import { SatelliteOrbitManager } from './satelliteOrbit.js'
-import { KSPGameSystem } from './kspGame.js'
 import { SolarSystemModel } from './solarSystem.js'
+import { aerospaceHistoryEvents, getEventsByCategory, getEventsByCountry, getHighSignificanceEvents } from './aerospaceHistory.js'
+
+// Declare solarSystem at module level so it can be accessed in applyUserConfig
+let solarSystem = null
 
 /**
  * Load user configuration from launch page
@@ -92,6 +95,22 @@ function applyUserConfig() {
         if (earthMaterial.uniforms.waveHeight) {
             earthMaterial.uniforms.waveHeight.value = 0
         }
+    }
+    
+    // Control orbit lines visibility
+    if (typeof orbitManager !== 'undefined') {
+        const showOrbitLines = isFeatureEnabled('orbitLines', true)
+        orbitManager.orbitLines.forEach(orbitObj => {
+            if (orbitObj.line) {
+                orbitObj.line.visible = showOrbitLines
+            }
+        })
+    }
+    
+    // Control planetary orbits visibility
+    if (solarSystem !== null && solarSystem !== undefined) {
+        const showPlanetaryOrbits = isFeatureEnabled('planetaryOrbits', false)
+        solarSystem.toggleOrbits(showPlanetaryOrbits)
     }
     
     console.log('Configuration applied successfully!')
@@ -997,14 +1016,14 @@ const onSatelliteClick = (satellite, index) => {
     console.log(`点击了卫星: ${satellite.name}`)
     showSatelliteInfoPopup(satellite, orbitManager)
     
-    // 可选：聚焦到该卫星
+    // 可选:聚焦到该卫星
     if (satellite.mesh) {
         const satPos = satellite.mesh.position
         controls.target.lerp(satPos, 0.5)
     }
 }
 
-// 测试：计算 ISS 未来 24 小时位置序列
+// 测试:计算 ISS 未来 24 小时位置序列
 let testPositions = null
 
 // 卫星轨道控制面板
@@ -1031,7 +1050,7 @@ const satelliteConfig = {
         }
     },
     calculateISSPositions: () => {
-        // 获取 ISS 的 satrec（如果已加载）
+        // 获取 ISS 的 satrec(如果已加载)
         if (orbitManager.satellites.length === 0) {
             console.warn('请先加载 ISS')
             return
@@ -1040,7 +1059,7 @@ const satelliteConfig = {
         const issSatrec = orbitManager.satellites[0].satrec
         const startTime = performance.now()
         
-        // 计算未来 24 小时，每分钟一个点
+        // 计算未来 24 小时,每分钟一个点
         testPositions = orbitManager.calculateFuturePositions(
             issSatrec,
             24,  // 24 小时
@@ -1206,6 +1225,11 @@ satelliteFolder.add(satelliteConfig, 'updatePositions').name('实时更新位置
 // Mesh
 const earthGeometry = new THREE.SphereGeometry(2, 64, 64)
 const earth = new THREE.Mesh(earthGeometry, earthMaterial)
+// Store Earth's radius in userData for KSP system to use
+earth.userData = {
+    radius: 6378, // Earth radius in km (used by physics calculations)
+    sceneRadius: 2 // Scene units radius
+}
 scene.add(earth)
 
 // Create Gravitational Field Visualization
@@ -1534,7 +1558,7 @@ window.addEventListener('resize', () =>
  * Camera
  */
 // Base camera
-const camera = new THREE.PerspectiveCamera(25, sizes.width / sizes.height, 0.1, 1000)
+const camera = new THREE.PerspectiveCamera(25, sizes.width / sizes.height, 0.1, 10000)
 camera.position.x = 12
 camera.position.y = 5
 camera.position.z = 4
@@ -2257,6 +2281,48 @@ const moon = new THREE.Mesh(moonGeometry, moonMaterial)
 moon.position.set(30, 0, 0)
 scene.add(moon)
 
+// Create Moon orbit line around Earth
+const moonOrbitRadius = 30
+const moonOrbitCurve = new THREE.EllipseCurve(
+    0, 0,  // Center (Earth position)
+    moonOrbitRadius, moonOrbitRadius,  // xRadius, yRadius (circular orbit)
+    0, 2 * Math.PI,
+    false,
+    0
+)
+const moonOrbitPoints = moonOrbitCurve.getPoints(128)
+const moonOrbitGeometry = new THREE.BufferGeometry().setFromPoints(moonOrbitPoints)
+const moonOrbitMaterial = new THREE.LineBasicMaterial({
+    color: 0xffffff,  // 白色轨道线
+    transparent: true,
+    opacity: 0.4
+})
+const moonOrbitLine = new THREE.Line(moonOrbitGeometry, moonOrbitMaterial)
+moonOrbitLine.rotation.x = Math.PI / 2  // Rotate to XZ plane
+scene.add(moonOrbitLine)
+
+// Create Earth orbit line around Sun
+const earthOrbitRadius = 150  // Distance from Sun to Earth
+const earthOrbitCurve = new THREE.EllipseCurve(
+    0, 0,  // Center
+    earthOrbitRadius, earthOrbitRadius,  // xRadius, yRadius (nearly circular, e=0.017)
+    0, 2 * Math.PI,
+    false,
+    0
+)
+const earthOrbitPoints = earthOrbitCurve.getPoints(256)
+const earthOrbitGeometry = new THREE.BufferGeometry().setFromPoints(earthOrbitPoints)
+const earthOrbitMaterial = new THREE.LineBasicMaterial({
+    color: 0xffffff,  // 白色轨道线
+    transparent: true,
+    opacity: 0.4
+})
+const earthOrbitLine = new THREE.Line(earthOrbitGeometry, earthOrbitMaterial)
+earthOrbitLine.rotation.x = Math.PI / 2  // Rotate to XZ plane
+// Offset to center around Sun position (150, 0, 0)
+earthOrbitLine.position.set(150, 0, 0)
+scene.add(earthOrbitLine)
+
 // Add ambient light for better visibility of non-sunlit areas
 const ambientLight = new THREE.AmbientLight('#404040', 0.3)
 scene.add(ambientLight)
@@ -2340,15 +2406,8 @@ const clock = new THREE.Clock()
 let lastFrameTime = Date.now()
 let lastListUpdateTime = 0
 
-// Initialize KSP Game System
-let kspGame = null
-const appMode = getAppMode()
-if (appMode === 'ksp') {
-    kspGame = new KSPGameSystem(scene, earth, camera, controls)
-}
-
 // Initialize Solar System Extension (adds other planets to existing Earth scene)
-let solarSystem = null
+// solarSystem is already declared at module level (line 10)
 const solarSystemConfig = {
     enableSolarSystem: false,  // 默认禁用
     showOrbits: false,         // 默认隐藏轨道
@@ -2388,82 +2447,6 @@ function toggleSolarSystem(enabled) {
     }
 }
 
-// KSP GUI controls
-const kspFolder = gui.addFolder('🚀 KSP Game Mode')
-const kspConfig = {
-    enableKSPMode: appMode === 'ksp',
-    resetSpacecraft: () => kspGame && kspGame.resetSpacecraft(),
-    cameraMode: 'FREE_ROAM'
-}
-
-if (kspGame) {
-    kspFolder.add(kspConfig, 'enableKSPMode').name('Enable KSP Controls')
-    kspFolder.add(kspConfig, 'resetSpacecraft').name('Reset Spacecraft')
-    kspFolder.add({
-        openConfigPanel: () => kspGame.toggleConfigPanel()
-    }, 'openConfigPanel').name('🔧 航天器配置面板')
-    kspFolder.add(kspConfig, 'cameraMode', ['FREE_ROAM', 'FOLLOW', 'ORBIT']).name('Camera Mode').onChange((value) => {
-        const modeMap = {
-            'FREE_ROAM': 'FREE_ROAM',
-            'FOLLOW': 'FOLLOW_SPACECRAFT',
-            'ORBIT': 'ORBIT_VIEW'
-        }
-        kspGame.gameState.mode = modeMap[value]
-    })
-    
-    // New controls for extended features
-    kspFolder.add({
-        startLaunch: () => kspGame.startLaunchSequence()
-    }, 'startLaunch').name('🚀 开始发射序列')
-    
-    kspFolder.add({
-        toggleAttitudePanel: () => {
-            if (!kspGame.attitudePanel) {
-                kspGame.createAttitudePanel()
-            }
-            const isVisible = kspGame.attitudePanel.style.display !== 'none'
-            kspGame.attitudePanel.style.display = isVisible ? 'none' : 'block'
-        }
-    }, 'toggleAttitudePanel').name('📊 姿态数据面板')
-    
-    kspFolder.add({
-        toggle3DIndicator: () => {
-            if (!kspGame.attitudeIndicator3D) {
-                kspGame.create3DAttitudeIndicator()
-            }
-            kspGame.attitudeIndicator3D.visible = !kspGame.attitudeIndicator3D.visible
-        }
-    }, 'toggle3DIndicator').name('🎨 3D姿态指示器')
-    
-    kspFolder.add({
-        calculateOrbit: () => {
-            kspGame.calculateOrbit()
-            kspGame.drawPredictedOrbit()
-        }
-    }, 'calculateOrbit').name('🛰️ 计算轨道')
-    
-    kspFolder.add({
-        toggleManeuverPanel: () => kspGame.toggleManeuverPanel()
-    }, 'toggleManeuverPanel').name('🎯 机动节点面板')
-    
-    kspFolder.add({
-        toggleMapView: () => kspGame.toggleMapView()
-    }, 'toggleMapView').name('🗺️ 轨道地图视图')
-    
-    kspFolder.add({
-        toggle2DPanel: () => kspGame.toggle2DPanel()
-    }, 'toggle2DPanel').name('🎮 2D控制面板')
-    
-    kspFolder.add({
-        switchToGround: () => {
-            kspGame.gameState.mode = 'GROUND'
-            kspGame.initGroundScene()
-        }
-    }, 'switchToGround').name('🌍 切换到地面模式')
-} else {
-    kspFolder.add(kspConfig, 'enableKSPMode').name('KSP Mode (Disabled in Launch)').disable()
-}
-
 // Solar System GUI controls
 const solarSystemFolder = gui.addFolder('🌌 太阳系模型')
 
@@ -2485,8 +2468,63 @@ solarSystemFolder.add(solarSystemConfig, 'focusPlanet', planetNames).name('聚�
     }
 })
 
+// View mode switching
+const viewConfig = {
+    viewMode: '地球视角'
+}
+
+const viewModes = ['地球视角', '地月系视角', '地日系视角', '全太阳系视角']
+
+function switchViewMode(mode) {
+    console.log(`🎥 Switching to: ${mode}`)
+    
+    switch(mode) {
+        case '地球视角':
+            // Focus on Earth with close view
+            camera.position.set(12, 5, 4)
+            controls.target.set(0, 0, 0)
+            controls.update()
+            break
+            
+        case '地月系视角':
+            // Show Earth-Moon system
+            camera.position.set(0, 50, 80)
+            controls.target.set(0, 0, 0)
+            controls.update()
+            break
+            
+        case '地日系视角':
+            // Show Earth-Sun system
+            camera.position.set(75, 80, 150)
+            controls.target.set(75, 0, 0)
+            controls.update()
+            break
+            
+        case '全太阳系视角':
+            // Show entire solar system
+            camera.position.set(150, 2000, 3000)
+            controls.target.set(150, 0, 0)
+            controls.update()
+            break
+    }
+}
+
+const viewFolder = gui.addFolder('🎥 视角切换')
+viewFolder.add(viewConfig, 'viewMode', viewModes).name('选择视角').onChange(switchViewMode)
+
+
 // Apply user configuration from launch page
 applyUserConfig()
+
+// Auto-initialize solar system if planetary orbits are enabled
+if (isFeatureEnabled('planetaryOrbits', false) && !solarSystem) {
+    console.log('🌌 Auto-initializing solar system for planetary orbits...')
+    solarSystemConfig.enableSolarSystem = true
+    initSolarSystem()
+    // Apply the orbit visibility setting
+    const showPlanetaryOrbits = isFeatureEnabled('planetaryOrbits', false)
+    solarSystem.toggleOrbits(showPlanetaryOrbits)
+}
 
 const tick = () =>
 {
@@ -2494,18 +2532,6 @@ const tick = () =>
     const currentTime = Date.now()
     const deltaTime = (currentTime - lastFrameTime) / 1000  // 秒
     lastFrameTime = currentTime
-
-    // Update KSP game system if enabled
-    if (kspConfig.enableKSPMode) {
-        kspGame.update(deltaTime, elapsedTime)
-        
-        // Disable OrbitControls during launch sequence
-        if (kspGame.gameState.mode === 'LAUNCH' || kspGame.gameState.mode === 'GROUND') {
-            controls.enabled = false
-        } else {
-            controls.enabled = true
-        }
-    }
 
     earth.rotation.y = elapsedTime * 0.1
 
@@ -2643,7 +2669,7 @@ const tick = () =>
         solarSystem.update(deltaTime * (solarSystemConfig.timeScale || 1))
     }
 
-    // 更新模拟时间（应用时间缩放）
+    // 更新模拟时间(应用时间缩放)
     if (orbitManager.timeScale !== 1) {
         orbitManager.timeOffset += deltaTime * (orbitManager.timeScale - 1)
     }
@@ -2661,7 +2687,7 @@ const tick = () =>
         orbitManager.updateSatellites(simulationTime)
     }
 
-    // 定期更新卫星列表（每秒一次）
+    // 定期更新卫星列表(每秒一次)
     if (currentTime - lastListUpdateTime > 1000) {
         if (orbitManager.satellites.length > 0) {
             updateSatelliteList(orbitManager.satellites, onSatelliteClick)

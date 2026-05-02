@@ -2,67 +2,67 @@
 
 ## 概述
 
-本次升级将太阳系模型从简单的基础材质升级到专业级GLSL着色器系统，与地球模型的质量标准保持一致。
+本次升级将太阳系模型从简单的基础材质升级到专业级GLSL着色器系统,与地球模型的质量标准保持一致.
 
 ## 升级内容
 
 ### 1. 新增着色器文件
 
-创建了4套专业着色器（8个文件）：
+创建了4套专业着色器(8个文件):
 
 #### 太阳着色器
 - **sun-vertex.glsl** - 太阳顶点着色器
 - **sun-fragment.glsl** - 太阳片段着色器
 
-**特性：**
+**特性:**
 - 多层等离子体动画效果
 - 程序化太阳黑子生成
 - 动态太阳耀斑
 - 日冕边缘变暗效果
 - 辉光和泛光效果
 
-#### 类地行星着色器（水星、金星、火星、地球）
+#### 类地行星着色器(水星、金星、火星、地球)
 - **rocky-planet-vertex.glsl** - 类地行星顶点着色器
 - **rocky-planet-fragment.glsl** - 类地行星片段着色器
 
-**特性：**
+**特性:**
 - 程序化表面纹理生成
-- 多层地形噪声（FBM算法）
+- 多层地形噪声(FBM算法)
 - 大气散射效果
 - 昼夜平滑过渡
 - 菲涅尔边缘光
 - 镜面反射
 
-**每个行星的独特配置：**
-- **水星**：无大气层，表面细节突出
-- **金星**：浓厚大气层（密度0.8），金黄色大气
-- **地球**：蓝色大气层（密度0.6），天蓝色大气
-- **火星**：稀薄大气层（密度0.15），橙红色大气
+**每个行星的独特配置:**
+- **水星**:无大气层,表面细节突出
+- **金星**:浓厚大气层(密度0.8),金黄色大气
+- **地球**:蓝色大气层(密度0.6),天蓝色大气
+- **火星**:稀薄大气层(密度0.15),橙红色大气
 
-#### 气态巨行星着色器（木星、土星、天王星、海王星）
+#### 气态巨行星着色器(木星、土星、天王星、海王星)
 - **gas-giant-vertex.glsl** - 气态巨行星顶点着色器
 - **gas-giant-fragment.glsl** - 气态巨行星片段着色器
 
-**特性：**
-- 大气带纹理（水平条纹）
+**特性:**
+- 大气带纹理(水平条纹)
 - 大气湍流效果
 - 多层颜色混合
 - 云层变化
 - 边缘辉光
 
-**特殊效果：**
-- **木星**：大红斑风暴系统（动态旋转）
-- **土星**：标准大气带
-- **天王星**：蓝绿色调，侧躺旋转
-- **海王星**：深蓝色调
+**特殊效果:**
+- **木星**:大红斑风暴系统(动态旋转)
+- **土星**:标准大气带
+- **天王星**:蓝绿色调,侧躺旋转
+- **海王星**:深蓝色调
 
-#### 行星环着色器（土星、天王星）
+#### 行星环着色器(土星、天王星)
 - **ring-vertex.glsl** - 行星环顶点着色器
 - **ring-fragment.glsl** - 行星环片段着色器
 
-**特性：**
-- 多环带结构（内环、中环、外环）
-- 卡西尼环缝（著名间隙）
+**特性:**
+- 多环带结构(内环、中环、外环)
+- 卡西尼环缝(著名间隙)
 - 粒子分布噪声
 - 径向渐变
 - 透明度变化
@@ -84,19 +84,19 @@ import ringFragmentShader from './shaders/solarSystem/ring-fragment.glsl'
 
 #### 太阳系统升级
 - 使用自定义ShaderMaterial替代MeshBasicMaterial
-- 几何体细分提升至128x128（原64x64）
+- 几何体细分提升至128x128(原64x64)
 - 添加time、intensity、sunColor、coronaColor uniforms
-- 光照强度提升至1.8（原1.5）
-- 光照范围扩展至250（原200）
-- 日冕粒子数增加至300（原200）
+- 光照强度提升至1.8(原1.5)
+- 光照范围扩展至250(原200)
+- 日冕粒子数增加至300(原200)
 
 #### 行星系统升级
 - 所有行星使用ShaderMaterial
-- 几何体细分提升至64x64（原32x32）
+- 几何体细分提升至64x64(原32x32)
 - 根据行星类型自动选择着色器
 - 每个行星配置独特的uniforms参数
 
-**类地行星配置示例：**
+**类地行星配置示例:**
 ```javascript
 {
     time: { value: 0 },
@@ -108,7 +108,7 @@ import ringFragmentShader from './shaders/solarSystem/ring-fragment.glsl'
 }
 ```
 
-**气态巨行星配置示例：**
+**气态巨行星配置示例:**
 ```javascript
 {
     time: { value: 0 },
@@ -124,14 +124,14 @@ import ringFragmentShader from './shaders/solarSystem/ring-fragment.glsl'
 
 #### 土星环系统升级
 - 使用自定义Ring Shader
-- 几何体细分提升至128x8（原64）
-- 改进UV映射（径向渐变）
+- 几何体细分提升至128x8(原64)
+- 改进UV映射(径向渐变)
 - 三层环带颜色配置
 - 透明度支持
 
 #### 动画系统升级
 - 实时更新所有着色器的time uniform
-- 动态计算太阳方向（sunDirection）
+- 动态计算太阳方向(sunDirection)
 - 基于行星位置的光照方向更新
 
 ```javascript
@@ -151,7 +151,7 @@ if (planet.material && planet.material.uniforms) {
 
 ### 噪声算法
 
-所有着色器使用相同的基础噪声函数：
+所有着色器使用相同的基础噪声函数:
 
 ```glsl
 float hash(vec2 p) {
@@ -188,7 +188,7 @@ float fbm(vec2 p) {
 
 ### 光照模型
 
-所有行星使用统一的光照计算：
+所有行星使用统一的光照计算:
 
 ```glsl
 // 光照强度
@@ -205,7 +205,7 @@ vec3 color = mix(nightColor, litColor, dayFactor);
 
 ### 大气散射
 
-基于菲涅尔效应的大气散射：
+基于菲涅尔效应的大气散射:
 
 ```glsl
 float fresnel = pow(1.0 - max(dot(viewDirection, normal), 0.0), 3.0);
@@ -250,12 +250,12 @@ mesh.receiveShadow = false
 
 ### 太阳
 
-**升级前：**
+**升级前:**
 - 静态黄色球体
 - 简单辉光层
 - 无表面细节
 
-**升级后：**
+**升级后:**
 - 动态等离子体表面
 - 程序化太阳黑子
 - 动态太阳耀斑
@@ -264,12 +264,12 @@ mesh.receiveShadow = false
 
 ### 类地行星
 
-**升级前：**
+**升级前:**
 - 单一颜色球体
 - 简单光照
 - 无大气效果
 
-**升级后：**
+**升级后:**
 - 程序化地形纹理
 - 多层FBM噪声
 - 大气散射和辉光
@@ -279,24 +279,24 @@ mesh.receiveShadow = false
 
 ### 气态巨行星
 
-**升级前：**
+**升级前:**
 - 单一颜色球体
 - 简单光照
 
-**升级后：**
+**升级后:**
 - 大气带纹理
 - 大气湍流
 - 云层变化
-- 木星大红斑（动态）
+- 木星大红斑(动态)
 - 边缘辉光
 
 ### 土星环
 
-**升级前：**
+**升级前:**
 - 简单半透明圆环
 - 单一颜色
 
-**升级后：**
+**升级后:**
 - 三层环带结构
 - 卡西尼环缝
 - 粒子分布噪声
@@ -316,7 +316,7 @@ initSolarSystem()
 ### 查看着色器效果
 
 1. 打开浏览器控制台
-2. 检查着色器uniforms：
+2. 检查着色器uniforms:
 ```javascript
 // 查看太阳着色器
 console.log(solarSystem.sun.material.uniforms)
@@ -329,7 +329,7 @@ solarSystem.planets.forEach(p => {
 
 ### 自定义参数
 
-可以通过修改uniforms来自定义效果：
+可以通过修改uniforms来自定义效果:
 
 ```javascript
 // 修改太阳强度
@@ -358,13 +358,13 @@ jupiter.material.uniforms.hasGreatSpot.value = 0.0 // 关闭大红斑
 
 ### Uniform变量
 
-**太阳：**
+**太阳:**
 - time (float)
 - intensity (float)
 - sunColor (vec3)
 - coronaColor (vec3)
 
-**类地行星：**
+**类地行星:**
 - time (float)
 - planetColor (vec3)
 - atmosphereColor (vec3)
@@ -372,7 +372,7 @@ jupiter.material.uniforms.hasGreatSpot.value = 0.0 // 关闭大红斑
 - sunDirection (vec3)
 - surfaceDetail (float)
 
-**气态巨行星：**
+**气态巨行星:**
 - time (float)
 - planetColor (vec3)
 - bandColor1 (vec3)
@@ -382,7 +382,7 @@ jupiter.material.uniforms.hasGreatSpot.value = 0.0 // 关闭大红斑
 - rotationSpeed (float)
 - hasGreatSpot (float)
 
-**行星环：**
+**行星环:**
 - time (float)
 - ringColor1 (vec3)
 - ringColor2 (vec3)
@@ -391,7 +391,7 @@ jupiter.material.uniforms.hasGreatSpot.value = 0.0 // 关闭大红斑
 
 ### Varying变量
 
-所有着色器共用：
+所有着色器共用:
 - vUv (vec2)
 - vNormal (vec3)
 - vPosition (vec3)
@@ -399,7 +399,7 @@ jupiter.material.uniforms.hasGreatSpot.value = 0.0 // 关闭大红斑
 
 ## 文件清单
 
-### 新增文件（8个着色器）
+### 新增文件(8个着色器)
 
 ```
 src/shaders/solarSystem/
@@ -413,7 +413,7 @@ src/shaders/solarSystem/
 └── ring-fragment.glsl        (102 lines)
 ```
 
-### 修改文件（1个）
+### 修改文件(1个)
 
 ```
 src/solarSystem.js            (+120 lines, -50 lines)
@@ -455,7 +455,7 @@ src/solarSystem.js            (+120 lines, -50 lines)
 
 ## 总结
 
-本次升级将太阳系模型从基础可视化提升到专业级科学模拟标准：
+本次升级将太阳系模型从基础可视化提升到专业级科学模拟标准:
 
 ✅ **8个专业着色器** - 与地球模型质量一致
 ✅ **程序化生成** - 无需外部纹理资源
@@ -464,6 +464,6 @@ src/solarSystem.js            (+120 lines, -50 lines)
 ✅ **大气效果** - 菲涅尔散射和边缘光
 ✅ **特殊效果** - 太阳黑子、大红斑、环缝
 ✅ **性能优化** - 禁用阴影、几何体优化
-✅ **可扩展性** - 模块化设计，易于扩展
+✅ **可扩展性** - 模块化设计,易于扩展
 
-太阳系现在与地球模型保持一致的专业标准，为用户提供高质量的科学可视化体验！
+太阳系现在与地球模型保持一致的专业标准,为用户提供高质量的科学可视化体验！

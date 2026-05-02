@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
 })
 
 /**
- * 显示所有内容（清除搜索）
+ * 显示所有内容(清除搜索)
  */
 function showAllContent() {
     const allElements = document.querySelectorAll('.concept-card, .info-box, .warning-box, .example-box, .data-table')
@@ -202,7 +202,7 @@ async function copyToClipboard(text) {
         textarea.select()
         document.execCommand('copy')
         document.body.removeChild(textarea)
-        console.log('✅ 公式已复制到剪贴板（降级方案）')
+        console.log('✅ 公式已复制到剪贴板(降级方案)')
     }
 }
 
@@ -270,4 +270,4 @@ document.addEventListener('keydown', function(e) {
 })
 
 console.log('📚 知识库交互系统已就绪')
-console.log('💡 提示：按 Ctrl+F 快速搜索，ESC 清除搜索')
+console.log('💡 提示:按 Ctrl+F 快速搜索,ESC 清除搜索')

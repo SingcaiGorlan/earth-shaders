@@ -15,15 +15,15 @@ export class SatelliteOrbitManager {
         // 地球半径 (km)
         this.EARTH_RADIUS_KM = 6371
         
-        // 缩放比例：将真实距离转换为场景单位
+        // 缩放比例:将真实距离转换为场景单位
         this.scale = earthRadius / this.EARTH_RADIUS_KM
         
         // 时间系统
-        this.timeOffset = 0  // 时间偏移（秒）
+        this.timeOffset = 0  // 时间偏移(秒)
         this.timeScale = 1   // 时间缩放比例
         this.lastRealTime = Date.now()  // 上次更新的实际时间
         
-        // 性能优化：大量卫星时使用 instanced mesh
+        // 性能优化:大量卫星时使用 instanced mesh
         this.useInstancing = false
         this.satelliteInstances = null
         
@@ -39,7 +39,7 @@ export class SatelliteOrbitManager {
     parseTLE(tleString) {
         const lines = tleString.trim().split('\n')
         if (lines.length < 3) {
-            console.error('TLE 数据格式错误，需要至少 3 行')
+            console.error('TLE 数据格式错误,需要至少 3 行')
             return null
         }
         
@@ -134,7 +134,7 @@ export class SatelliteOrbitManager {
     }
 
     /**
-     * 从 URL 加载本地 TLE 文件（如 gp.tle）
+     * 从 URL 加载本地 TLE 文件(如 gp.tle)
      * @param {string} url - 文件 URL
      * @returns {Promise<Array>} 卫星数据数组
      */
@@ -186,21 +186,21 @@ export class SatelliteOrbitManager {
         if (!positionEci) return null
         
         // ECI (Earth-Centered Inertial) 坐标转换为 Three.js 世界坐标
-        // ECI 坐标系：
-        //   - 原点：地心
-        //   - X 轴：指向春分点（J2000.0）
-        //   - Y 轴：在赤道平面内，与 X 轴垂直
-        //   - Z 轴：指向北极（右手系）
-        //   - 单位：km
+        // ECI 坐标系:
+        //   - 原点:地心
+        //   - X 轴:指向春分点(J2000.0)
+        //   - Y 轴:在赤道平面内,与 X 轴垂直
+        //   - Z 轴:指向北极(右手系)
+        //   - 单位:km
         //
-        // Three.js 坐标系：
-        //   - Y 轴：向上（up）
-        //   - X 轴：向右
-        //   - Z 轴：向前（朝向观察者）
-        //   - 单位：场景单位（这里通过 scale 缩放）
+        // Three.js 坐标系:
+        //   - Y 轴:向上(up)
+        //   - X 轴:向右
+        //   - Z 轴:向前(朝向观察者)
+        //   - 单位:场景单位(这里通过 scale 缩放)
         //
-        // 转换步骤：
-        // 1. 将 ECI 的 Z 轴（北极）映射到 Three.js 的 Y 轴（向上）
+        // 转换步骤:
+        // 1. 将 ECI 的 Z 轴(北极)映射到 Three.js 的 Y 轴(向上)
         // 2. 将 ECI 的 Y 轴反转并映射到 Three.js 的 Z 轴
         // 3. ECI 的 X 轴直接映射到 Three.js 的 X 轴
         // 4. 应用缩放比例
@@ -226,7 +226,7 @@ export class SatelliteOrbitManager {
     }
 
     /**
-     * 可视化坐标转换过程（辅助调试）
+     * 可视化坐标转换过程(辅助调试)
      * @param {Object} satrec - 卫星记录
      * @param {Date} date - 时间
      * @returns {Object} 包含所有坐标系的信息
@@ -239,7 +239,7 @@ export class SatelliteOrbitManager {
         
         const worldPos = this.getSatellitePosition(satrec, date)
         
-        // 验证转换：world -> ECI -> world 应该得到相同结果
+        // 验证转换:world -> ECI -> world 应该得到相同结果
         const eciBack = this.worldToECI(worldPos)
         
         return {
@@ -270,7 +270,7 @@ export class SatelliteOrbitManager {
      * 生成轨道路径点
      * @param {Object} satrec - 卫星记录
      * @param {Date} startDate - 起始时间
-     * @param {number} orbitPeriod - 轨道周期（分钟）
+     * @param {number} orbitPeriod - 轨道周期(分钟)
      * @param {number} numPoints - 路径点数量
      * @returns {Array} 位置点数组
      */
@@ -293,9 +293,9 @@ export class SatelliteOrbitManager {
     /**
      * 计算卫星在未来指定时间内的位置序列
      * @param {Object} satrec - 卫星记录
-     * @param {number} hours - 未来小时数（默认 24 小时）
-     * @param {number} intervalMinutes - 计算间隔（分钟，默认 1 分钟）
-     * @param {Date} startTime - 起始时间（默认当前时间）
+     * @param {number} hours - 未来小时数(默认 24 小时)
+     * @param {number} intervalMinutes - 计算间隔(分钟,默认 1 分钟)
+     * @param {Date} startTime - 起始时间(默认当前时间)
      * @returns {Array} 位置序列 [{ time, position: { x, y, z } }]
      */
     calculateFuturePositions(satrec, hours = 24, intervalMinutes = 1, startTime = new Date()) {
@@ -304,7 +304,7 @@ export class SatelliteOrbitManager {
         const intervalMs = intervalMinutes * 60 * 1000
         const startTimestamp = startTime.getTime()
         
-        console.log(`开始计算未来 ${hours} 小时的位置序列，间隔 ${intervalMinutes} 分钟...`)
+        console.log(`开始计算未来 ${hours} 小时的位置序列,间隔 ${intervalMinutes} 分钟...`)
         console.log(`预计生成 ${totalMinutes / intervalMinutes + 1} 个位置点`)
         
         for (let i = 0; i <= totalMinutes; i += intervalMinutes) {
@@ -325,12 +325,12 @@ export class SatelliteOrbitManager {
             }
         }
         
-        console.log(`✅ 位置序列计算完成，共 ${positions.length} 个点`)
+        console.log(`✅ 位置序列计算完成,共 ${positions.length} 个点`)
         return positions
     }
 
     /**
-     * 获取卫星在特定时间的位置（包含地理坐标信息）
+     * 获取卫星在特定时间的位置(包含地理坐标信息)
      * @param {Object} satrec - 卫星记录
      * @param {Date} date - 时间
      * @returns {Object} 完整的位置信息
@@ -341,7 +341,7 @@ export class SatelliteOrbitManager {
         
         if (!positionEci) return null
         
-        // 计算 GMST（格林威治平均恒星时）
+        // 计算 GMST(格林威治平均恒星时)
         const gmst = satellite.gstime(date)
         
         // 转换为地理坐标
@@ -379,7 +379,7 @@ export class SatelliteOrbitManager {
             satelliteSize = 0.05,
             showOrbit = true,
             showSatellite = true,
-            orbitPeriod = 92 // 默认 ISS 轨道周期（分钟）
+            orbitPeriod = 92 // 默认 ISS 轨道周期(分钟)
         } = options
 
         // 创建轨道路径
@@ -407,7 +407,7 @@ export class SatelliteOrbitManager {
 
         // 创建卫星标记
         if (showSatellite) {
-            // 对于大量卫星，使用更简单的几何体
+            // 对于大量卫星,使用更简单的几何体
             const satelliteGeometry = satelliteSize < 0.04 
                 ? new THREE.SphereGeometry(satelliteSize, 8, 8)  // 低多边形
                 : new THREE.SphereGeometry(satelliteSize, 16, 16)  // 高多边形
@@ -500,7 +500,7 @@ export class SatelliteOrbitManager {
     }
 
     /**
-     * 清除所有卫星和轨道（不释放内存，用于快速重置）
+     * 清除所有卫星和轨道(不释放内存,用于快速重置)
      */
     clearAllFast() {
         this.orbitLines.forEach(({ line }) => {
@@ -519,8 +519,8 @@ export class SatelliteOrbitManager {
     }
 
     /**
-     * 设置模拟时间偏移（秒）
-     * @param {number} offsetSeconds - 时间偏移（正数=未来，负数=过去）
+     * 设置模拟时间偏移(秒)
+     * @param {number} offsetSeconds - 时间偏移(正数=未来,负数=过去)
      */
     setTimeOffset(offsetSeconds = 0) {
         this.timeOffset = offsetSeconds
@@ -529,7 +529,7 @@ export class SatelliteOrbitManager {
 
     /**
      * 获取当前模拟时间
-     * @param {Date} realTime - 真实时间（默认当前时间）
+     * @param {Date} realTime - 真实时间(默认当前时间)
      * @returns {Date} 模拟时间
      */
     getSimulationTime(realTime = new Date()) {
@@ -538,7 +538,7 @@ export class SatelliteOrbitManager {
 
     /**
      * 更新时间缩放比例
-     * @param {number} scale - 时间缩放（1=实时，2=2倍速，0.5=半速）
+     * @param {number} scale - 时间缩放(1=实时,2=2倍速,0.5=半速)
      */
     setTimeScale(scale = 1) {
         this.timeScale = scale
@@ -557,7 +557,7 @@ export class SatelliteOrbitManager {
 
     /**
      * 快速前进/后退指定小时数
-     * @param {number} hours - 小时数（正数=前进，负数=后退）
+     * @param {number} hours - 小时数(正数=前进,负数=后退)
      */
     skipHours(hours) {
         this.timeOffset += hours * 3600
@@ -565,9 +565,9 @@ export class SatelliteOrbitManager {
     }
 
     /**
-     * 加载卫星 3D 模型（GLTF/GLB 格式）
+     * 加载卫星 3D 模型(GLTF/GLB 格式)
      * @param {string} modelPath - 模型文件路径
-     * @param {string} modelName - 模型名称（用于缓存）
+     * @param {string} modelName - 模型名称(用于缓存)
      * @returns {Promise<THREE.Object3D>} 加载的模型
      */
     async loadSatelliteModel(modelPath, modelName = 'default') {
@@ -577,7 +577,7 @@ export class SatelliteOrbitManager {
             return this.satelliteModels.get(modelName)
         }
 
-        // 如果是程序化模型（以 'procedural:' 开头）
+        // 如果是程序化模型(以 'procedural:' 开头)
         if (modelPath.startsWith('procedural:')) {
             const modelType = modelPath.replace('procedural:', '')
             let model
@@ -644,7 +644,7 @@ export class SatelliteOrbitManager {
     }
 
     /**
-     * 创建默认的卫星模型（立方体）
+     * 创建默认的卫星模型(立方体)
      * @returns {THREE.Mesh}
      */
     createDefaultSatelliteModel() {
@@ -661,13 +661,13 @@ export class SatelliteOrbitManager {
     }
 
     /**
-     * 创建简单的卫星模型（立方体 + 太阳能板）
+     * 创建简单的卫星模型(立方体 + 太阳能板)
      * @returns {THREE.Group}
      */
     createSimpleSatelliteModel() {
         const satelliteGroup = new THREE.Group()
 
-        // 卫星主体（立方体）
+        // 卫星主体(立方体)
         const bodyGeometry = new THREE.BoxGeometry(0.06, 0.06, 0.06)
         const bodyMaterial = new THREE.MeshStandardMaterial({
             color: '#cccccc',
@@ -723,7 +723,7 @@ export class SatelliteOrbitManager {
     }
 
     /**
-     * 创建 ISS 模型（简化版）
+     * 创建 ISS 模型(简化版)
      * @returns {THREE.Group}
      */
     createISSModel() {
@@ -741,7 +741,7 @@ export class SatelliteOrbitManager {
         module.castShadow = true
         issGroup.add(module)
 
-        // 太阳能板阵列（大型）
+        // 太阳能板阵列(大型)
         const solarPanelGeometry = new THREE.BoxGeometry(0.25, 0.01, 0.12)
         const solarPanelMaterial = new THREE.MeshStandardMaterial({
             color: '#1565c0',
@@ -846,7 +846,7 @@ export class SatelliteOrbitManager {
     }
 
     /**
-     * 添加示例：国际空间站 (ISS)
+     * 添加示例:国际空间站 (ISS)
      */
     addISS() {
         const issTLE = `ISS (ZARYA)
@@ -865,7 +865,7 @@ export class SatelliteOrbitManager {
     }
 
     /**
-     * 添加示例：GPS 卫星
+     * 添加示例:GPS 卫星
      */
     addGPSSatellite() {
         const gpsTLE = `GPS BIIR-2  (PRN 13)

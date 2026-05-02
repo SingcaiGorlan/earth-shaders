@@ -15,6 +15,7 @@
                 <a href="index.html">地球可视化</a>
                 <a href="launch.html">KSP模拟器</a>
                 <a href="knowledge-base.html" class="active">知识库</a>
+                <a href="aerospace-history.html" class="nav-highlight">🚀 航天历史</a>
                 <a href="exam-guide.html" class="nav-highlight">📝 复习指南</a>
                 <a href="exercises.html" class="nav-highlight">✍️ 练习题</a>
             </div>
@@ -51,7 +52,7 @@
 
         <!-- 内容区 -->
         <main class="content">
-            <!-- 第1章：轨道力学基础 -->
+            <!-- 第1章:轨道力学基础 -->
             <section id="section-1" class="knowledge-section">
                 <h1>1. 轨道力学基础</h1>
                 
@@ -59,35 +60,35 @@
                     <h2>1.1 开普勒定律</h2>
                     
                     <div class="concept-card">
-                        <h3>第一定律（椭圆轨道定律）</h3>
-                        <p>所有行星绕太阳运动的轨道都是椭圆，太阳位于椭圆的一个焦点上。</p>
+                        <h3>第一定律(椭圆轨道定律)</h3>
+                        <p>所有行星绕太阳运动的轨道都是椭圆,太阳位于椭圆的一个焦点上.</p>
                         <div class="formula-box">
                             <code>r = a(1 - e²) / (1 + e·cos(ν))</code>
                         </div>
-                        <p class="note"><strong>应用：</strong>人造卫星绕地球运动同样遵循此定律。</p>
+                        <p class="note"><strong>应用:</strong>人造卫星绕地球运动同样遵循此定律.</p>
                     </div>
 
                     <div class="concept-card">
-                        <h3>第二定律（面积速度定律）</h3>
-                        <p>行星在相等时间内扫过的面积相等。</p>
+                        <h3>第二定律(面积速度定律)</h3>
+                        <p>行星在相等时间内扫过的面积相等.</p>
                         <div class="formula-box">
                             <code>dA/dt = constant = h/2</code>
                         </div>
-                        <p class="note"><strong>推论：</strong>近地点速度快，远地点速度慢。</p>
+                        <p class="note"><strong>推论:</strong>近地点速度快,远地点速度慢.</p>
                     </div>
 
                     <div class="concept-card">
-                        <h3>第三定律（周期定律）</h3>
-                        <p>轨道周期的平方与半长轴的立方成正比。</p>
+                        <h3>第三定律(周期定律)</h3>
+                        <p>轨道周期的平方与半长轴的立方成正比.</p>
                         <div class="formula-box">
                             <code>T² = (4π²/GM) × a³</code>
                         </div>
-                        <p class="note"><strong>简化：</strong>对于地球轨道，当T以年为单位，a以AU为单位时：T² = a³</p>
+                        <p class="note"><strong>简化:</strong>对于地球轨道,当T以年为单位,a以AU为单位时:T² = a³</p>
                     </div>
                 </div>
 
                 <div class="subsection">
-                    <h2>1.2 轨道六根数（Keplerian Elements）</h2>
+                    <h2>1.2 轨道六根数(Keplerian Elements)</h2>
                     
                     <div class="data-table">
                         <table>
@@ -109,7 +110,7 @@
                                 <tr>
                                     <td>偏心率</td>
                                     <td>e</td>
-                                    <td>轨道形状（0=圆，0&lt;e&lt;1=椭圆）</td>
+                                    <td>轨道形状(0=圆,0&lt;e&lt;1=椭圆)</td>
                                     <td>无量纲</td>
                                 </tr>
                                 <tr>
@@ -149,7 +150,7 @@
                         <div class="formula-box">
                             <code>v_circular = √(μ/r)</code>
                         </div>
-                        <p>其中 μ = GM = 398600.4418 km³/s²（地球引力常数）</p>
+                        <p>其中 μ = GM = 398600.4418 km³/s²(地球引力常数)</p>
                     </div>
 
                     <div class="concept-card highlight">
@@ -184,31 +185,31 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>LEO<br>（低地球轨道）</td>
+                                    <td>LEO<br>(低地球轨道)</td>
                                     <td>160-2000 km</td>
-                                    <td>周期~90分钟，速度快</td>
+                                    <td>周期~90分钟,速度快</td>
                                     <td>ISS、遥感卫星</td>
                                 </tr>
                                 <tr>
-                                    <td>MEO<br>（中地球轨道）</td>
+                                    <td>MEO<br>(中地球轨道)</td>
                                     <td>2000-35786 km</td>
                                     <td>GPS卫星轨道</td>
                                     <td>导航卫星</td>
                                 </tr>
                                 <tr>
-                                    <td>GEO<br>（地球同步轨道）</td>
+                                    <td>GEO<br>(地球同步轨道)</td>
                                     <td>35786 km</td>
-                                    <td>周期=24小时，相对地面静止</td>
+                                    <td>周期=24小时,相对地面静止</td>
                                     <td>通信卫星</td>
                                 </tr>
                                 <tr>
-                                    <td>HEO<br>（高椭圆轨道）</td>
+                                    <td>HEO<br>(高椭圆轨道)</td>
                                     <td>近地点&lt;2000km<br>远地点&gt;35786km</td>
                                     <td>覆盖高纬度地区</td>
                                     <td>军事通信</td>
                                 </tr>
                                 <tr>
-                                    <td>SSO<br>（太阳同步轨道）</td>
+                                    <td>SSO<br>(太阳同步轨道)</td>
                                     <td>600-800 km<br>倾角~98°</td>
                                     <td>每天同一时间经过同一地点</td>
                                     <td>气象、遥感</td>
@@ -219,7 +220,7 @@
                 </div>
             </section>
 
-            <!-- 第2章：火箭推进原理 -->
+            <!-- 第2章:火箭推进原理 -->
             <section id="section-2" class="knowledge-section">
                 <h1>2. 火箭推进原理</h1>
                 
@@ -232,11 +233,11 @@
                             <code>ΔV = Isp × g₀ × ln(m₀/mf)</code>
                         </div>
                         <div class="variable-list">
-                            <p><strong>ΔV</strong> = 速度增量（m/s）</p>
-                            <p><strong>Isp</strong> = 比冲（s）</p>
+                            <p><strong>ΔV</strong> = 速度增量(m/s)</p>
+                            <p><strong>Isp</strong> = 比冲(s)</p>
                             <p><strong>g₀</strong> = 标准重力加速度 = 9.80665 m/s²</p>
-                            <p><strong>m₀</strong> = 初始质量（含燃料）</p>
-                            <p><strong>mf</strong> = 最终质量（燃料耗尽后）</p>
+                            <p><strong>m₀</strong> = 初始质量(含燃料)</p>
+                            <p><strong>mf</strong> = 最终质量(燃料耗尽后)</p>
                         </div>
                     </div>
 
@@ -256,21 +257,21 @@
                         <div class="formula-box">
                             <code>F = ṁ × Ve + (Pe - Pa) × Ae</code>
                         </div>
-                        <p class="note"><strong>真空简化：</strong>F = ṁ × Ve</p>
+                        <p class="note"><strong>真空简化:</strong>F = ṁ × Ve</p>
                         <div class="variable-list">
-                            <p><strong>F</strong> = 推力（N）</p>
-                            <p><strong>ṁ</strong> = 质量流量（kg/s）</p>
-                            <p><strong>Ve</strong> = 排气速度（m/s）</p>
+                            <p><strong>F</strong> = 推力(N)</p>
+                            <p><strong>ṁ</strong> = 质量流量(kg/s)</p>
+                            <p><strong>Ve</strong> = 排气速度(m/s)</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="subsection">
-                    <h2>2.3 比冲（Specific Impulse）</h2>
+                    <h2>2.3 比冲(Specific Impulse)</h2>
                     
                     <div class="concept-card">
                         <h3>定义</h3>
-                        <p>单位重量推进剂产生的冲量，衡量发动机效率的关键指标。</p>
+                        <p>单位重量推进剂产生的冲量,衡量发动机效率的关键指标.</p>
                         <div class="formula-box">
                             <code>Isp = F / (ṁ × g₀) = Ve / g₀</code>
                         </div>
@@ -282,8 +283,8 @@
                             <thead>
                                 <tr>
                                     <th>发动机类型</th>
-                                    <th>Isp（海平面）</th>
-                                    <th>Isp（真空）</th>
+                                    <th>Isp(海平面)</th>
+                                    <th>Isp(真空)</th>
                                     <th>应用</th>
                                 </tr>
                             </thead>
@@ -318,7 +319,7 @@
                 </div>
 
                 <div class="subsection">
-                    <h2>2.4 TWR（推重比）</h2>
+                    <h2>2.4 TWR(推重比)</h2>
                     
                     <div class="concept-card highlight">
                         <h3>定义</h3>
@@ -330,36 +331,36 @@
                     <div class="info-box">
                         <h4>关键阈值</h4>
                         <ul>
-                            <li><strong>TWR &gt; 1：</strong>能够起飞</li>
-                            <li><strong>TWR = 1.5-2.5：</strong>理想的发射推重比</li>
-                            <li><strong>TWR &lt; 1：</strong>无法离地</li>
+                            <li><strong>TWR &gt; 1:</strong>能够起飞</li>
+                            <li><strong>TWR = 1.5-2.5:</strong>理想的发射推重比</li>
+                            <li><strong>TWR &lt; 1:</strong>无法离地</li>
                         </ul>
                     </div>
 
-                    <p class="note"><strong>随时间变化：</strong>发射时TWR最小（质量最大），燃料消耗后TWR增加。需要注意过高的TWR可能导致结构过载或大气阻力过大。</p>
+                    <p class="note"><strong>随时间变化:</strong>发射时TWR最小(质量最大),燃料消耗后TWR增加.需要注意过高的TWR可能导致结构过载或大气阻力过大.</p>
                 </div>
             </section>
 
-            <!-- 第3章：大气飞行力学 -->
+            <!-- 第3章:大气飞行力学 -->
             <section id="section-3" class="knowledge-section">
                 <h1>3. 大气飞行力学</h1>
                 
                 <div class="subsection">
-                    <h2>3.1 国际标准大气（ISA）</h2>
+                    <h2>3.1 国际标准大气(ISA)</h2>
                     
                     <div class="data-table">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>高度（km）</th>
-                                    <th>温度（K）</th>
-                                    <th>压力（Pa）</th>
-                                    <th>密度（kg/m³）</th>
+                                    <th>高度(km)</th>
+                                    <th>温度(K)</th>
+                                    <th>压力(Pa)</th>
+                                    <th>密度(kg/m³)</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>0（海平面）</td>
+                                    <td>0(海平面)</td>
                                     <td>288.15</td>
                                     <td>101325</td>
                                     <td>1.225</td>
@@ -411,22 +412,22 @@
                     </div>
 
                     <div class="concept-card highlight">
-                        <h3>动压（Dynamic Pressure）</h3>
+                        <h3>动压(Dynamic Pressure)</h3>
                         <div class="formula-box">
                             <code>q = ½ × ρ × v²</code>
                         </div>
-                        <p class="note"><strong>Max-Q：</strong>最大动压点，通常在10-15 km高度，是火箭设计中的关键参数。</p>
+                        <p class="note"><strong>Max-Q:</strong>最大动压点,通常在10-15 km高度,是火箭设计中的关键参数.</p>
                     </div>
                 </div>
 
                 <div class="subsection">
-                    <h2>3.3 重力转弯（Gravity Turn）</h2>
+                    <h2>3.3 重力转弯(Gravity Turn)</h2>
                     
                     <div class="info-box">
                         <h4>最优策略</h4>
                         <ol>
                             <li>垂直上升至100-200 m/s</li>
-                            <li>开始小幅倾斜（5-10°）</li>
+                            <li>开始小幅倾斜(5-10°)</li>
                             <li>让重力逐渐增加倾角</li>
                             <li>到达目标高度时达到水平</li>
                         </ol>
@@ -435,7 +436,7 @@
                     <div class="info-box success">
                         <h4>优点</h4>
                         <ul>
-                            <li>✅ 节省燃料（相比纯垂直+纯水平）</li>
+                            <li>✅ 节省燃料(相比纯垂直+纯水平)</li>
                             <li>✅ 减少结构应力</li>
                             <li>✅ 自动控制简单</li>
                         </ul>
@@ -443,7 +444,7 @@
                 </div>
             </section>
 
-            <!-- 第4章：姿态控制与稳定 -->
+            <!-- 第4章:姿态控制与稳定 -->
             <section id="section-4" class="knowledge-section">
                 <h1>4. 姿态控制与稳定</h1>
                 
@@ -451,20 +452,20 @@
                     <h2>4.1 坐标系定义</h2>
                     
                     <div class="concept-card">
-                        <h3>机体坐标系（Body Frame）</h3>
+                        <h3>机体坐标系(Body Frame)</h3>
                         <ul>
-                            <li><strong>X轴：</strong>纵向（向前为正）</li>
-                            <li><strong>Y轴：</strong>横向（向右为正）</li>
-                            <li><strong>Z轴：</strong>垂直（向下为正，右手定则）</li>
+                            <li><strong>X轴:</strong>纵向(向前为正)</li>
+                            <li><strong>Y轴:</strong>横向(向右为正)</li>
+                            <li><strong>Z轴:</strong>垂直(向下为正,右手定则)</li>
                         </ul>
                     </div>
 
                     <div class="concept-card">
-                        <h3>惯性坐标系（Inertial Frame）</h3>
+                        <h3>惯性坐标系(Inertial Frame)</h3>
                         <ul>
-                            <li><strong>原点：</strong>地心</li>
-                            <li><strong>XY平面：</strong>赤道面</li>
-                            <li><strong>X轴：</strong>指向春分点</li>
+                            <li><strong>原点:</strong>地心</li>
+                            <li><strong>XY平面:</strong>赤道面</li>
+                            <li><strong>X轴:</strong>指向春分点</li>
                         </ul>
                     </div>
                 </div>
@@ -475,15 +476,15 @@
                     <div class="concept-card">
                         <h3>三个旋转角</h3>
                         <ol>
-                            <li><strong>滚转（Roll, φ）：</strong>绕X轴旋转</li>
-                            <li><strong>俯仰（Pitch, θ）：</strong>绕Y轴旋转</li>
-                            <li><strong>偏航（Yaw, ψ）：</strong>绕Z轴旋转</li>
+                            <li><strong>滚转(Roll, φ):</strong>绕X轴旋转</li>
+                            <li><strong>俯仰(Pitch, θ):</strong>绕Y轴旋转</li>
+                            <li><strong>偏航(Yaw, ψ):</strong>绕Z轴旋转</li>
                         </ol>
-                        <p class="warning">⚠️ 注意万向节锁（Gimbal Lock）问题</p>
+                        <p class="warning">⚠️ 注意万向节锁(Gimbal Lock)问题</p>
                     </div>
 
                     <div class="concept-card highlight">
-                        <h3>四元数（Quaternion）</h3>
+                        <h3>四元数(Quaternion)</h3>
                         <div class="formula-box">
                             <code>q = w + xi + yj + zk<br>
                             其中 w² + x² + y² + z² = 1</code>
@@ -493,7 +494,7 @@
                             <ul>
                                 <li>✅ 避免万向节锁</li>
                                 <li>✅ 计算效率高</li>
-                                <li>✅ 插值平滑（SLERP）</li>
+                                <li>✅ 插值平滑(SLERP)</li>
                             </ul>
                         </div>
                     </div>
@@ -504,17 +505,17 @@
                     
                     <div class="comparison-grid">
                         <div class="comparison-item">
-                            <h4>反作用轮（Reaction Wheel）</h4>
+                            <h4>反作用轮(Reaction Wheel)</h4>
                             <p>通过改变轮的转速产生扭矩</p>
                             <ul>
                                 <li>✓ 精度高</li>
                                 <li>✓ 适合精细控制</li>
-                                <li>✗ 会饱和，需要卸载</li>
+                                <li>✗ 会饱和,需要卸载</li>
                             </ul>
                         </div>
 
                         <div class="comparison-item">
-                            <h4>控制力矩陀螺（CMG）</h4>
+                            <h4>控制力矩陀螺(CMG)</h4>
                             <p>高速旋转的陀螺仪</p>
                             <ul>
                                 <li>✓ 大扭矩</li>
@@ -524,7 +525,7 @@
                         </div>
 
                         <div class="comparison-item">
-                            <h4>推力器（Thruster）</h4>
+                            <h4>推力器(Thruster)</h4>
                             <p>RCS反应控制系统</p>
                             <ul>
                                 <li>✓ 快速响应</li>
@@ -546,7 +547,7 @@
                 </div>
             </section>
 
-            <!-- 第5章：重力与引力场 -->
+            <!-- 第5章:重力与引力场 -->
             <section id="section-5" class="knowledge-section">
                 <h1>5. 重力与引力场</h1>
                 
@@ -570,7 +571,7 @@
                         <div class="formula-box">
                             <code>g = GM / r²</code>
                         </div>
-                        <p>对于地球：GM = μ = 398600.4418 km³/s²，地表g₀ = 9.80665 m/s²</p>
+                        <p>对于地球:GM = μ = 398600.4418 km³/s²,地表g₀ = 9.80665 m/s²</p>
                     </div>
                 </div>
 
@@ -582,7 +583,7 @@
                         <div class="formula-box">
                             <code>g(h) = g₀ × (R / (R + h))²</code>
                         </div>
-                        <p>其中 R = 地球半径 = 6371 km，h = 高度</p>
+                        <p>其中 R = 地球半径 = 6371 km,h = 高度</p>
                     </div>
 
                     <div class="data-table">
@@ -601,17 +602,17 @@
                                     <td>100%</td>
                                 </tr>
                                 <tr>
-                                    <td>100 km（卡门线）</td>
+                                    <td>100 km(卡门线)</td>
                                     <td>9.51 m/s²</td>
                                     <td>97%</td>
                                 </tr>
                                 <tr>
-                                    <td>400 km（ISS）</td>
+                                    <td>400 km(ISS)</td>
                                     <td>8.69 m/s²</td>
                                     <td>89%</td>
                                 </tr>
                                 <tr>
-                                    <td>35786 km（GEO）</td>
+                                    <td>35786 km(GEO)</td>
                                     <td>0.224 m/s²</td>
                                     <td>2.3%</td>
                                 </tr>
@@ -670,16 +671,16 @@
                 </div>
             </section>
 
-            <!-- 第6章：发射窗口与轨道转移 -->
+            <!-- 第6章:发射窗口与轨道转移 -->
             <section id="section-6" class="knowledge-section">
                 <h1>6. 发射窗口与轨道转移</h1>
                 
                 <div class="subsection">
-                    <h2>6.1 霍曼转移（Hohmann Transfer）</h2>
+                    <h2>6.1 霍曼转移(Hohmann Transfer)</h2>
                     
                     <div class="info-box">
                         <h4>原理</h4>
-                        <p>最节能的双脉冲轨道转移，适用于共面圆轨道之间的转移。</p>
+                        <p>最节能的双脉冲轨道转移,适用于共面圆轨道之间的转移.</p>
                     </div>
 
                     <div class="concept-card highlight">
@@ -698,10 +699,10 @@
                     </div>
 
                     <div class="example-box">
-                        <h4>示例：LEO到GEO</h4>
+                        <h4>示例:LEO到GEO</h4>
                         <ul>
-                            <li>r₁ = 6571 km（200 km高度）</li>
-                            <li>r₂ = 42164 km（GEO）</li>
+                            <li>r₁ = 6571 km(200 km高度)</li>
+                            <li>r₂ = 42164 km(GEO)</li>
                             <li>ΔV₁ ≈ 2.44 km/s</li>
                             <li>ΔV₂ ≈ 1.47 km/s</li>
                             <li><strong>总ΔV ≈ 3.91 km/s</strong></li>
@@ -718,13 +719,13 @@
                         <div class="formula-box">
                             <code>ΔV = 2 × v × sin(Δi/2)</code>
                         </div>
-                        <p>其中 v = 当前轨道速度，Δi = 倾角变化量</p>
+                        <p>其中 v = 当前轨道速度,Δi = 倾角变化量</p>
                     </div>
 
                     <div class="warning-box">
                         <h4>关键点</h4>
                         <ul>
-                            <li>⚠️ 在速度最低点进行（远地点）</li>
+                            <li>⚠️ 在速度最低点进行(远地点)</li>
                             <li>⚠️ 60°以上的平面变更极其昂贵</li>
                             <li>⚠️ 最好从发射时就选择正确倾角</li>
                         </ul>
@@ -732,16 +733,16 @@
 
                     <div class="example-box">
                         <h4>示例</h4>
-                        <p>LEO速度：7.8 km/s</p>
+                        <p>LEO速度:7.8 km/s</p>
                         <ul>
-                            <li>改变10°倾角：ΔV ≈ 1.36 km/s</li>
-                            <li>改变28.5°倾角：ΔV ≈ 3.82 km/s（几乎等于整个轨道速度！）</li>
+                            <li>改变10°倾角:ΔV ≈ 1.36 km/s</li>
+                            <li>改变28.5°倾角:ΔV ≈ 3.82 km/s(几乎等于整个轨道速度！)</li>
                         </ul>
                     </div>
                 </div>
             </section>
 
-            <!-- 第7章：热力学与再入物理 -->
+            <!-- 第7章:热力学与再入物理 -->
             <section id="section-7" class="knowledge-section">
                 <h1>7. 热力学与再入物理</h1>
                 
@@ -751,8 +752,8 @@
                     <div class="info-box">
                         <h4>主要热源</h4>
                         <ol>
-                            <li><strong>激波压缩（占90%以上）：</strong>高速气体被压缩升温，形成高温等离子体</li>
-                            <li><strong>摩擦加热：</strong>边界层内的粘性耗散，贡献较小</li>
+                            <li><strong>激波压缩(占90%以上):</strong>高速气体被压缩升温,形成高温等离子体</li>
+                            <li><strong>摩擦加热:</strong>边界层内的粘性耗散,贡献较小</li>
                         </ol>
                     </div>
 
@@ -761,21 +762,21 @@
                         <div class="formula-box">
                             <code>T_stagnation ≈ T_∞ × (1 + (γ-1)/2 × M²)</code>
                         </div>
-                        <p>其中 γ = 比热比（空气≈1.4），M = 马赫数</p>
+                        <p>其中 γ = 比热比(空气≈1.4),M = 马赫数</p>
                     </div>
 
                     <div class="example-box">
                         <h4>典型值</h4>
                         <ul>
-                            <li>返回舱再入：M ≈ 25</li>
-                            <li>激波温度：&gt; 10000 K</li>
-                            <li>表面温度：1500-3000°C</li>
+                            <li>返回舱再入:M ≈ 25</li>
+                            <li>激波温度:&gt; 10000 K</li>
+                            <li>表面温度:1500-3000°C</li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="subsection">
-                    <h2>7.2 热防护系统（TPS）</h2>
+                    <h2>7.2 热防护系统(TPS)</h2>
                     
                     <div class="comparison-grid">
                         <div class="comparison-item">
@@ -783,7 +784,7 @@
                             <p>通过材料分解带走热量</p>
                             <ul>
                                 <li>✓ 一次性使用</li>
-                                <li>✓ 例：阿波罗指令舱、神舟飞船</li>
+                                <li>✓ 例:阿波罗指令舱、神舟飞船</li>
                             </ul>
                         </div>
 
@@ -792,7 +793,7 @@
                             <p>高温表面辐射散热</p>
                             <ul>
                                 <li>✓ 可重复使用</li>
-                                <li>✓ 例：航天飞机隔热瓦</li>
+                                <li>✓ 例:航天飞机隔热瓦</li>
                             </ul>
                         </div>
 
@@ -801,7 +802,7 @@
                             <p>内部流体循环</p>
                             <ul>
                                 <li>✓ 复杂但高效</li>
-                                <li>✓ 例：火箭发动机喷管</li>
+                                <li>✓ 例:火箭发动机喷管</li>
                             </ul>
                         </div>
                     </div>
@@ -812,42 +813,42 @@
                     
                     <div class="warning-box">
                         <h4>成因</h4>
-                        <p>高温电离气体形成等离子体鞘，阻挡无线电波传播。</p>
+                        <p>高温电离气体形成等离子体鞘,阻挡无线电波传播.</p>
                     </div>
 
                     <div class="info-box">
                         <h4>影响</h4>
                         <ul>
-                            <li><strong>持续时间：</strong>典型3-5分钟</li>
-                            <li><strong>高度范围：</strong>80-40 km</li>
-                            <li><strong>影响频率：</strong>UHF/VHF完全阻断，更高频率部分衰减</li>
+                            <li><strong>持续时间:</strong>典型3-5分钟</li>
+                            <li><strong>高度范围:</strong>80-40 km</li>
+                            <li><strong>影响频率:</strong>UHF/VHF完全阻断,更高频率部分衰减</li>
                         </ul>
                     </div>
                 </div>
             </section>
 
-            <!-- 第8章：导航制导与控制 -->
+            <!-- 第8章:导航制导与控制 -->
             <section id="section-8" class="knowledge-section">
                 <h1>8. 导航制导与控制</h1>
                 
                 <div class="subsection">
-                    <h2>8.1 惯性导航系统（INS）</h2>
+                    <h2>8.1 惯性导航系统(INS)</h2>
                     
                     <div class="info-box">
                         <h4>原理</h4>
-                        <p>使用加速度计和陀螺仪，积分得到速度和位置。</p>
+                        <p>使用加速度计和陀螺仪,积分得到速度和位置.</p>
                     </div>
 
                     <div class="warning-box">
                         <h4>误差累积</h4>
-                        <p>位置误差随时间增长，典型漂移：1-10 km/hour</p>
+                        <p>位置误差随时间增长,典型漂移:1-10 km/hour</p>
                     </div>
 
                     <div class="concept-card">
                         <h3>组件</h3>
                         <ol>
-                            <li><strong>加速度计：</strong>测量比力（specific force），需要减去重力</li>
-                            <li><strong>陀螺仪：</strong>测量角速度，积分得到姿态</li>
+                            <li><strong>加速度计:</strong>测量比力(specific force),需要减去重力</li>
+                            <li><strong>陀螺仪:</strong>测量角速度,积分得到姿态</li>
                         </ol>
                     </div>
                 </div>
@@ -858,16 +859,16 @@
                     <div class="info-box success">
                         <h4>精度</h4>
                         <ul>
-                            <li>民用：5-10 m</li>
-                            <li>军用：1 m以内</li>
-                            <li>RTK：厘米级</li>
+                            <li>民用:5-10 m</li>
+                            <li>军用:1 m以内</li>
+                            <li>RTK:厘米级</li>
                         </ul>
                     </div>
 
                     <div class="warning-box">
                         <h4>局限性</h4>
                         <ul>
-                            <li>⚠️ 需要视线（LOS）</li>
+                            <li>⚠️ 需要视线(LOS)</li>
                             <li>⚠️ 高动态环境可能失锁</li>
                             <li>⚠️ 易受干扰</li>
                         </ul>
@@ -878,16 +879,16 @@
                     <h2>8.3 制导律</h2>
                     
                     <div class="concept-card highlight">
-                        <h3>比例导引（Proportional Navigation）</h3>
+                        <h3>比例导引(Proportional Navigation)</h3>
                         <div class="formula-box">
                             <code>a_command = N × Vc × λ̇</code>
                         </div>
                         <div class="variable-list">
-                            <p><strong>N</strong> = 导航常数（3-5）</p>
+                            <p><strong>N</strong> = 导航常数(3-5)</p>
                             <p><strong>Vc</strong> = 接近速度</p>
                             <p><strong>λ̇</strong> = 视线角速率</p>
                         </div>
-                        <p class="note"><strong>应用：</strong>导弹制导、交会对接、着陆引导</p>
+                        <p class="note"><strong>应用:</strong>导弹制导、交会对接、着陆引导</p>
                     </div>
 
                     <div class="concept-card">
@@ -896,9 +897,9 @@
                             <code>u(t) = Kp×e(t) + Ki×∫e(t)dt + Kd×de/dt</code>
                         </div>
                         <ul>
-                            <li><strong>P：</strong>比例项（当前误差）</li>
-                            <li><strong>I：</strong>积分项（消除稳态误差）</li>
-                            <li><strong>D：</strong>微分项（预测趋势）</li>
+                            <li><strong>P:</strong>比例项(当前误差)</li>
+                            <li><strong>I:</strong>积分项(消除稳态误差)</li>
+                            <li><strong>D:</strong>微分项(预测趋势)</li>
                         </ul>
                     </div>
                 </div>
@@ -909,10 +910,10 @@
                     <div class="comparison-grid">
                         <div class="comparison-item">
                             <h4>星敏感器</h4>
-                            <p>拍摄星空图像，识别恒星图案</p>
+                            <p>拍摄星空图像,识别恒星图案</p>
                             <ul>
                                 <li>✓ 确定绝对姿态</li>
-                                <li>✓ 精度：弧秒级</li>
+                                <li>✓ 精度:弧秒级</li>
                             </ul>
                         </div>
 
@@ -926,18 +927,18 @@
                         </div>
 
                         <div class="comparison-item">
-                            <h4>激光雷达（LiDAR）</h4>
+                            <h4>激光雷达(LiDAR)</h4>
                             <p>近距离高精度测距</p>
                             <ul>
                                 <li>✓ 用于着陆和交会</li>
-                                <li>✓ 例：SpaceX Dragon对接</li>
+                                <li>✓ 例:SpaceX Dragon对接</li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- 快速链接：复习指南和练习题 -->
+            <!-- 快速链接:复习指南和练习题 -->
             <section id="quick-links" class="knowledge-section" style="text-align: center; padding: 3rem 2rem;">
                 <h1 style="color: #ffd700; margin-bottom: 2rem;">📚 学习资源</h1>
                 
@@ -957,10 +958,10 @@
                     <a href="exercises.html" style="text-decoration: none;">
                         <div class="comparison-item" style="cursor: pointer; border-color: #00d4ff;">
                             <h4 style="color: #00d4ff;">✍️ 章节练习题集</h4>
-                            <p>160道练习题（含详细答案）</p>
+                            <p>160道练习题(含详细答案)</p>
                             <ul>
                                 <li>✓ 8章 × 20题</li>
-                                <li>✓ 4种题型（选择/填空/计算/简答）</li>
+                                <li>✓ 4种题型(选择/填空/计算/简答)</li>
                                 <li>✓ 总分640分</li>
                             </ul>
                         </div>
@@ -1025,24 +1026,24 @@
                     <h2>📝 必记公式清单</h2>
                     
                     <div class="concept-card highlight">
-                        <h3>⭐⭐⭐⭐⭐ 核心公式（必须熟练掌握）</h3>
+                        <h3>⭐⭐⭐⭐⭐ 核心公式(必须熟练掌握)</h3>
                         <div class="formula-box">
-                            <code>开普勒第三定律：T² = (4π²/GM) × a³<br>
-                            圆周速度：v = √(μ/r)<br>
-                            火箭方程：ΔV = Isp × g₀ × ln(m₀/mf)<br>
-                            霍曼转移：ΔV₁ + ΔV₂<br>
-                            推力公式：F = ṁ × Ve</code>
+                            <code>开普勒第三定律:T² = (4π²/GM) × a³<br>
+                            圆周速度:v = √(μ/r)<br>
+                            火箭方程:ΔV = Isp × g₀ × ln(m₀/mf)<br>
+                            霍曼转移:ΔV₁ + ΔV₂<br>
+                            推力公式:F = ṁ × Ve</code>
                         </div>
                     </div>
 
                     <div class="concept-card">
-                        <h3>⭐⭐⭐⭐ 重要公式（需要理解并能应用）</h3>
+                        <h3>⭐⭐⭐⭐ 重要公式(需要理解并能应用)</h3>
                         <div class="formula-box">
-                            <code>逃逸速度：v_esc = √(2μ/r)<br>
-                            比机械能：ε = v²/2 - μ/r<br>
-                            升力/阻力：L/D = ½ρv²SC<br>
-                            TWR：TWR = F / (m × g)<br>
-                            平面变更：ΔV = 2v sin(Δi/2)</code>
+                            <code>逃逸速度:v_esc = √(2μ/r)<br>
+                            比机械能:ε = v²/2 - μ/r<br>
+                            升力/阻力:L/D = ½ρv²SC<br>
+                            TWR:TWR = F / (m × g)<br>
+                            平面变更:ΔV = 2v sin(Δi/2)</code>
                         </div>
                     </div>
                 </div>
@@ -1053,10 +1054,10 @@
                     <div class="warning-box">
                         <h4>常见错误</h4>
                         <ul>
-                            <li>❌ <strong>单位混淆：</strong>r是距地心距离，不是高度。正确：r = R_earth + h</li>
-                            <li>❌ <strong>公式误用：</strong>逃逸速度是圆周速度的√2倍，不是2倍</li>
-                            <li>❌ <strong>概念混淆：</strong>Isp（比冲）vs TWR（推重比）</li>
-                            <li>❌ <strong>忽略条件：</strong>轨道平面变更应在远地点进行</li>
+                            <li>❌ <strong>单位混淆:</strong>r是距地心距离,不是高度.正确:r = R_earth + h</li>
+                            <li>❌ <strong>公式误用:</strong>逃逸速度是圆周速度的√2倍,不是2倍</li>
+                            <li>❌ <strong>概念混淆:</strong>Isp(比冲)vs TWR(推重比)</li>
+                            <li>❌ <strong>忽略条件:</strong>轨道平面变更应在远地点进行</li>
                         </ul>
                     </div>
                 </div>
@@ -1067,19 +1068,19 @@
                     <div class="info-box">
                         <h4>✅ 答题策略</h4>
                         <ul>
-                            <li><strong>先易后难：</strong>先做计算题，再做概念题</li>
-                            <li><strong>单位检查：</strong>确保所有单位一致</li>
-                            <li><strong>公式标注：</strong>写出使用的公式，即使计算错误也能得分</li>
-                            <li><strong>合理近似：</strong>必要时可使用近似值（如g≈10 m/s²）</li>
+                            <li><strong>先易后难:</strong>先做计算题,再做概念题</li>
+                            <li><strong>单位检查:</strong>确保所有单位一致</li>
+                            <li><strong>公式标注:</strong>写出使用的公式,即使计算错误也能得分</li>
+                            <li><strong>合理近似:</strong>必要时可使用近似值(如g≈10 m/s²)</li>
                         </ul>
                     </div>
 
                     <div class="info-box success">
                         <h4>⏱️ 时间分配建议</h4>
                         <ul>
-                            <li>选择题/填空题：30%</li>
-                            <li>计算题：50%</li>
-                            <li>概念题/分析题：20%</li>
+                            <li>选择题/填空题:30%</li>
+                            <li>计算题:50%</li>
+                            <li>概念题/分析题:20%</li>
                         </ul>
                     </div>
                 </div>
@@ -1103,7 +1104,7 @@
                         <a href="../docs/CHAPTER_EXERCISES.md" target="_blank" style="text-decoration: none;">
                             <div class="comparison-item" style="cursor: pointer;">
                                 <h4>✍️ 章节练习题集</h4>
-                                <p>160道练习题（含详细答案）</p>
+                                <p>160道练习题(含详细答案)</p>
                                 <ul>
                                     <li>✓ 8章 × 20题</li>
                                     <li>✓ 4种题型</li>
@@ -1122,10 +1123,10 @@
                 <div class="info-box">
                     <h4>📊 题目统计</h4>
                     <ul>
-                        <li><strong>总题数：</strong>160题（8章 × 20题）</li>
-                        <li><strong>总分值：</strong>640分</li>
-                        <li><strong>题型分布：</strong>选择题40题、填空题40题、计算题40题、简答题40题</li>
-                        <li><strong>预计完成时间：</strong>8小时（每章约60分钟）</li>
+                        <li><strong>总题数:</strong>160题(8章 × 20题)</li>
+                        <li><strong>总分值:</strong>640分</li>
+                        <li><strong>题型分布:</strong>选择题40题、填空题40题、计算题40题、简答题40题</li>
+                        <li><strong>预计完成时间:</strong>8小时(每章约60分钟)</li>
                     </ul>
                 </div>
 
@@ -1135,10 +1136,10 @@
                     <div class="concept-card">
                         <h3>学习方法</h3>
                         <ol>
-                            <li><strong>学完一章做一章：</strong>不要等到全部学完再做题</li>
-                            <li><strong>独立完成：</strong>先自己做，再对照答案</li>
-                            <li><strong>错题整理：</strong>记录错误题目，定期复习</li>
-                            <li><strong>计算题必做：</strong>考试重点，务必掌握解题步骤</li>
+                            <li><strong>学完一章做一章:</strong>不要等到全部学完再做题</li>
+                            <li><strong>独立完成:</strong>先自己做,再对照答案</li>
+                            <li><strong>错题整理:</strong>记录错误题目,定期复习</li>
+                            <li><strong>计算题必做:</strong>考试重点,务必掌握解题步骤</li>
                         </ol>
                     </div>
 
@@ -1257,7 +1258,7 @@
                     
                     <div class="info-box success">
                         <h4>📖 完整练习题集</h4>
-                        <p>点击下方链接查看完整的160道练习题（含详细答案解析）：</p>
+                        <p>点击下方链接查看完整的160道练习题(含详细答案解析):</p>
                         <br>
                         <a href="../docs/CHAPTER_EXERCISES.md" target="_blank" 
                            style="display: inline-block; padding: 12px 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
@@ -1265,17 +1266,17 @@
                                   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4); transition: all 0.3s ease;"
                            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(102, 126, 234, 0.6)'"
                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(102, 126, 234, 0.4)'">
-                            ✍️ 打开练习题集（160题）
+                            ✍️ 打开练习题集(160题)
                         </a>
                     </div>
 
                     <div class="note">
-                        <p><strong>💡 提示：</strong>建议按照学习路径系统练习：</p>
+                        <p><strong>💡 提示:</strong>建议按照学习路径系统练习:</p>
                         <ol>
                             <li>学完一章理论 → 完成对应章节20道题</li>
-                            <li>对照答案，理解错误原因</li>
-                            <li>整理错题本，定期复习</li>
-                            <li>考前进行模拟测试（随机抽40题，限时2小时）</li>
+                            <li>对照答案,理解错误原因</li>
+                            <li>整理错题本,定期复习</li>
+                            <li>考前进行模拟测试(随机抽40题,限时2小时)</li>
                         </ol>
                     </div>
                 </div>
@@ -1283,10 +1284,10 @@
 
             <!-- 页脚 -->
             <footer class="page-footer">
-                <p>📖 完整理论文档：<a href="../docs/AEROSPACE_THEORY_KNOWLEDGE_BASE.md" target="_blank">AEROSPACE_THEORY_KNOWLEDGE_BASE.md</a></p>
-                <p>📝 复习指南：<a href="exam-guide.html" style="color: #ffd700;">exam-guide.html（网页版）</a> | <a href="../docs/EXAM_REVIEW_GUIDE.md" target="_blank">EXAM_REVIEW_GUIDE.md</a></p>
-                <p>✍️ 练习题集：<a href="exercises.html" style="color: #ffd700;">exercises.html（网页版）</a> | <a href="../docs/CHAPTER_EXERCISES.md" target="_blank">CHAPTER_EXERCISES.md</a>（160道题）</p>
-                <p> 提示：点击左侧目录可快速跳转到对应章节 | 按 Ctrl+F 搜索知识点</p>
+                <p>📖 完整理论文档:<a href="../docs/AEROSPACE_THEORY_KNOWLEDGE_BASE.md" target="_blank">AEROSPACE_THEORY_KNOWLEDGE_BASE.md</a></p>
+                <p>📝 复习指南:<a href="exam-guide.html" style="color: #ffd700;">exam-guide.html(网页版)</a> | <a href="../docs/EXAM_REVIEW_GUIDE.md" target="_blank">EXAM_REVIEW_GUIDE.md</a></p>
+                <p>✍️ 练习题集:<a href="exercises.html" style="color: #ffd700;">exercises.html(网页版)</a> | <a href="../docs/CHAPTER_EXERCISES.md" target="_blank">CHAPTER_EXERCISES.md</a>(160道题)</p>
+                <p> 提示:点击左侧目录可快速跳转到对应章节 | 按 Ctrl+F 搜索知识点</p>
             </footer>
         </main>
     </div>

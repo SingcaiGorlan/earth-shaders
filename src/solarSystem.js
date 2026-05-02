@@ -30,7 +30,7 @@ export class SolarSystemModel {
         // 1 AU = 149,597,870.7 km (Earth-Sun distance)
         // In existing scene: Sun at (150, 0, 0), Earth at (0, 0, 0)
         // So 1 AU = 150 scene units
-        const AU = 150  // Scale to match existing scene (Sun at 150, Earth at 0)
+        this.AU = 150  // Scale to match existing scene (Sun at 150, Earth at 0)
         
         // Real planet data (radius in Earth radii, distance in AU)
         this.planetData = [
@@ -38,70 +38,70 @@ export class SolarSystemModel {
                 name: 'Mercury',
                 nameCN: '水星',
                 radius: 0.383,  // Real: 0.383 Earth radii
-                distance: 0.387 * AU,  // Real: 0.387 AU
+                distance: 0.387 * this.AU,  // Real: 0.387 AU
                 color: 0x8C7853,
                 orbitSpeed: 4.15,  // Relative to Earth (1 year)
                 rotationSpeed: 0.005,
                 inclination: 7.0,
                 eccentricity: 0.205,
-                description: '离太阳最近的行星，表面温差极大 (-180°C ~ 430°C)'
+                description: '离太阳最近的行星,表面温差极大 (-180°C ~ 430°C)'
             },
             {
                 name: 'Venus',
                 nameCN: '金星',
                 radius: 0.949,  // Real: 0.949 Earth radii
-                distance: 0.723 * AU,  // Real: 0.723 AU
+                distance: 0.723 * this.AU,  // Real: 0.723 AU
                 color: 0xFFC649,
                 orbitSpeed: 1.62,  // Real: 225 days
                 rotationSpeed: -0.002, // Retrograde rotation
                 inclination: 3.4,
                 eccentricity: 0.007,
-                description: '最热的行星，浓厚的大气层造成温室效应 (462°C)'
+                description: '最热的行星,浓厚的大气层造成温室效应 (462°C)'
             },
             // Note: Earth already exists in the scene, skip adding it
             {
                 name: 'Mars',
                 nameCN: '火星',
                 radius: 0.532,  // Real: 0.532 Earth radii
-                distance: 1.524 * AU,  // Real: 1.524 AU
+                distance: 1.524 * this.AU,  // Real: 1.524 AU
                 color: 0xC1440E,
                 orbitSpeed: 0.53,  // Real: 687 days
                 rotationSpeed: 0.018,
                 inclination: 1.9,
                 eccentricity: 0.094,
-                description: '红色星球，可能有液态水存在 (-60°C)'
+                description: '红色星球,可能有液态水存在 (-60°C)'
             },
             {
                 name: 'Jupiter',
                 nameCN: '木星',
                 radius: 11.21,  // Real: 11.21 Earth radii
-                distance: 5.203 * AU,  // Real: 5.203 AU
+                distance: 5.203 * this.AU,  // Real: 5.203 AU
                 color: 0xD8CA9D,
                 orbitSpeed: 0.084,  // Real: 11.86 years
                 rotationSpeed: 0.04,
                 inclination: 1.3,
                 eccentricity: 0.049,
                 hasRings: false,
-                description: '最大的行星，拥有大红斑风暴'
+                description: '最大的行星,拥有大红斑风暴'
             },
             {
                 name: 'Saturn',
                 nameCN: '土星',
                 radius: 9.45,  // Real: 9.45 Earth radii
-                distance: 9.537 * AU,  // Real: 9.537 AU
+                distance: 9.537 * this.AU,  // Real: 9.537 AU
                 color: 0xFAD5A5,
                 orbitSpeed: 0.034,  // Real: 29.46 years
                 rotationSpeed: 0.038,
                 inclination: 2.5,
                 eccentricity: 0.057,
                 hasRings: true,
-                description: '美丽的光环系统，密度小于水'
+                description: '美丽的光环系统,密度小于水'
             },
             {
                 name: 'Uranus',
                 nameCN: '天王星',
                 radius: 4.01,  // Real: 4.01 Earth radii
-                distance: 19.191 * AU,  // Real: 19.191 AU
+                distance: 19.191 * this.AU,  // Real: 19.191 AU
                 color: 0x4FD0E7,
                 orbitSpeed: 0.012,  // Real: 84.01 years
                 rotationSpeed: -0.03, // Retrograde rotation
@@ -109,19 +109,19 @@ export class SolarSystemModel {
                 eccentricity: 0.046,
                 hasRings: true,
                 axialTilt: 97.8, // Extreme tilt
-                description: '侧躺的冰巨星，蓝绿色外观 (-224°C)'
+                description: '侧躺的冰巨星,蓝绿色外观 (-224°C)'
             },
             {
                 name: 'Neptune',
                 nameCN: '海王星',
                 radius: 3.88,  // Real: 3.88 Earth radii
-                distance: 30.069 * AU,  // Real: 30.069 AU
+                distance: 30.069 * this.AU,  // Real: 30.069 AU
                 color: 0x4B70DD,
                 orbitSpeed: 0.006,  // Real: 164.8 years
                 rotationSpeed: 0.032,
                 inclination: 1.8,
                 eccentricity: 0.010,
-                description: '最远的行星，风速最快的行星 (-218°C)'
+                description: '最远的行星,风速最快的行星 (-218°C)'
             }
         ]
         
@@ -336,10 +336,18 @@ export class SolarSystemModel {
             this.createMoon(planetGroup, data)
         }
         
-        // Initial position
+        // Initial position on elliptical orbit
         const angle = Math.random() * Math.PI * 2
-        planetGroup.position.x = Math.cos(angle) * data.distance
-        planetGroup.position.z = Math.sin(angle) * data.distance
+        const a = data.distance  // Semi-major axis
+        const e = data.eccentricity || 0  // Eccentricity
+        const b = a * Math.sqrt(1 - e * e)  // Semi-minor axis
+        
+        // Ellipse center is at (150 + a*e, 0, 0) to place Sun at focus (150, 0, 0)
+        const ellipseCenterX = 150 + a * e
+        const ellipseCenterZ = 0
+        
+        planetGroup.position.x = ellipseCenterX + a * Math.cos(angle)
+        planetGroup.position.z = ellipseCenterZ + b * Math.sin(angle)
         
         // Apply orbital inclination
         planetGroup.rotation.x = THREE.MathUtils.degToRad(data.inclination)
@@ -450,8 +458,8 @@ export class SolarSystemModel {
         const asteroidCount = 2000
         // Real asteroid belt: 2.2 - 3.2 AU from Sun
         // Sun is at (150, 0, 0), 1 AU = 150 units
-        const innerRadius = 2.2 * AU  // 330 units from Sun
-        const outerRadius = 3.2 * AU  // 480 units from Sun
+        const innerRadius = 2.2 * this.AU  // 330 units from Sun
+        const outerRadius = 3.2 * this.AU  // 480 units from Sun
         
         const geometry = new THREE.BufferGeometry()
         const positions = new Float32Array(asteroidCount * 3)
@@ -510,14 +518,18 @@ export class SolarSystemModel {
             const geometry = new THREE.BufferGeometry().setFromPoints(points)
             
             const material = new THREE.LineBasicMaterial({
-                color: 0x444444,
+                color: 0xffffff,  // 白色轨道线
                 transparent: true,
-                opacity: 0.3
+                opacity: 0.4
             })
             
             const orbit = new THREE.Line(geometry, material)
+            
+            // Rotate to XZ plane (ellipse is created in XY plane by default)
             orbit.rotation.x = Math.PI / 2
-            orbit.rotation.y = THREE.MathUtils.degToRad(data.inclination)
+            
+            // Apply orbital inclination (same as planet group)
+            orbit.rotation.z = THREE.MathUtils.degToRad(data.inclination)
             
             // Offset orbit to center around existing Sun position (150, 0, 0)
             // Sun is at one focus of the ellipse, not the center
@@ -554,14 +566,14 @@ export class SolarSystemModel {
             const e = planet.data.eccentricity || 0  // Eccentricity
             const b = a * Math.sqrt(1 - e * e)  // Semi-minor axis
             
-            // Calculate position on ellipse
-            // Sun is at focus (ae, 0), planet orbits around center (0,0) then offset
-            const centerX = 150 + a * e  // Sun position + focus offset
-            const centerZ = 0
+            // Ellipse center is at (150 + a*e, 0, 0) to place Sun at focus (150, 0, 0)
+            // Planet orbits around ellipse center, not around Sun directly
+            const ellipseCenterX = 150 + a * e
+            const ellipseCenterZ = 0
             
-            // Parametric equations for ellipse
-            planet.group.position.x = centerX + a * Math.cos(planet.angle)
-            planet.group.position.z = centerZ + b * Math.sin(planet.angle)
+            // Parametric equations for ellipse (planet orbits around ellipse center)
+            planet.group.position.x = ellipseCenterX + a * Math.cos(planet.angle)
+            planet.group.position.z = ellipseCenterZ + b * Math.sin(planet.angle)
             
             // Self rotation
             planet.mesh.rotation.y += planet.rotationSpeed

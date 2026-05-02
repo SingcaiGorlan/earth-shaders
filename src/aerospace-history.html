@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>航天历史事件库 | Aerospace History Events</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0c0e1b 0%, #1a1d3a 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.1em;
+            color: #a0a0a0;
+            margin-top: 10px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.3);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #4facfe;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #a0a0a0;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            background: rgba(79, 172, 254, 0.2);
+            border: 1px solid rgba(79, 172, 254, 0.5);
+            color: #4facfe;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95em;
+        }
+
+        .filter-btn:hover {
+            background: rgba(79, 172, 254, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: #4facfe;
+            color: #0c0e1b;
+            font-weight: bold;
+        }
+
+        select {
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            border-radius: 8px;
+            font-size: 0.95em;
+            cursor: pointer;
+        }
+
+        select option {
+            background: #1a1d3a;
+            color: #ffffff;
+        }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .event-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .event-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .event-card.high-significance::before {
+            background: linear-gradient(90deg, #ff6b6b 0%, #ffa500 100%);
+        }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(79, 172, 254, 0.2);
+            border-color: rgba(79, 172, 254, 0.3);
+        }
+
+        .event-date {
+            font-size: 0.85em;
+            color: #4facfe;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .event-country {
+            display: inline-block;
+            padding: 4px 12px;
+            background: rgba(79, 172, 254, 0.2);
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-bottom: 12px;
+            color: #4facfe;
+        }
+
+        .event-title {
+            font-size: 1.3em;
+            margin-bottom: 8px;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .event-title-en {
+            font-size: 0.9em;
+            color: #a0a0a0;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .event-description {
+            font-size: 0.95em;
+            line-height: 1.6;
+            color: #d0d0d0;
+            margin-bottom: 10px;
+        }
+
+        .event-description-en {
+            font-size: 0.85em;
+            line-height: 1.5;
+            color: #909090;
+            font-style: italic;
+        }
+
+        .event-category {
+            display: inline-block;
+            padding: 4px 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            font-size: 0.75em;
+            margin-top: 12px;
+            color: #b0b0b0;
+        }
+
+        .significance-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.7em;
+            font-weight: bold;
+        }
+
+        .high-significance .significance-badge {
+            background: rgba(255, 107, 107, 0.3);
+            color: #ff6b6b;
+        }
+
+        .no-events {
+            text-align: center;
+            padding: 60px 20px;
+            color: #a0a0a0;
+            font-size: 1.2em;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 12px 24px;
+            background: rgba(79, 172, 254, 0.2);
+            border: 1px solid rgba(79, 172, 254, 0.5);
+            color: #4facfe;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95em;
+            z-index: 1000;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-btn:hover {
+            background: rgba(79, 172, 254, 0.4);
+            transform: translateX(-5px);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .events-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .controls {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-btn">← 返回主界面</a>
+    
+    <div class="container">
+        <header>
+            <h1>🚀 航天历史事件库</h1>
+            <p class="subtitle">Aerospace History Events Database</p>
+            <p class="subtitle">记录人类探索太空的伟大历程</p>
+        </header>
+
+        <div class="stats" id="stats"></div>
+
+        <div class="controls">
+            <button class="filter-btn active" data-filter="all">全部事件</button>
+            <button class="filter-btn" data-filter="high">重要里程碑</button>
+            <select id="countryFilter">
+                <option value="all">所有国家/地区</option>
+            </select>
+            <select id="categoryFilter">
+                <option value="all">所有类别</option>
+            </select>
+        </div>
+
+        <div class="events-grid" id="eventsGrid"></div>
+    </div>
+
+    <script type="module">
+        import { aerospaceHistoryEvents, getEventsByCategory, getEventsByCountry, getHighSignificanceEvents } from './aerospaceHistory.js'
+
+        let currentFilter = 'all'
+        let selectedCountry = 'all'
+        let selectedCategory = 'all'
+
+        // Calculate statistics
+        function calculateStats() {
+            const totalEvents = aerospaceHistoryEvents.length
+            const highSignificance = getHighSignificanceEvents().length
+            const countries = [...new Set(aerospaceHistoryEvents.map(e => e.country))]
+            const categories = [...new Set(aerospaceHistoryEvents.map(e => e.category))]
+
+            return {
+                total: totalEvents,
+                highSignificance,
+                countries: countries.length,
+                categories: categories.length
+            }
+        }
+
+        // Display statistics
+        function displayStats() {
+            const stats = calculateStats()
+            const statsContainer = document.getElementById('stats')
+            
+            statsContainer.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-number">${stats.total}</div>
+                    <div class="stat-label">总事件数</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${stats.highSignificance}</div>
+                    <div class="stat-label">重要里程碑</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${stats.countries}</div>
+                    <div class="stat-label">参与国家/地区</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">${stats.categories}</div>
+                    <div class="stat-label">事件类别</div>
+                </div>
+            `
+        }
+
+        // Populate filters
+        function populateFilters() {
+            const countries = [...new Set(aerospaceHistoryEvents.map(e => e.country))].sort()
+            const categories = [...new Set(aerospaceHistoryEvents.map(e => e.category))].sort()
+
+            const countrySelect = document.getElementById('countryFilter')
+            countries.forEach(country => {
+                const option = document.createElement('option')
+                option.value = country
+                option.textContent = country
+                countrySelect.appendChild(option)
+            })
+
+            const categorySelect = document.getElementById('categoryFilter')
+            categories.forEach(category => {
+                const option = document.createElement('option')
+                option.value = category
+                option.textContent = category
+                categorySelect.appendChild(option)
+            })
+        }
+
+        // Filter events
+        function filterEvents() {
+            let filtered = aerospaceHistoryEvents
+
+            if (currentFilter === 'high') {
+                filtered = getHighSignificanceEvents()
+            }
+
+            if (selectedCountry !== 'all') {
+                filtered = filtered.filter(e => e.country === selectedCountry)
+            }
+
+            if (selectedCategory !== 'all') {
+                filtered = filtered.filter(e => e.category === selectedCategory)
+            }
+
+            return filtered.sort((a, b) => new Date(a.date) - new Date(b.date))
+        }
+
+        // Create event card HTML
+        function createEventCard(event) {
+            const isHighSignificance = event.significance === 'high'
+            
+            return `
+                <div class="event-card ${isHighSignificance ? 'high-significance' : ''}">
+                    ${isHighSignificance ? '<div class="significance-badge">⭐ 重要</div>' : ''}
+                    <div class="event-date">📅 ${event.date}</div>
+                    <div class="event-country">${event.country}</div>
+                    <div class="event-title">${event.title}</div>
+                    <div class="event-title-en">${event.titleEN}</div>
+                    <div class="event-description">${event.description}</div>
+                    <div class="event-description-en">${event.descriptionEN}</div>
+                    <div class="event-category">${event.category}</div>
+                </div>
+            `
+        }
+
+        // Display events
+        function displayEvents() {
+            const events = filterEvents()
+            const grid = document.getElementById('eventsGrid')
+
+            if (events.length === 0) {
+                grid.innerHTML = '<div class="no-events">没有找到符合条件的事件</div>'
+                return
+            }
+
+            grid.innerHTML = events.map(createEventCard).join('')
+        }
+
+        // Event listeners
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'))
+                e.target.classList.add('active')
+                currentFilter = e.target.dataset.filter
+                displayEvents()
+            })
+        })
+
+        document.getElementById('countryFilter').addEventListener('change', (e) => {
+            selectedCountry = e.target.value
+            displayEvents()
+        })
+
+        document.getElementById('categoryFilter').addEventListener('change', (e) => {
+            selectedCategory = e.target.value
+            displayEvents()
+        })
+
+        // Initialize
+        displayStats()
+        populateFilters()
+        displayEvents()
+    </script>
+</body>
+</html>

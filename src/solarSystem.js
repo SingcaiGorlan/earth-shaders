@@ -13,6 +13,8 @@ import gasGiantVertexShader from './shaders/solarSystem/gas-giant-vertex.glsl'
 import gasGiantFragmentShader from './shaders/solarSystem/gas-giant-fragment.glsl'
 import ringVertexShader from './shaders/solarSystem/ring-vertex.glsl'
 import ringFragmentShader from './shaders/solarSystem/ring-fragment.glsl'
+// 添加引力模型导入
+import { SolarSystemGravityModel, PHYSICAL_CONSTANTS } from './gravityModel.js'
 
 export class SolarSystemModel {
     constructor(scene, existingEarth = null, existingSun = null) {
@@ -25,6 +27,9 @@ export class SolarSystemModel {
         this.sun = null  // Will not create new sun, use existing one
         this.time = 0
         this.timeScale = 1
+        
+        // Initialize solar system gravity model
+        this.gravityModel = new SolarSystemGravityModel();
         
         // Realistic solar system proportions (AU scale)
         // 1 AU = 149,597,870.7 km (Earth-Sun distance)
@@ -41,7 +46,7 @@ export class SolarSystemModel {
                 distance: 0.387 * this.AU,  // Real: 0.387 AU
                 color: 0x8C7853,
                 orbitSpeed: 4.15,  // Relative to Earth (1 year)
-                rotationSpeed: 0.005,
+                rotationSpeed: 0.0004,  // Real: 58.6 days (very slow)
                 inclination: 7.0,
                 eccentricity: 0.205,
                 description: '离太阳最近的行星,表面温差极大 (-180°C ~ 430°C)'
@@ -53,7 +58,7 @@ export class SolarSystemModel {
                 distance: 0.723 * this.AU,  // Real: 0.723 AU
                 color: 0xFFC649,
                 orbitSpeed: 1.62,  // Real: 225 days
-                rotationSpeed: -0.002, // Retrograde rotation
+                rotationSpeed: -0.0001, // Retrograde rotation (243 days, slowest)
                 inclination: 3.4,
                 eccentricity: 0.007,
                 description: '最热的行星,浓厚的大气层造成温室效应 (462°C)'
@@ -66,7 +71,7 @@ export class SolarSystemModel {
                 distance: 1.524 * this.AU,  // Real: 1.524 AU
                 color: 0xC1440E,
                 orbitSpeed: 0.53,  // Real: 687 days
-                rotationSpeed: 0.018,
+                rotationSpeed: 0.024,  // Real: 1.03 days (similar to Earth)
                 inclination: 1.9,
                 eccentricity: 0.094,
                 description: '红色星球,可能有液态水存在 (-60°C)'
@@ -78,7 +83,7 @@ export class SolarSystemModel {
                 distance: 5.203 * this.AU,  // Real: 5.203 AU
                 color: 0xD8CA9D,
                 orbitSpeed: 0.084,  // Real: 11.86 years
-                rotationSpeed: 0.04,
+                rotationSpeed: 0.06,  // Real: 0.41 days (fastest planet)
                 inclination: 1.3,
                 eccentricity: 0.049,
                 hasRings: false,
@@ -91,7 +96,7 @@ export class SolarSystemModel {
                 distance: 9.537 * this.AU,  // Real: 9.537 AU
                 color: 0xFAD5A5,
                 orbitSpeed: 0.034,  // Real: 29.46 years
-                rotationSpeed: 0.038,
+                rotationSpeed: 0.055,  // Real: 0.45 days (second fastest)
                 inclination: 2.5,
                 eccentricity: 0.057,
                 hasRings: true,
@@ -102,34 +107,41 @@ export class SolarSystemModel {
                 nameCN: '天王星',
                 radius: 4.01,  // Real: 4.01 Earth radii
                 distance: 19.191 * this.AU,  // Real: 19.191 AU
-                color: 0x4FD0E7,
+                color: 0xD1E7E7,
                 orbitSpeed: 0.012,  // Real: 84.01 years
-                rotationSpeed: -0.03, // Retrograde rotation
+                rotationSpeed: -0.035, // Retrograde rotation (0.72 days, tilted 98°)
                 inclination: 0.8,
                 eccentricity: 0.046,
                 hasRings: true,
-                axialTilt: 97.8, // Extreme tilt
-                description: '侧躺的冰巨星,蓝绿色外观 (-224°C)'
+                description: '侧躺着自转的冰巨星 (-224°C)'
             },
             {
                 name: 'Neptune',
                 nameCN: '海王星',
                 radius: 3.88,  // Real: 3.88 Earth radii
                 distance: 30.069 * this.AU,  // Real: 30.069 AU
-                color: 0x4B70DD,
+                color: 0x5B5DDF,
                 orbitSpeed: 0.006,  // Real: 164.8 years
-                rotationSpeed: 0.032,
+                rotationSpeed: 0.038,  // Real: 0.67 days
                 inclination: 1.8,
                 eccentricity: 0.010,
-                description: '最远的行星,风速最快的行星 (-218°C)'
+                hasRings: true,
+                description: '最远的行星,强风速达2100km/h (-218°C)'
             }
-        ]
+        ];
         
-        // 不再在构造函数中自动初始化
-        // 由外部调用 initSolarSystem() 方法来初始化
-        // this.initSolarSystem()
+        // Add planets to gravity model (optional for high precision calculations)
+        this.initializeGravitationalBodies();
     }
     
+    /**
+     * 初始化引力源天体（可选，用于高精度计算）
+     */
+    initializeGravitationalBodies() {
+        // 可以在这里添加行星作为次要引力源
+        // 目前主要使用太阳作为主导引力源
+    }
+
     /**
      * Initialize complete solar system
      * Uses existing Sun, Earth, and Moon from the main scene

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>期末考试复习指南 - 航天航空理论</title>
+    <title data-i18n="examGuide.title">期末考试复习指南 - 航天航空理论</title>
     <link rel="stylesheet" href="./knowledge-base.css">
     <style>
         /* 复习指南特殊样式 */
@@ -232,20 +232,61 @@
             transform: translateY(-3px);
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
         }
+        
+        /* Language switcher styles */
+        .language-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(30, 35, 60, 0.9);
+            border-radius: 20px;
+            padding: 5px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            display: flex;
+            gap: 2px;
+        }
+        
+        .language-switcher button {
+            background: transparent;
+            border: none;
+            color: #a0d8ff;
+            padding: 8px 16px;
+            border-radius: 18px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .language-switcher button:hover {
+            color: #ffd700;
+            background: rgba(255, 215, 0, 0.1);
+        }
+        
+        .language-switcher button.active {
+            color: white;
+            background: linear-gradient(135deg, #00d4ff 0%, #ffd700 100%);
+        }
     </style>
 </head>
 <body>
+    <!-- Language Switcher -->
+    <div class="language-switcher" id="language-switcher">
+        <button data-lang="zh" data-i18n="index.chinese">中文</button>
+        <button data-lang="en" data-i18n="index.english">English</button>
+    </div>
+
     <!-- 导航栏 -->
     <nav class="navbar">
         <div class="nav-container">
-            <a href="index.html" class="nav-logo">🌍 Earth Visualization</a>
+            <a href="index.html" class="nav-logo" data-i18n="examGuide.navLogo">🌍 Earth Visualization</a>
             <div class="nav-links">
-                <a href="index.html">地球可视化</a>
-                <a href="launch.html">KSP模拟器</a>
-                <a href="knowledge-base.html">知识库</a>
-                <a href="aerospace-history.html" class="nav-highlight">🚀 航天历史</a>
-                <a href="exam-guide.html" class="active">📝 复习指南</a>
-                <a href="exercises.html">✍️ 练习题</a>
+                <a href="index.html" data-i18n="navigation.home">地球可视化</a>
+                <a href="launch.html" data-i18n="navigation.launch">KSP模拟器</a>
+                <a href="knowledge-base.html" data-i18n="navigation.knowledgeBase">知识库</a>
+                <a href="aerospace-history.html" class="nav-highlight" data-i18n="navigation.aerospaceHistory">🚀 航天历史</a>
+                <a href="exam-guide.html" class="active" data-i18n="navigation.examGuide">📝 复习指南</a>
+                <a href="exercises.html" data-i18n="navigation.exercises">✍️ 练习题</a>
             </div>
         </div>
     </nav>
@@ -255,8 +296,8 @@
         <!-- 侧边栏目 -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <h2>📚 复习导航</h2>
-                <input type="text" id="searchInput" placeholder="搜索知识库.." class="search-box">
+                <h2 data-i18n="examGuide.sidebar.title">📚 复习导航</h2>
+                <input type="text" id="searchInput" data-i18n-placeholder="examGuide.sidebar.searchPlaceholder" placeholder="搜索知识库.." class="search-box">
             </div>
             <nav class="toc">
                 <ul id="tocList">
@@ -268,10 +309,10 @@
                     <li><a href="#tips">💡 考试技巧</a></li>
                     <li><a href="#selftest">🧪 模拟自测</a></li>
                     <li style="margin-top: 1rem; border-top: 1px solid rgba(0, 212, 255, 0.3); padding-top: 1rem;">
-                        <a href="exercises.html" style="color: #ffd700; font-weight: bold;">✍️ 练习题集</a>
+                        <a href="exercises.html" style="color: #ffd700; font-weight: bold;" data-i18n="navigation.exercises">✍️ 练习题集</a>
                     </li>
                     <li>
-                        <a href="knowledge-base.html" style="color: #00d4ff;">📖 返回知识库</a>
+                        <a href="knowledge-base.html" style="color: #00d4ff;" data-i18n="navigation.knowledgeBase">📖 返回知识库</a>
                     </li>
                 </ul>
             </nav>
@@ -398,13 +439,13 @@
                     
                     <div class="formula-item">
                         <div class="name">1. 圆轨道速度</div>
-                        <span class="formula">v = �?μ/r)</span>
+                        <span class="formula">v = √μ/r)</span>
                         <div class="note">μ = 398600.4418 km³/s²(地球引力常数)</div>
                     </div>
 
                     <div class="formula-item">
                         <div class="name">2. 逃逸速度</div>
-                        <span class="formula">v_escape = �?2μ/r) = �? × v_circular</span>
+                        <span class="formula">v_escape = √2μ/r) = √ × v_circular</span>
                         <div class="note">约为11.2 km/s(地表),是圆周速度的√2</div>
                     </div>
 
@@ -422,8 +463,8 @@
 
                     <div class="formula-item">
                         <div class="name">5. Hohmann转移Δv</div>
-                        <span class="formula">Δv�?= �?μ/r�? × (�?2r�?(r�?r�?) - 1)</span>
-                        <span class="formula">Δv�?= �?μ/r�? × (1 - �?2r�?(r�?r�?))</span>
+                        <span class="formula">Δv√= √μ/r√ × (√2r√(r√r√) - 1)</span>
+                        <span class="formula">Δv√= √μ/r√ × (1 - √2r√(r√r√))</span>
                         <div class="note">轨道转移必考计算题</div>
                     </div>
 
@@ -439,26 +480,26 @@
                     
                     <div class="formula-item">
                         <div class="name">7. 比冲定义</div>
-                        <span class="formula">I_sp = F / (�?× g₀)</span>
+                        <span class="formula">I_sp = F / (√× g₀)</span>
                         <div class="note">单位:秒,衡量发动机效率</div>
                     </div>
 
                     <div class="formula-item">
                         <div class="name">8. 推力公式</div>
-                        <span class="formula">F = �?× v_e + (p_e - p_a) × A_e</span>
+                        <span class="formula">F = √× v_e + (p_e - p_a) × A_e</span>
                         <div class="note">:质量流量,v_e:排气速度</div>
                     </div>
 
                     <div class="formula-item">
                         <div class="name">9. 轨道周期</div>
-                        <span class="formula">T = 2π�?a³/μ)</span>
+                        <span class="formula">T = 2π√a³/μ)</span>
                         <div class="note">从开普勒第三定律推导</div>
                     </div>
 
                     <div class="formula-item">
                         <div class="name">10. 地球同步轨道半径</div>
-                        <span class="formula">a_GEO �?42164 km</span>
-                        <div class="note">高度 �?35786 km</div>
+                        <span class="formula">a_GEO √42164 km</span>
+                        <div class="note">高度 √35786 km</div>
                     </div>
                 </div>
             </section>
@@ -518,14 +559,14 @@
                 <div class="error-prone">
                     <strong> 单位混淆</strong>
                     <p>轨道高度 vs 轨道半径:r = R_earth + h(不要忘记加地球半径！)</p>
-                    <p>km vs m�? km = 1000 m</p>
+                    <p>km vs m√ km = 1000 m</p>
                     <p>小时 vs 秒:1小时 = 3600</p>
                 </div>
 
                 <div class="error-prone">
                     <strong>公式误用</strong>
                     <p>逃逸速度是圆周速度的√2倍(1.414倍),不是2倍！</p>
-                    <p>Hohmann转移需要两次速度增量(Δv�?+ Δv₂)</p>
+                    <p>Hohmann转移需要两次速度增量(Δv√+ Δv₂)</p>
                     <p>活力公式 v² = μ(2/r - 1/a) 适用于任意轨道位置</p>
                 </div>
 
@@ -579,7 +620,7 @@
                         <div class="strategy-content">
                             <h5>检查要点</h5>
                             <p>单位是否统一(km、s、kg)</p>
-                            <p>数量级是否合理(卫星速度�?-8 km/s)</p>
+                            <p>数量级是否合理(卫星速度√-8 km/s)</p>
                             <p>公式是否正确(特别是正负号)</p>
                             <p>计算是否准确(用计算器复核)</p>
                         </div>
@@ -634,6 +675,23 @@
                 console.log('Search input:', this.value);
             });
         }
+    </script>
+    
+    <script type="module">
+        import I18n from './i18n.js';
+        const i18n = new I18n();
+        i18n.init();
+
+        const languageSwitcher = document.getElementById('language-switcher');
+        languageSwitcher.addEventListener('click', (event) => {
+            if (event.target.tagName === 'BUTTON') {
+                const lang = event.target.getAttribute('data-lang');
+                i18n.setLanguage(lang);
+                document.querySelectorAll('.language-switcher button').forEach(button => {
+                    button.classList.toggle('active', button.getAttribute('data-lang') === lang);
+                });
+            }
+        });
     </script>
 </body>
 </html>

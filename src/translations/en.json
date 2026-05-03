@@ -1,0 +1,121 @@
+{
+  "navigation": {
+    "home": "Earth Visualization",
+    "launch": "KSP Simulator",
+    "knowledgeBase": "Knowledge Base",
+    "aerospaceHistory": "🚀 Aerospace History",
+    "examGuide": "📝 Study Guide",
+    "exercises": "✍️ Exercises"
+  },
+  "index": {
+    "title": "Earth Visualization",
+    "chinese": "中文",
+    "english": "English"
+  },
+  "launch": {
+    "title": "Earth Science Visualization - Launch",
+    "header": {
+      "title": "🌍 Earth Science Visualization",
+      "subtitle": "Select Features to Enable | 选择要启用的功能模块",
+      "knowledgeLink": "📚 Aerospace Knowledge Base",
+      "historyLink": "🚀 Aerospace History"
+    },
+    "mode": {
+      "section": "Application Mode | 应用模式",
+      "education": "Education Demo | 教学演示模式",
+      "educationDesc": "Suitable for teaching and demonstration, showcasing earth science concepts",
+      "research": "Research Mode | 科研模式",
+      "researchDesc": "Detailed data analysis and scientific visualization"
+    },
+    "presets": {
+      "minimal": "🔧 Minimal Configuration",
+      "balanced": "⚖️ Balanced Mode",
+      "full": "🚀 Full Experience",
+      "performance": "🎮 Performance Priority"
+    },
+    "visualEffects": {
+      "section": "Visual Effects | 视觉效果",
+      "earth": "Earth Rendering | 地球渲染",
+      "earthDesc": "Basic earth model and textures",
+      "clouds": "Cloud Layer | 云层系统",
+      "cloudsDesc": "Dynamic cloud layers and atmospheric effects",
+      "atmosphere": "Atmosphere | 大气层",
+      "atmosphereDesc": "Multi-layer atmospheric halo effects",
+      "oceanWaves": "Ocean Waves | 海洋波浪",
+      "oceanWavesDesc": "Dynamic ocean surface wave effects"
+    },
+    "spaceWeather": {
+      "section": "Space Weather | 太空天气",
+      "sun": "Sun System | 太阳系统",
+      "sunDesc": "Realistic sun and lighting effects",
+      "solarWind": "Solar Wind | 太阳风",
+      "solarWindDesc": "Solar particle stream effects",
+      "planetaryOrbits": "Planetary Orbits | 行星轨道",
+      "planetaryOrbitsDesc": "Display solar system planetary orbits",
+      "magnetosphere": "Magnetosphere | 地球磁层",
+      "magnetosphereDesc": "Magnetic field shield visualization",
+      "aurora": "Aurora | 极光效果",
+      "auroraDesc": "Northern and southern lights effects"
+    },
+    "physicsSimulation": {
+      "section": "Physics Simulation | 物理模拟",
+      "gravityField": "Gravitational Field | 引力场",
+      "gravityFieldDesc": "Equipotential surfaces and field line visualization",
+      "lagrangePoints": "Lagrange Points | 拉格朗日点",
+      "lagrangePointsDesc": "Earth-Moon system equilibrium points",
+      "cyclones": "Tropical Cyclones | 热带气旋",
+      "cyclonesDesc": "Typhoon/hurricane simulation"
+    },
+    "interactiveFeatures": {
+      "section": "Interactive Features | 交互功能",
+      "satellites": "Satellite Orbits | 卫星轨道",
+      "satellitesDesc": "Real satellite tracking system (with orbit lines)",
+      "orbitLines": "Orbit Lines | 轨道线显示",
+      "orbitLinesDesc": "Display satellite orbit trajectories",
+      "timeControl": "Time Control | 时间控制",
+      "timeControlDesc": "Time acceleration and rewind"
+    },
+    "performance": {
+      "indicator": "📊 Estimated Performance Impact | 预估性能影响",
+      "mediumLoad": "Current: Medium Load - Good | 当前配置:中等负载 - 良好性能"
+    },
+    "buttons": {
+      "deselectAll": "Deselect All",
+      "selectAll": "Select All",
+      "launch": "🚀 Launch System"
+    },
+    "loading": "Initializing system..."
+  },
+  "knowledgeBase": {
+    "title": "Aerospace Theory Knowledge Base",
+    "navLogo": "🌍 Earth Visualization",
+    "sidebar": {
+      "title": "📚 Table of Contents",
+      "searchPlaceholder": "Search knowledge points..."
+    }
+  },
+  "aerospaceHistory": {
+    "title": "Aerospace Development History",
+    "navLogo": "🌍 Earth Visualization",
+    "sidebar": {
+      "title": "📚 Timeline",
+      "searchPlaceholder": "Search historical events..."
+    }
+  },
+  "examGuide": {
+    "title": "Final Exam Study Guide - Aerospace Theory",
+    "navLogo": "🌍 Earth Visualization",
+    "sidebar": {
+      "title": "📚 Study Navigation",
+      "searchPlaceholder": "Search knowledge base..."
+    }
+  },
+  "exercises": {
+    "title": "Chapter Exercise Collection - Aerospace Theory",
+    "navLogo": "🌍 Earth Visualization",
+    "sidebar": {
+      "title": "📚 Chapter Navigation",
+      "searchPlaceholder": "Search questions..."
+    }
+  }
+}

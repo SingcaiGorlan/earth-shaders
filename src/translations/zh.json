@@ -1,0 +1,121 @@
+{
+  "navigation": {
+    "home": "地球可视化",
+    "launch": "KSP模拟器",
+    "knowledgeBase": "知识库",
+    "aerospaceHistory": "🚀 航天历史",
+    "examGuide": "📝 复习指南",
+    "exercises": "✍️ 练习题"
+  },
+  "index": {
+    "title": "Earth Visualization",
+    "chinese": "中文",
+    "english": "English"
+  },
+  "launch": {
+    "title": "Earth Science Visualization - Launch",
+    "header": {
+      "title": "🌍 Earth Science Visualization",
+      "subtitle": "选择要启用的功能模块 | Select Features to Enable",
+      "knowledgeLink": "📚 航天航空知识库",
+      "historyLink": "🚀 航天历史"
+    },
+    "mode": {
+      "section": "应用模式 | Application Mode",
+      "education": "教学演示模式 | Education Demo",
+      "educationDesc": "适合教学和演示,展示地球科学概念",
+      "research": "科研模式 | Research Mode",
+      "researchDesc": "详细数据分析和科学可视化"
+    },
+    "presets": {
+      "minimal": "🔧 最小配置",
+      "balanced": "⚖️ 平衡模式",
+      "full": "🚀 完整体验",
+      "performance": "🎮 性能优先"
+    },
+    "visualEffects": {
+      "section": "视觉效果 | Visual Effects",
+      "earth": "地球渲染 | Earth Rendering",
+      "earthDesc": "基础地球模型和纹理",
+      "clouds": "云层系统 | Cloud Layer",
+      "cloudsDesc": "动态云层和大气效果",
+      "atmosphere": "大气层 | Atmosphere",
+      "atmosphereDesc": "多层大气光晕效果",
+      "oceanWaves": "海洋波浪 | Ocean Waves",
+      "oceanWavesDesc": "动态海面波动效果"
+    },
+    "spaceWeather": {
+      "section": "太空天气 | Space Weather",
+      "sun": "太阳系统 | Sun System",
+      "sunDesc": "真实太阳和光照效果",
+      "solarWind": "太阳风 | Solar Wind",
+      "solarWindDesc": "太阳粒子流效果",
+      "planetaryOrbits": "行星轨道 | Planetary Orbits",
+      "planetaryOrbitsDesc": "显示太阳系行星运行轨道",
+      "magnetosphere": "地球磁层 | Magnetosphere",
+      "magnetosphereDesc": "磁场保护罩可视化",
+      "aurora": "极光效果 | Aurora",
+      "auroraDesc": "南北极光效果"
+    },
+    "physicsSimulation": {
+      "section": "物理模拟 | Physics Simulation",
+      "gravityField": "引力场 | Gravitational Field",
+      "gravityFieldDesc": "等势面和场线可视化",
+      "lagrangePoints": "拉格朗日点 | Lagrange Points",
+      "lagrangePointsDesc": "地月系统平衡点",
+      "cyclones": "热带气旋 | Tropical Cyclones",
+      "cyclonesDesc": "台风/飓风模拟"
+    },
+    "interactiveFeatures": {
+      "section": "交互功能 | Interactive Features",
+      "satellites": "卫星轨道 | Satellite Orbits",
+      "satellitesDesc": "真实卫星追踪系统(含轨道线)",
+      "orbitLines": "轨道线显示 | Orbit Lines",
+      "orbitLinesDesc": "显示卫星运行轨道轨迹",
+      "timeControl": "时间控制 | Time Control",
+      "timeControlDesc": "时间加速和回溯"
+    },
+    "performance": {
+      "indicator": "📊 预估性能影响 | Estimated Performance Impact",
+      "mediumLoad": "当前配置:中等负载 - 良好性能 | Current: Medium Load - Good"
+    },
+    "buttons": {
+      "deselectAll": "取消全选",
+      "selectAll": "全选",
+      "launch": "🚀 启动系统"
+    },
+    "loading": "正在初始化系统..."
+  },
+  "knowledgeBase": {
+    "title": "航天航空理论知识库",
+    "navLogo": "🌍 Earth Visualization",
+    "sidebar": {
+      "title": "📚 目录",
+      "searchPlaceholder": "搜索知识点..."
+    }
+  },
+  "aerospaceHistory": {
+    "title": "航天航空发展史",
+    "navLogo": "🌍 Earth Visualization",
+    "sidebar": {
+      "title": "📚 时间线",
+      "searchPlaceholder": "搜索历史事件..."
+    }
+  },
+  "examGuide": {
+    "title": "期末考试复习指南 - 航天航空理论",
+    "navLogo": "🌍 Earth Visualization",
+    "sidebar": {
+      "title": "📚 复习导航",
+      "searchPlaceholder": "搜索知识库.."
+    }
+  },
+  "exercises": {
+    "title": "章节练习题集 - 航天航空理论",
+    "navLogo": "🌍 Earth Visualization",
+    "sidebar": {
+      "title": "📚 章节导航",
+      "searchPlaceholder": "搜索题目..."
+    }
+  }
+}

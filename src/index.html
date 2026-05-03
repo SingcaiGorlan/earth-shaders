@@ -1,13 +1,79 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Earth</title>
+    <title data-i18n="index.title">Earth Visualization</title>
     <link rel="stylesheet" href="./style.css">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #1e233c;
+            color: #8892b0;
+            font-family: 'Roboto Mono', monospace;
+        }
+        
+        /* Language switcher styles */
+        .language-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(30, 35, 60, 0.9);
+            border-radius: 20px;
+            padding: 5px;
+            border: 1px solid rgba(100, 150, 255, 0.3);
+            display: flex;
+            gap: 2px;
+        }
+        
+        .language-switcher button {
+            background: transparent;
+            border: none;
+            color: #8892b0;
+            padding: 8px 16px;
+            border-radius: 18px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .language-switcher button:hover {
+            color: #64ffda;
+            background: rgba(100, 255, 218, 0.1);
+        }
+        
+        .language-switcher button.active {
+            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+    </style>
 </head>
 <body>
+    <!-- Language Switcher -->
+    <div class="language-switcher" id="language-switcher">
+        <button data-lang="zh" data-i18n="index.chinese">中文</button>
+        <button data-lang="en" data-i18n="index.english">English</button>
+    </div>
+    
     <canvas class="webgl"></canvas>
+    <script type="module">
+        import I18n from './i18n.js';
+        const i18n = new I18n();
+        i18n.init();
+
+        const languageSwitcher = document.getElementById('language-switcher');
+        languageSwitcher.addEventListener('click', (event) => {
+            if (event.target.tagName === 'BUTTON') {
+                const lang = event.target.getAttribute('data-lang');
+                i18n.setLanguage(lang);
+                document.querySelectorAll('.language-switcher button').forEach(button => {
+                    button.classList.toggle('active', button.getAttribute('data-lang') === lang);
+                });
+            }
+        });
+    </script>
     <script type="module" src="./script.js"></script>
 </body>
 </html>

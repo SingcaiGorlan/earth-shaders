@@ -267,6 +267,43 @@
             transform: translateX(-5px);
         }
 
+        /* Language switcher styles */
+        .language-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            background: rgba(12, 14, 27, 0.8);
+            border-radius: 20px;
+            padding: 5px;
+            border: 1px solid rgba(79, 172, 254, 0.3);
+            display: flex;
+            gap: 2px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .language-switcher button {
+            background: transparent;
+            border: none;
+            color: #a0d8ff;
+            padding: 8px 16px;
+            border-radius: 18px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .language-switcher button:hover {
+            color: #ffffff;
+            background: rgba(79, 172, 254, 0.2);
+        }
+        
+        .language-switcher button.active {
+            color: #0c0e1b;
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            font-weight: bold;
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 1.8em;
@@ -283,25 +320,31 @@
     </style>
 </head>
 <body>
-    <a href="index.html" class="back-btn">← 返回主界面</a>
+    <!-- Language Switcher -->
+    <div class="language-switcher" id="language-switcher">
+        <button data-lang="zh" class="active">中文</button>
+        <button data-lang="en">English</button>
+    </div>
+
+    <a href="index.html" class="back-btn" data-i18n="common.backToMain">← 返回主界面</a>
     
     <div class="container">
         <header>
-            <h1>🚀 航天历史事件库</h1>
-            <p class="subtitle">Aerospace History Events Database</p>
-            <p class="subtitle">记录人类探索太空的伟大历程</p>
+            <h1 data-i18n="history.title">🚀 航天历史事件库</h1>
+            <p class="subtitle" data-i18n="history.subtitle">Aerospace History Events Database</p>
+            <p class="subtitle" data-i18n="history.description">记录人类探索太空的伟大历程</p>
         </header>
 
         <div class="stats" id="stats"></div>
 
         <div class="controls">
-            <button class="filter-btn active" data-filter="all">全部事件</button>
-            <button class="filter-btn" data-filter="high">重要里程碑</button>
+            <button class="filter-btn active" data-filter="all" data-i18n="filter.all">全部事件</button>
+            <button class="filter-btn" data-filter="high" data-i18n="filter.milestones">重要里程碑</button>
             <select id="countryFilter">
-                <option value="all">所有国家/地区</option>
+                <option value="all" data-i18n="filter.allCountries">所有国家/地区</option>
             </select>
             <select id="categoryFilter">
-                <option value="all">所有类别</option>
+                <option value="all" data-i18n="filter.allCategories">所有类别</option>
             </select>
         </div>
 
@@ -310,10 +353,48 @@
 
     <script type="module">
         import { aerospaceHistoryEvents, getEventsByCategory, getEventsByCountry, getHighSignificanceEvents } from './aerospaceHistory.js'
+        import { setLanguage, getCurrentLang, initI18n } from './i18n.js'
 
         let currentFilter = 'all'
         let selectedCountry = 'all'
         let selectedCategory = 'all'
+        let currentLang = 'zh' // Default language
+
+        // Translations for static UI elements
+        const translations = {
+            zh: {
+                backToMain: "← 返回主界面",
+                title: "🚀 航天历史事件库",
+                subtitle: "Aerospace History Events Database",
+                description: "记录人类探索太空的伟大历程",
+                filterAll: "全部事件",
+                filterMilestones: "重要里程碑",
+                filterAllCountries: "所有国家/地区",
+                filterAllCategories: "所有类别",
+                statTotal: "总事件数",
+                statHighSig: "重要里程碑",
+                statCountries: "参与国家/地区",
+                statCategories: "事件类别",
+                noEvents: "没有找到符合条件的事件",
+                significanceBadge: "⭐ 重要"
+            },
+            en: {
+                backToMain: "← Back to Main",
+                title: "🚀 Aerospace History Events",
+                subtitle: "Aerospace History Events Database",
+                description: "Recording the great journey of human space exploration",
+                filterAll: "All Events",
+                filterMilestones: "Key Milestones",
+                filterAllCountries: "All Countries/Regions",
+                filterAllCategories: "All Categories",
+                statTotal: "Total Events",
+                statHighSig: "Key Milestones",
+                statCountries: "Countries/Regions",
+                statCategories: "Categories",
+                noEvents: "No events found matching criteria",
+                significanceBadge: "⭐ Key"
+            }
+        }
 
         // Calculate statistics
         function calculateStats() {
@@ -334,23 +415,24 @@
         function displayStats() {
             const stats = calculateStats()
             const statsContainer = document.getElementById('stats')
+            const t = translations[currentLang]
             
             statsContainer.innerHTML = `
                 <div class="stat-card">
                     <div class="stat-number">${stats.total}</div>
-                    <div class="stat-label">总事件数</div>
+                    <div class="stat-label">${t.statTotal}</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number">${stats.highSignificance}</div>
-                    <div class="stat-label">重要里程碑</div>
+                    <div class="stat-label">${t.statHighSig}</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number">${stats.countries}</div>
-                    <div class="stat-label">参与国家/地区</div>
+                    <div class="stat-label">${t.statCountries}</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number">${stats.categories}</div>
-                    <div class="stat-label">事件类别</div>
+                    <div class="stat-label">${t.statCategories}</div>
                 </div>
             `
         }
@@ -361,6 +443,14 @@
             const categories = [...new Set(aerospaceHistoryEvents.map(e => e.category))].sort()
 
             const countrySelect = document.getElementById('countryFilter')
+            // Keep the first option (All) and update its text
+            countrySelect.options[0].text = translations[currentLang].filterAllCountries
+            
+            // Clear existing dynamic options if any (except first)
+            while (countrySelect.options.length > 1) {
+                countrySelect.remove(1);
+            }
+
             countries.forEach(country => {
                 const option = document.createElement('option')
                 option.value = country
@@ -369,6 +459,12 @@
             })
 
             const categorySelect = document.getElementById('categoryFilter')
+            categorySelect.options[0].text = translations[currentLang].filterAllCategories
+            
+            while (categorySelect.options.length > 1) {
+                categorySelect.remove(1);
+            }
+
             categories.forEach(category => {
                 const option = document.createElement('option')
                 option.value = category
@@ -399,16 +495,19 @@
         // Create event card HTML
         function createEventCard(event) {
             const isHighSignificance = event.significance === 'high'
+            const t = translations[currentLang]
+            
+            // Determine content based on language
+            const title = currentLang === 'zh' ? event.title : event.titleEN
+            const description = currentLang === 'zh' ? event.description : event.descriptionEN
             
             return `
                 <div class="event-card ${isHighSignificance ? 'high-significance' : ''}">
-                    ${isHighSignificance ? '<div class="significance-badge">⭐ 重要</div>' : ''}
+                    ${isHighSignificance ? `<div class="significance-badge">${t.significanceBadge}</div>` : ''}
                     <div class="event-date">📅 ${event.date}</div>
                     <div class="event-country">${event.country}</div>
-                    <div class="event-title">${event.title}</div>
-                    <div class="event-title-en">${event.titleEN}</div>
-                    <div class="event-description">${event.description}</div>
-                    <div class="event-description-en">${event.descriptionEN}</div>
+                    <div class="event-title">${title}</div>
+                    <div class="event-description">${description}</div>
                     <div class="event-category">${event.category}</div>
                 </div>
             `
@@ -418,13 +517,58 @@
         function displayEvents() {
             const events = filterEvents()
             const grid = document.getElementById('eventsGrid')
+            const t = translations[currentLang]
 
             if (events.length === 0) {
-                grid.innerHTML = '<div class="no-events">没有找到符合条件的事件</div>'
+                grid.innerHTML = `<div class="no-events">${t.noEvents}</div>`
                 return
             }
 
             grid.innerHTML = events.map(createEventCard).join('')
+        }
+
+        // Update UI Text
+        function updateUIText() {
+            const t = translations[currentLang]
+            
+            // Update static texts via data-i18n or direct selection if needed
+            // Here we manually update specific elements that don't have data-i18n bound in a framework way
+            const backBtn = document.querySelector('.back-btn')
+            if(backBtn) backBtn.innerHTML = t.backToMain
+
+            const h1 = document.querySelector('h1[data-i18n="history.title"]')
+            if(h1) h1.textContent = t.title
+            
+            const subtitles = document.querySelectorAll('.subtitle')
+            if(subtitles[0]) subtitles[0].textContent = t.subtitle
+            if(subtitles[1]) subtitles[1].textContent = t.description
+
+            // Update buttons
+            const filterBtns = document.querySelectorAll('.filter-btn')
+            if(filterBtns[0]) filterBtns[0].textContent = t.filterAll
+            if(filterBtns[1]) filterBtns[1].textContent = t.filterMilestones
+
+            // Refresh dynamic content
+            displayStats()
+            populateFilters()
+            displayEvents()
+        }
+
+        // Handle Language Switch
+        function handleLanguageSwitch(lang) {
+            currentLang = lang
+            document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en'
+            
+            // Update active state of buttons
+            document.querySelectorAll('.language-switcher button').forEach(btn => {
+                if (btn.dataset.lang === lang) {
+                    btn.classList.add('active')
+                } else {
+                    btn.classList.remove('active')
+                }
+            })
+
+            updateUIText()
         }
 
         // Event listeners
@@ -447,10 +591,16 @@
             displayEvents()
         })
 
+        // Language switcher listeners
+        document.querySelectorAll('.language-switcher button').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const lang = e.target.dataset.lang
+                handleLanguageSwitch(lang)
+            })
+        })
+
         // Initialize
-        displayStats()
-        populateFilters()
-        displayEvents()
+        // Check if i18n module exposes a default language or saved preference
+        // For now, we default to 'zh' as per original code, but allow switching
+        handleLanguageSwitch('zh')
     </script>
-</body>
-</html>

@@ -502,8 +502,8 @@
                 <div class="checkbox-item">
                     <input type="checkbox" id="enableLagrangePoints">
                     <label for="enableLagrangePoints">
-                        <div>拉格朗日点 | Lagrange Points</div>
-                        <div class="description">地月系统平衡点</div>
+                        <div>拉格朗日点 & 特殊轨道 | Lagrange Points & Special Orbits</div>
+                        <div class="description">地月系统5个拉格朗日点、Halo轨道和环月冻结轨道</div>
                     </label>
                 </div>
                 <div class="checkbox-item">
@@ -542,6 +542,23 @@
                     <label for="enableTimeControl">
                         <div>时间控制 | Time Control</div>
                         <div class="description">时间加速和回溯</div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Astronomy Education Section -->
+        <div class="feature-section">
+            <div class="section-title">
+                <span class="section-icon">⭐</span>
+                <span>天文教育 | Astronomy Education</span>
+            </div>
+            <div class="checkbox-grid">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="enableZodiac">
+                    <label for="enableZodiac">
+                        <div>黄道十二宫 & 星宿 | Zodiac & Constellations</div>
+                        <div class="description">西方十二星座和中国二十八宿可视化</div>
                     </label>
                 </div>
             </div>
@@ -647,7 +664,8 @@
                     enableCyclones: false,
                     enableSatellites: true,
                     enableOrbitLines: true,
-                    enableTimeControl: true
+                    enableTimeControl: true,
+                    enableZodiac: false
                 },
                 balanced: {
                     appMode: 'education',
@@ -665,7 +683,8 @@
                     enableCyclones: false,
                     enableSatellites: true,
                     enableOrbitLines: true,
-                    enableTimeControl: true
+                    enableTimeControl: true,
+                    enableZodiac: false
                 },
                 full: {
                     appMode: 'education',
@@ -683,7 +702,8 @@
                     enableCyclones: true,
                     enableSatellites: true,
                     enableOrbitLines: true,
-                    enableTimeControl: true
+                    enableTimeControl: true,
+                    enableZodiac: true
                 },
                 performance: {
                     appMode: 'education',
@@ -701,7 +721,8 @@
                     enableCyclones: false,
                     enableSatellites: true,
                     enableOrbitLines: true,
-                    enableTimeControl: true
+                    enableTimeControl: true,
+                    enableZodiac: false
                 }
             };
 
@@ -753,7 +774,8 @@
                 cyclones: document.getElementById('enableCyclones').checked,
                 satellites: document.getElementById('enableSatellites').checked,
                 orbitLines: document.getElementById('enableOrbitLines').checked,
-                timeControl: document.getElementById('enableTimeControl').checked
+                timeControl: document.getElementById('enableTimeControl').checked,
+                zodiac: document.getElementById('enableZodiac').checked
             };
 
             // Save configuration to localStorage

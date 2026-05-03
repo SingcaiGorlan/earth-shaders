@@ -1,5 +1,7 @@
 import * as THREE from 'three'
 import * as satellite from 'satellite.js'
+// 添加引力模型导入
+import { EarthGravityModel, PHYSICAL_CONSTANTS } from './gravityModel.js'
 
 /**
  * 卫星轨道可视化管理器
@@ -12,11 +14,14 @@ export class SatelliteOrbitManager {
         this.orbitLines = []
         this.satelliteMeshes = []
         
-        // 地球半径 (km)
-        this.EARTH_RADIUS_KM = 6371
+        // 使用统一的物理常数
+        this.EARTH_RADIUS_KM = PHYSICAL_CONSTANTS.EARTH_RADIUS / 1000
         
         // 缩放比例:将真实距离转换为场景单位
         this.scale = earthRadius / this.EARTH_RADIUS_KM
+        
+        // 初始化地球引力模型
+        this.gravityModel = new EarthGravityModel(earthRadius);
         
         // 时间系统
         this.timeOffset = 0  // 时间偏移(秒)
@@ -174,7 +179,7 @@ export class SatelliteOrbitManager {
     }
 
     /**
-     * 计算卫星在指定时间的位置
+     * 计算卫星在指定时间的位置（使用物理引擎进行验证）
      * @param {Object} satrec - 卫星记录
      * @param {Date} date - 时间
      * @returns {Object} { x, y, z } 场景坐标
@@ -843,6 +848,53 @@ export class SatelliteOrbitManager {
         this.satelliteMeshes.push(satelliteModel)
         
         console.log(`已添加卫星 (3D 模型): ${satData.name}`)
+    }
+
+    /**
+     * 使用物理引擎计算轨道力学参数
+     * @param {THREE.Vector3} position - 卫星位置 (场景坐标)
+     * @param {THREE.Vector3} velocity - 卫星速度 (m/s)
+     * @returns {Object} 轨道参数
+     */
+    calculateOrbitalParametersFromPhysics(position, velocity) {
+        // 将场景坐标转换为物理坐标
+        const physicalPos = this.gravityModel.sceneToPhysicalPosition(position);
+        const r = physicalPos.length(); // 距地心距离 (m)
+        const v = velocity.length(); // 速度大小 (m/s)
+        
+        // 特定轨道能量
+        const specificEnergy = (v * v) / 2 - PHYSICAL_CONSTANTS.EARTH_GRAVITATIONAL_PARAMETER / r;
+        
+        // 半长轴
+        const semiMajorAxis = -PHYSICAL_CONSTANTS.EARTH_GRAVITATIONAL_PARAMETER / (2 * specificEnergy);
+        
+        // 角动量向量
+        const angularMomentum = new THREE.Vector3().crossVectors(physicalPos, velocity);
+        const hMagnitude = angularMomentum.length();
+        
+        // 偏心率
+        const eccentricity = Math.sqrt(1 + (2 * specificEnergy * hMagnitude * hMagnitude) / 
+                                     (PHYSICAL_CONSTANTS.EARTH_GRAVITATIONAL_PARAMETER * PHYSICAL_CONSTANTS.EARTH_GRAVITATIONAL_PARAMETER));
+        
+        // 近地点和远地点高度 (km)
+        const periapsisAltitude = (semiMajorAxis * (1 - eccentricity) - PHYSICAL_CONSTANTS.EARTH_RADIUS) / 1000;
+        const apoapsisAltitude = (semiMajorAxis * (1 + eccentricity) - PHYSICAL_CONSTANTS.EARTH_RADIUS) / 1000;
+        
+        // 轨道周期 (秒)
+        const orbitalPeriod = 2 * Math.PI * Math.sqrt((semiMajorAxis * semiMajorAxis * semiMajorAxis) / 
+                                                    PHYSICAL_CONSTANTS.EARTH_GRAVITATIONAL_PARAMETER);
+        
+        // 轨道倾角 (度)
+        const inclination = Math.acos(angularMomentum.z / hMagnitude) * 180 / Math.PI;
+        
+        return {
+            semiMajorAxis: semiMajorAxis / 1000, // km
+            eccentricity: eccentricity,
+            periapsisAltitude: Math.max(0, periapsisAltitude), // km
+            apoapsisAltitude: Math.max(0, apoapsisAltitude), // km
+            orbitalPeriod: orbitalPeriod, // seconds
+            inclination: inclination // degrees
+        };
     }
 
     /**

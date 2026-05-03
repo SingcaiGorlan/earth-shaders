@@ -6,9 +6,21 @@ import earthFragmentShader from './shaders/earth/fragment.glsl'
 import { SatelliteOrbitManager } from './satelliteOrbit.js'
 import { SolarSystemModel } from './solarSystem.js'
 import { aerospaceHistoryEvents, getEventsByCategory, getEventsByCountry, getHighSignificanceEvents } from './aerospaceHistory.js'
+// 添加引力模型导入
+import { EarthGravityModel, SolarSystemGravityModel, PHYSICAL_CONSTANTS, SCENE_CONSTANTS } from './gravityModel.js'
+// 添加航天器发射模块导入
+import { SpacecraftLauncher } from './spacecraftLauncher.js'
+// 添加黄道十二宫和星宿管理器
+import { ZodiacManager } from './zodiacManager.js'
+// 添加拉格朗日点和特殊轨道管理器
+import { LagrangeOrbitManager } from './lagrangeOrbitManager.js'
 
 // Declare solarSystem at module level so it can be accessed in applyUserConfig
 let solarSystem = null
+
+// 全局引力模型实例
+let earthGravityModel = null;
+let solarSystemGravityModel = null;
 
 /**
  * Load user configuration from launch page
@@ -92,7 +104,7 @@ function applyUserConfig() {
     
     // Disable ocean waves if not enabled
     if (typeof earthMaterial !== 'undefined' && !isFeatureEnabled('oceanWaves', appMode === 'education')) {
-        if (earthMaterial.uniforms.waveHeight) {
+        if (earthMaterial && earthMaterial.uniforms && earthMaterial.uniforms.waveHeight) {
             earthMaterial.uniforms.waveHeight.value = 0
         }
     }
@@ -111,6 +123,18 @@ function applyUserConfig() {
     if (solarSystem !== null && solarSystem !== undefined) {
         const showPlanetaryOrbits = isFeatureEnabled('planetaryOrbits', false)
         solarSystem.toggleOrbits(showPlanetaryOrbits)
+    }
+    
+    // Control zodiac and constellations visibility
+    if (typeof zodiacManager !== 'undefined') {
+        const showZodiac = isFeatureEnabled('zodiac', appMode === 'education')
+        zodiacManager.setVisible(showZodiac)
+    }
+    
+    // Control Lagrange points and special orbits visibility
+    if (typeof lagrangeOrbitManager !== 'undefined') {
+        const showLagrangeOrbits = isFeatureEnabled('lagrangePoints', appMode === 'research')
+        lagrangeOrbitManager.setVisible(showLagrangeOrbits)
     }
     
     console.log('Configuration applied successfully!')
@@ -835,11 +859,15 @@ const oceanConfig = {
 
 const oceanFolder = gui.addFolder('Ocean Waves')
 oceanFolder.add(oceanConfig, 'waveHeight', 0, 3).name('Wave Height').onChange((value) => {
-    earthMaterial.uniforms.waveHeight.value = value
+    if (earthMaterial && earthMaterial.uniforms && earthMaterial.uniforms.waveHeight) {
+        earthMaterial.uniforms.waveHeight.value = value
+    }
 })
 
 oceanFolder.add(oceanConfig, 'waveSpeed', 0, 5).name('Wave Speed').onChange((value) => {
-    earthMaterial.uniforms.waveSpeed.value = value
+    if (earthMaterial && earthMaterial.uniforms && earthMaterial.uniforms.waveSpeed) {
+        earthMaterial.uniforms.waveSpeed.value = value
+    }
 })
 
 oceanFolder.add(oceanConfig, 'waveAnimation').name('Animate Waves')
@@ -854,19 +882,25 @@ const cloudConfig = {
 
 const cloudFolder = gui.addFolder('Cloud Layer')
 cloudFolder.add(cloudConfig, 'cloudSpeed', 0, 5).name('Cloud Rotation Speed').onChange((value) => {
-    cloudsMaterial.uniforms.cloudSpeed.value = value
+    if (cloudsMaterial && cloudsMaterial.uniforms && cloudsMaterial.uniforms.cloudSpeed) {
+        cloudsMaterial.uniforms.cloudSpeed.value = value
+    }
 })
 
 cloudFolder.add(cloudConfig, 'cloudDensity', 0, 2).name('Cloud Density').onChange((value) => {
-    cloudsMaterial.uniforms.cloudDensity.value = value
+    if (cloudsMaterial && cloudsMaterial.uniforms && cloudsMaterial.uniforms.cloudDensity) {
+        cloudsMaterial.uniforms.cloudDensity.value = value
+    }
 })
 
 cloudFolder.add(cloudConfig, 'cloudBrightness', 0.5, 2).name('Cloud Brightness').onChange((value) => {
-    cloudsMaterial.uniforms.cloudBrightness.value = value
+    if (cloudsMaterial && cloudsMaterial.uniforms && cloudsMaterial.uniforms.cloudBrightness) {
+        cloudsMaterial.uniforms.cloudBrightness.value = value
+    }
 })
 
 cloudFolder.add(cloudConfig, 'cloudVisibility').name('Show Clouds').onChange((value) => {
-    clouds.visible = value
+    if (clouds) clouds.visible = value
 })
 
 // Tropical Cyclone (Typhoon/Hurricane) controls
@@ -879,24 +913,30 @@ const cycloneConfig = {
 
 const cycloneFolder = gui.addFolder('Tropical Cyclones')
 cycloneFolder.add(cycloneConfig, 'cycloneVisibility').name('Show Cyclones').onChange((value) => {
-    cycloneGroup.visible = value
+    if (cycloneGroup) cycloneGroup.visible = value
 })
 
 cycloneFolder.add(cycloneConfig, 'globalIntensity', 0, 2).name('Global Intensity').onChange((value) => {
     cyclones.forEach((cyclone) => {
-        cyclone.userData.material.uniforms.intensity.value = cyclone.userData.intensity * value
+        if (cyclone && cyclone.userData && cyclone.userData.material && cyclone.userData.material.uniforms && cyclone.userData.material.uniforms.intensity) {
+            cyclone.userData.material.uniforms.intensity.value = cyclone.userData.intensity * value
+        }
     })
 })
 
 cycloneFolder.add(cycloneConfig, 'globalRotationSpeed', 0, 3).name('Rotation Speed Multiplier').onChange((value) => {
     cyclones.forEach((cyclone) => {
-        cyclone.userData.material.uniforms.rotationSpeed.value = cyclone.userData.rotationSpeed * value
+        if (cyclone && cyclone.userData && cyclone.userData.material && cyclone.userData.material.uniforms && cyclone.userData.material.uniforms.rotationSpeed) {
+            cyclone.userData.material.uniforms.rotationSpeed.value = cyclone.userData.rotationSpeed * value
+        }
     })
 })
 
 cycloneFolder.add(cycloneConfig, 'cycloneOpacity', 0.3, 1.0).name('Cyclone Opacity').onChange((value) => {
     cyclones.forEach((cyclone) => {
-        cyclone.userData.material.uniforms.opacity.value = value
+        if (cyclone && cyclone.userData && cyclone.userData.material && cyclone.userData.material.uniforms && cyclone.userData.material.uniforms.opacity) {
+            cyclone.userData.material.uniforms.opacity.value = value
+        }
     })
 })
 
@@ -912,7 +952,7 @@ const spaceWeatherConfig = {
 
 const spaceWeatherFolder = gui.addFolder('Space Weather')
 spaceWeatherFolder.add(spaceWeatherConfig, 'solarWindVisibility').name('Show Solar Wind').onChange((value) => {
-    solarWind.visible = value
+    if (solarWind) solarWind.visible = value
 })
 
 spaceWeatherFolder.add(spaceWeatherConfig, 'solarWindIntensity', 0, 2).name('Solar Wind Intensity').onChange((value) => {
@@ -925,17 +965,19 @@ spaceWeatherFolder.add(spaceWeatherConfig, 'solarWindIntensity', 0, 2).name('Sol
 })
 
 spaceWeatherFolder.add(spaceWeatherConfig, 'magnetosphereVisibility').name('Show Magnetosphere').onChange((value) => {
-    magnetosphere.visible = value
+    if (magnetosphere) magnetosphere.visible = value
 })
 
 spaceWeatherFolder.add(spaceWeatherConfig, 'magnetosphereIntensity', 0, 1).name('Magnetosphere Intensity').onChange((value) => {
     // This would require shader modification, simplified here
-    magnetosphereMaterial.transparent = value > 0
+    if (magnetosphereMaterial) {
+        magnetosphereMaterial.transparent = value > 0
+    }
 })
 
 spaceWeatherFolder.add(spaceWeatherConfig, 'auroraVisibility').name('Show Aurora').onChange((value) => {
-    auroraNorth.visible = value
-    auroraSouth.visible = value
+    if (auroraNorth) auroraNorth.visible = value
+    if (auroraSouth) auroraSouth.visible = value
 })
 
 spaceWeatherFolder.add(spaceWeatherConfig, 'auroraIntensity', 0.3, 1.0).name('Aurora Intensity')
@@ -951,36 +993,50 @@ const gravityConfig = {
 
 const gravityFolder = gui.addFolder('Gravitational Field')
 gravityFolder.add(gravityConfig, 'gravityWellsVisibility').name('Show Potential Wells').onChange((value) => {
-    gravityWellsGroup.visible = value
+    if (gravityWellsGroup) gravityWellsGroup.visible = value
 })
 
 gravityFolder.add(gravityConfig, 'fieldLinesVisibility').name('Show Field Lines').onChange((value) => {
-    fieldLinesGroup.visible = value
+    if (fieldLinesGroup) fieldLinesGroup.visible = value
 })
 
 gravityFolder.add(gravityConfig, 'indicatorsVisibility').name('Show Gravity Indicators').onChange((value) => {
-    gravityIndicators.forEach(indicator => {
-        indicator.visible = value
-    })
+    if (gravityIndicators) {
+        gravityIndicators.forEach(indicator => {
+            if (indicator) indicator.visible = value
+        })
+    }
 })
 
 gravityFolder.add(gravityConfig, 'lagrangePointsVisibility').name('Show Lagrange Points').onChange((value) => {
-    lagrangeGroup.visible = value
+    if (lagrangeGroup) lagrangeGroup.visible = value
 })
 
 gravityFolder.add(gravityConfig, 'globalOpacity', 0.2, 1.0).name('Global Opacity').onChange((value) => {
     // Update all gravity visualization elements
-    gravityWellsGroup.children.forEach(well => {
-        well.userData.material.uniforms.opacity.value = well.userData.opacity * value
-    })
+    if (gravityWellsGroup && gravityWellsGroup.children) {
+        gravityWellsGroup.children.forEach(well => {
+            if (well && well.userData && well.userData.material && well.userData.material.uniforms && well.userData.material.uniforms.opacity) {
+                well.userData.material.uniforms.opacity.value = well.userData.opacity * value
+            }
+        })
+    }
     
-    fieldLinesGroup.children.forEach(line => {
-        line.material.opacity = 0.3 * value
-    })
+    if (fieldLinesGroup && fieldLinesGroup.children) {
+        fieldLinesGroup.children.forEach(line => {
+            if (line && line.material) {
+                line.material.opacity = 0.3 * value
+            }
+        })
+    }
     
-    gravityIndicators.forEach(indicator => {
-        indicator.material.opacity = 0.8 * value
-    })
+    if (gravityIndicators) {
+        gravityIndicators.forEach(indicator => {
+            if (indicator && indicator.material) {
+                indicator.material.opacity = 0.8 * value
+            }
+        })
+    }
 })
 
 // Earth appearance controls
@@ -1051,7 +1107,7 @@ const satelliteConfig = {
     },
     calculateISSPositions: () => {
         // 获取 ISS 的 satrec(如果已加载)
-        if (orbitManager.satellites.length === 0) {
+        if (!orbitManager || !orbitManager.satellites || orbitManager.satellites.length === 0) {
             console.warn('请先加载 ISS')
             return
         }
@@ -1084,7 +1140,7 @@ const satelliteConfig = {
     },
     testGeoPosition: () => {
         // 测试获取包含地理坐标的完整位置信息
-        if (orbitManager.satellites.length === 0) {
+        if (!orbitManager || !orbitManager.satellites || orbitManager.satellites.length === 0) {
             console.warn('请先加载 ISS')
             return
         }
@@ -1102,7 +1158,7 @@ const satelliteConfig = {
     },
     debugCoordinates: () => {
         // 调试坐标转换
-        if (orbitManager.satellites.length === 0) {
+        if (!orbitManager || !orbitManager.satellites || orbitManager.satellites.length === 0) {
             console.warn('请先加载 ISS')
             return
         }
@@ -1222,24 +1278,96 @@ satelliteFolder.add(satelliteConfig, 'testGeoPosition').name('测试地理坐标
 satelliteFolder.add(satelliteConfig, 'debugCoordinates').name('调试坐标转换')
 satelliteFolder.add(satelliteConfig, 'updatePositions').name('实时更新位置')
 
+// Spacecraft Launcher Folder
+const spacecraftFolder = gui.addFolder('🚀 Spacecraft Launcher')
+const spacecraftConfig = {
+    launchLatitude: 28.5,
+    launchLongitude: -80.6,
+    launchAltitude: 0,
+    launchVelocity: 7800,
+    launchAzimuth: 90,
+    launchElevation: 0,
+    pauseSimulation: false,
+    timeScale: 1.0,
+    showTrail: true
+}
+
+// 添加发射和重置函数
+spacecraftConfig.launch = function() {
+    spacecraftLauncher.setLaunchSite(
+        spacecraftConfig.launchLatitude,
+        spacecraftConfig.launchLongitude,
+        spacecraftConfig.launchAltitude
+    );
+    spacecraftLauncher.setLaunchVelocity(
+        spacecraftConfig.launchVelocity,
+        spacecraftConfig.launchAzimuth,
+        spacecraftConfig.launchElevation
+    );
+    spacecraftLauncher.launch();
+};
+
+spacecraftConfig.reset = function() {
+    spacecraftLauncher.reset();
+};
+
+spacecraftFolder.add(spacecraftConfig, 'launchLatitude', -90, 90).name('发射纬度 (°)').step(0.1)
+spacecraftFolder.add(spacecraftConfig, 'launchLongitude', -180, 180).name('发射经度 (°)').step(0.1)
+spacecraftFolder.add(spacecraftConfig, 'launchAltitude', 0, 100000).name('发射高度 (m)').step(100)
+spacecraftFolder.add(spacecraftConfig, 'launchVelocity', 1000, 15000).name('发射速度 (m/s)').step(100)
+spacecraftFolder.add(spacecraftConfig, 'launchAzimuth', 0, 360).name('发射方位角 (°)').step(1)
+spacecraftFolder.add(spacecraftConfig, 'launchElevation', 0, 90).name('发射仰角 (°)').step(1)
+spacecraftFolder.add(spacecraftConfig, 'launch').name('🚀 发射航天器')
+spacecraftFolder.add(spacecraftConfig, 'reset').name('🔄 重置')
+spacecraftFolder.add(spacecraftConfig, 'pauseSimulation').name('⏸️ 暂停模拟')
+spacecraftFolder.add(spacecraftConfig, 'timeScale', 0.1, 10).name('时间缩放').step(0.1)
+spacecraftFolder.add(spacecraftConfig, 'showTrail').name('显示轨迹').onChange((value) => {
+    if (spacecraftLauncher.trail) {
+        spacecraftLauncher.trail.visible = value;
+    }
+})
+
+// 多体引力控制
+const multiBodyConfig = {
+    enableMoonGravity: true,
+    enableSunGravity: true
+}
+
+spacecraftFolder.add(multiBodyConfig, 'enableMoonGravity').name('🌙 月球引力').onChange((value) => {
+    spacecraftLauncher.enableMoonGravity = value;
+})
+spacecraftFolder.add(multiBodyConfig, 'enableSunGravity').name('☀️ 太阳引力').onChange((value) => {
+    spacecraftLauncher.enableSunGravity = value;
+})
+
 // Mesh
 const earthGeometry = new THREE.SphereGeometry(2, 64, 64)
 const earth = new THREE.Mesh(earthGeometry, earthMaterial)
-// Store Earth's radius in userData for KSP system to use
+// Store Earth's radius in userData for physics calculations
 earth.userData = {
-    radius: 6378, // Earth radius in km (used by physics calculations)
+    radius: PHYSICAL_CONSTANTS.EARTH_RADIUS / 1000, // Earth radius in km (used by physics calculations)
     sceneRadius: 2 // Scene units radius
 }
 scene.add(earth)
 
+// Initialize gravitational models
+earthGravityModel = new EarthGravityModel(2);
+solarSystemGravityModel = new SolarSystemGravityModel();
+
+// Initialize spacecraft launcher with multi-body gravity support
+const spacecraftLauncher = new SpacecraftLauncher(scene, earthGravityModel, solarSystemGravityModel);
+
+// Initialize Zodiac and Constellation Manager (will be configured after sun is created)
+let zodiacManager = null;
+
 // Create Gravitational Field Visualization
 // Based on real physics: F = G*M*m/r^2, gravitational potential V = -GM/r
 
-// Physical constants (scaled for visualization)
-const EARTH_MASS = 5.972e24 // kg (real value)
-const GRAVITATIONAL_CONSTANT = 6.674e-11 // N⋅m²/kg² (real value)
-const EARTH_RADIUS_REAL = 6371 // km (real value)
-const SCENE_SCALE = 2 / EARTH_RADIUS_REAL // Scene units per km
+// Physical constants (now using the unified gravity model constants)
+const EARTH_MASS = PHYSICAL_CONSTANTS.EARTH_MASS; // kg (real value)
+const GRAVITATIONAL_CONSTANT = PHYSICAL_CONSTANTS.GRAVITATIONAL_CONSTANT; // N⋅m²/kg² (real value)
+const EARTH_RADIUS_REAL = PHYSICAL_CONSTANTS.EARTH_RADIUS / 1000; // km (real value)
+const SCENE_SCALE = SCENE_CONSTANTS.EARTH_SCENE_SCALE * 1000; // Scene units per km (convert from per meter)
 
 // 1. Gravitational Potential Wells (Equipotential surfaces)
 const gravityWellsGroup = new THREE.Group()
@@ -1739,6 +1867,10 @@ const sunMaterial = new THREE.ShaderMaterial({
 const sun = new THREE.Mesh(sunGeometry, sunMaterial)
 sun.position.set(150, 0, 0)
 scene.add(sun)
+
+// Initialize Zodiac Manager now that sun is created
+// Will be updated with earth position later
+zodiacManager = new ZodiacManager(scene, sun.position, new THREE.Vector3(0, 0, 0));
 
 // Create Solar Wind and Earth's Magnetosphere System
 // Based on real physics: solar wind interacts with Earth's magnetic field
@@ -2301,6 +2433,12 @@ const moonOrbitLine = new THREE.Line(moonOrbitGeometry, moonOrbitMaterial)
 moonOrbitLine.rotation.x = Math.PI / 2  // Rotate to XZ plane
 scene.add(moonOrbitLine)
 
+// Initialize Lagrange Point and Special Orbit Manager (Earth-Moon system)
+let lagrangeOrbitManager = null;
+
+// Initialize Lagrange Orbit Manager now that earth and moon are created
+lagrangeOrbitManager = new LagrangeOrbitManager(scene, new THREE.Vector3(0, 0, 0), moon.position)
+
 // Create Earth orbit line around Sun
 const earthOrbitRadius = 150  // Distance from Sun to Earth
 const earthOrbitCurve = new THREE.EllipseCurve(
@@ -2533,7 +2671,8 @@ const tick = () =>
     const deltaTime = (currentTime - lastFrameTime) / 1000  // 秒
     lastFrameTime = currentTime
 
-    earth.rotation.y = elapsedTime * 0.1
+    // Earth rotation - Real: 1 day (adjusted for visualization)
+    earth.rotation.y = elapsedTime * 0.2
 
     // Rotate moon around Earth (simplified orbit)
     const moonOrbitRadius = celestialConfig.moonDistance
@@ -2541,40 +2680,43 @@ const tick = () =>
     moon.position.x = Math.cos(elapsedTime * moonOrbitSpeed) * moonOrbitRadius
     moon.position.z = Math.sin(elapsedTime * moonOrbitSpeed) * moonOrbitRadius
     
-    // Moon slow rotation (tidal locked, but slight libration)
-    moon.rotation.y = elapsedTime * 0.02
+    // Moon slow rotation (tidal locked - same side faces Earth)
+    // Real: 27.3 days, but we use slower speed for better visualization
+    moon.rotation.y = elapsedTime * 0.008
     moon.rotation.x = Math.sin(elapsedTime * 0.1) * 0.05
     moon.rotation.z = Math.cos(elapsedTime * 0.08) * 0.03
 
     // Animate sun surface with shader time uniform
-    if (celestialConfig.sunAnimation && sunMaterial.uniforms) {
+    if (celestialConfig && celestialConfig.sunAnimation && sunMaterial && sunMaterial.uniforms) {
         sunMaterial.uniforms.time.value = elapsedTime
     }
     
     // Pulse the glow effects for realistic shimmering
     const glowPulse = 1.0 + Math.sin(elapsedTime * 2) * 0.05
-    innerGlow.scale.set(70 * glowPulse, 70 * glowPulse, 1)
+    if (innerGlow) innerGlow.scale.set(70 * glowPulse, 70 * glowPulse, 1)
     
     const middleGlowPulse = 1.0 + Math.sin(elapsedTime * 1.7 + 0.5) * 0.06
-    middleGlow.scale.set(95 * middleGlowPulse, 95 * middleGlowPulse, 1)
+    if (middleGlow) middleGlow.scale.set(95 * middleGlowPulse, 95 * middleGlowPulse, 1)
     
     const outerGlowPulse = 1.0 + Math.sin(elapsedTime * 1.5 + 1) * 0.08
-    outerGlow.scale.set(130 * outerGlowPulse, 130 * outerGlowPulse, 1)
+    if (outerGlow) outerGlow.scale.set(130 * outerGlowPulse, 130 * outerGlowPulse, 1)
     
     // Rotate solar ring slowly
-    solarRing.rotation.x = Math.sin(elapsedTime * 0.1) * 0.3
-    solarRing.rotation.y = elapsedTime * 0.05
-    solarRing.rotation.z = Math.cos(elapsedTime * 0.08) * 0.2
+    if (solarRing) {
+        solarRing.rotation.x = Math.sin(elapsedTime * 0.1) * 0.3
+        solarRing.rotation.y = elapsedTime * 0.05
+        solarRing.rotation.z = Math.cos(elapsedTime * 0.08) * 0.2
+    }
     
     // Pulse ring opacity
-    ringMaterial.opacity = 0.25 + Math.sin(elapsedTime * 2.5) * 0.05
+    if (ringMaterial) ringMaterial.opacity = 0.25 + Math.sin(elapsedTime * 2.5) * 0.05
     
     // Subtle lens flare pulse effect (Sprite rotation is read-only)
     const flarePulse = 1.0 + Math.sin(elapsedTime * 3) * 0.1
-    lensFlare.scale.set(40 * flarePulse, 40 * flarePulse, 1)
+    if (lensFlare) lensFlare.scale.set(40 * flarePulse, 40 * flarePulse, 1)
 
     // Update sun direction for shaders
-    if (earthMaterial.uniforms.sunDirection) {
+    if (earthMaterial && earthMaterial.uniforms && earthMaterial.uniforms.sunDirection) {
         // Calculate direction from Earth to Sun
         const sunDirection = new THREE.Vector3()
         sunDirection.subVectors(sun.position, earth.position).normalize()
@@ -2582,32 +2724,32 @@ const tick = () =>
     }
     
     // Update time uniform for aurora and dynamic effects
-    if (earthMaterial.uniforms.time) {
+    if (earthMaterial && earthMaterial.uniforms && earthMaterial.uniforms.time) {
         earthMaterial.uniforms.time.value = elapsedTime
     }
     
     // Update wave animation parameters
-    if (oceanConfig.waveAnimation) {
-        if (earthMaterial.uniforms.waveHeight) {
+    if (oceanConfig && oceanConfig.waveAnimation) {
+        if (earthMaterial && earthMaterial.uniforms && earthMaterial.uniforms.waveHeight) {
             earthMaterial.uniforms.waveHeight.value = oceanConfig.waveHeight
         }
-        if (earthMaterial.uniforms.waveSpeed) {
+        if (earthMaterial && earthMaterial.uniforms && earthMaterial.uniforms.waveSpeed) {
             earthMaterial.uniforms.waveSpeed.value = oceanConfig.waveSpeed
         }
     } else {
         // Pause wave animation by setting speed to 0
-        if (earthMaterial.uniforms.waveSpeed) {
+        if (earthMaterial && earthMaterial.uniforms && earthMaterial.uniforms.waveSpeed) {
             earthMaterial.uniforms.waveSpeed.value = 0
         }
     }
     
     // Update cloud layer animation
-    if (cloudsMaterial.uniforms.time) {
+    if (cloudsMaterial && cloudsMaterial.uniforms && cloudsMaterial.uniforms.time) {
         cloudsMaterial.uniforms.time.value = elapsedTime
     }
     
     // Update sun direction for clouds
-    if (cloudsMaterial.uniforms.sunDirection) {
+    if (cloudsMaterial && cloudsMaterial.uniforms && cloudsMaterial.uniforms.sunDirection) {
         const sunDirection = new THREE.Vector3()
         sunDirection.subVectors(sun.position, earth.position).normalize()
         cloudsMaterial.uniforms.sunDirection.value.copy(sunDirection)
@@ -2615,11 +2757,11 @@ const tick = () =>
     
     // Update cyclone animations
     cyclones.forEach((cyclone) => {
-        if (cyclone.userData.material.uniforms.time) {
+        if (cyclone && cyclone.userData && cyclone.userData.material && cyclone.userData.material.uniforms && cyclone.userData.material.uniforms.time) {
             cyclone.userData.material.uniforms.time.value = elapsedTime
         }
         
-        if (cyclone.userData.material.uniforms.sunDirection) {
+        if (cyclone && cyclone.userData && cyclone.userData.material && cyclone.userData.material.uniforms && cyclone.userData.material.uniforms.sunDirection) {
             const sunDirection = new THREE.Vector3()
             sunDirection.subVectors(sun.position, earth.position).normalize()
             cyclone.userData.material.uniforms.sunDirection.value.copy(sunDirection)
@@ -2627,79 +2769,115 @@ const tick = () =>
     })
     
     // Update solar wind animation
-    if (solarWindMaterial.uniforms.time) {
+    if (solarWindMaterial && solarWindMaterial.uniforms && solarWindMaterial.uniforms.time) {
         solarWindMaterial.uniforms.time.value = elapsedTime
     }
     
     // Update magnetosphere animation
-    if (magnetosphereMaterial.uniforms.time) {
+    if (magnetosphereMaterial && magnetosphereMaterial.uniforms && magnetosphereMaterial.uniforms.time) {
         magnetosphereMaterial.uniforms.time.value = elapsedTime
     }
     
     // Update aurora animations
-    auroraMaterial.uniforms.time.value = elapsedTime
+    if (auroraMaterial && auroraMaterial.uniforms && auroraMaterial.uniforms.time) {
+        auroraMaterial.uniforms.time.value = elapsedTime
+    }
     
     // Update gravitational field animations
-    gravityWellsGroup.children.forEach((well) => {
-        if (well.userData.material.uniforms.time) {
-            well.userData.material.uniforms.time.value = elapsedTime
-        }
-    })
+    if (gravityWellsGroup && gravityWellsGroup.children) {
+        gravityWellsGroup.children.forEach((well) => {
+            if (well && well.userData && well.userData.material && well.userData.material.uniforms && well.userData.material.uniforms.time) {
+                well.userData.material.uniforms.time.value = elapsedTime
+            }
+        })
+    }
     
     // Animate Lagrange points with pulsing effect
-    lagrangeGroup.children.forEach((point, index) => {
-        const pulse = 1.0 + Math.sin(elapsedTime * 2.0 + index) * 0.2
-        point.scale.set(pulse, pulse, pulse)
-    })
+    if (lagrangeGroup && lagrangeGroup.children) {
+        lagrangeGroup.children.forEach((point, index) => {
+            const pulse = 1.0 + Math.sin(elapsedTime * 2.0 + index) * 0.2
+            point.scale.set(pulse, pulse, pulse)
+        })
+    }
     
     // Pulse atmosphere layers for subtle shimmering effect
-    if (earthConfig.atmospherePulse) {
-        const innerAtmosPulse = 1.0 + Math.sin(elapsedTime * 1.5) * 0.02
-        innerAtmosphere.scale.set(innerAtmosPulse, innerAtmosPulse, innerAtmosPulse)
+    if (earthConfig && earthConfig.atmospherePulse) {
+        if (innerAtmosphere) {
+            const innerAtmosPulse = 1.0 + Math.sin(elapsedTime * 1.5) * 0.02
+            innerAtmosphere.scale.set(innerAtmosPulse, innerAtmosPulse, innerAtmosPulse)
+        }
         
-        const outerAtmosPulse = 1.0 + Math.sin(elapsedTime * 1.2 + 0.5) * 0.03
-        outerAtmosphere.scale.set(outerAtmosPulse, outerAtmosPulse, outerAtmosPulse)
+        if (outerAtmosphere) {
+            const outerAtmosPulse = 1.0 + Math.sin(elapsedTime * 1.2 + 0.5) * 0.03
+            outerAtmosphere.scale.set(outerAtmosPulse, outerAtmosPulse, outerAtmosPulse)
+        }
     } else {
-        innerAtmosphere.scale.set(1.0, 1.0, 1.0)
-        outerAtmosphere.scale.set(1.0, 1.0, 1.0)
+        if (innerAtmosphere) innerAtmosphere.scale.set(1.0, 1.0, 1.0)
+        if (outerAtmosphere) outerAtmosphere.scale.set(1.0, 1.0, 1.0)
     }
 
     // Update Solar System
-    if (solarSystem) {
+    if (solarSystem && solarSystemConfig) {
         solarSystem.update(deltaTime * (solarSystemConfig.timeScale || 1))
+    }
+    
+    // Update Zodiac and Constellations
+    if (zodiacManager && earth) {
+        zodiacManager.update(elapsedTime, earth.position)
+    }
+    
+    // Update Lagrange Points and Special Orbits
+    if (lagrangeOrbitManager) {
+        lagrangeOrbitManager.update(elapsedTime)
     }
 
     // 更新模拟时间(应用时间缩放)
-    if (orbitManager.timeScale !== 1) {
+    if (orbitManager && orbitManager.timeScale !== 1) {
         orbitManager.timeOffset += deltaTime * (orbitManager.timeScale - 1)
     }
     
     // 获取模拟时间
-    const simulationTime = orbitManager.getSimulationTime()
+    const simulationTime = orbitManager ? orbitManager.getSimulationTime() : new Date()
     
     // 更新 UI 显示
     timeConfig.currentTime = simulationTime.toLocaleString()
-    timeConfig.timeOffset = orbitManager.timeOffset
-    timeConfig.timeScale = orbitManager.timeScale
+    if (orbitManager) {
+        timeConfig.timeOffset = orbitManager.timeOffset
+        timeConfig.timeScale = orbitManager.timeScale
+    }
 
     // 更新卫星位置
-    if (satelliteConfig.updatePositions) {
+    if (satelliteConfig && satelliteConfig.updatePositions) {
         orbitManager.updateSatellites(simulationTime)
+    }
+
+    // Update spacecraft launcher simulation
+    if (spacecraftLauncher && spacecraftLauncher.isLaunched && spacecraftConfig && !spacecraftConfig.pauseSimulation) {
+        // Use fixed time step for consistent physics simulation
+        const dt = 0.1 * (spacecraftConfig.timeScale || 1); // Fixed 0.1 second step
+        spacecraftLauncher.update(dt);
+        
+        // Debug: confirm update is running
+        if (Math.floor(spacecraftLauncher.simulationTime) % 5 === 0) {
+            console.log(`[Update] Spacecraft active, time=${spacecraftLauncher.simulationTime.toFixed(1)}s, dt=${dt.toFixed(2)}s`);
+        }
     }
 
     // 定期更新卫星列表(每秒一次)
     if (currentTime - lastListUpdateTime > 1000) {
-        if (orbitManager.satellites.length > 0) {
+        if (orbitManager && orbitManager.satellites && orbitManager.satellites.length > 0) {
             updateSatelliteList(orbitManager.satellites, onSatelliteClick)
         }
         lastListUpdateTime = currentTime
     }
 
     // Update controls
-    controls.update()
+    if (controls) controls.update()
 
     // Render
-    renderer.render(scene, camera)
+    if (renderer && scene && camera) {
+        renderer.render(scene, camera)
+    }
 
     // Call tick again on the next frame
     window.requestAnimationFrame(tick)

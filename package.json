@@ -2,7 +2,7 @@
   "name": "aerospace-knowledge-system",
   "productName": "航天航空知识可视化系统",
   "private": true,
-  "version": "2.3.0",
+  "version": "2.5.0",
   "description": "基于 Three.js 的航天航空知识可视化学习平台",
   "author": "Gorlan",
   "type": "module",
